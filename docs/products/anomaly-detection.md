@@ -4,7 +4,7 @@ Distributed anomaly detection service for Kubernetes clusters.
 
 !!! info "Full documentation"
     The complete documentation lives in the project repository and is available at
-    [staffops.github.io/anomaly-detection/](https://staffops.github.io/anomaly-detection/).
+    [staffops.github.io/staffops-anomaly-detection/](https://staffops.github.io/staffops-anomaly-detection/).
 
 ---
 
