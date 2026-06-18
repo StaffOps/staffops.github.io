@@ -14,7 +14,7 @@ Kubernetes-ready Helm charts for the StaffOps suite.
 | Chart | Version | Description |
 |---|---|---|
 | `aigent-squad` | 0.5.0 | Multi-agent platform — supervisor + 5 specialists |
-| `staffops-anomaly-detection` | 0.1.0 | Distributed anomaly detection — Go controller + ML |
+| `anomaly-detection` | 0.1.0 | Distributed anomaly detection — Go controller + ML |
 
 ---
 
@@ -40,7 +40,7 @@ helm repo update
 === "Anomaly Detection"
 
     ```bash
-    helm install anomaly-detection staffops/staffops-anomaly-detection \
+    helm install anomaly-detection staffops/anomaly-detection \
       --namespace staffops \
       --create-namespace
     ```
