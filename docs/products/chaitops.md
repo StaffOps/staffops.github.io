@@ -4,7 +4,7 @@ Conversational orchestrator for observability stacks.
 
 !!! info "Full documentation"
     The complete ChaiTops documentation lives in the project repository and is available at
-    [staffops.github.io/staffops-chaitops/](https://staffops.github.io/staffops-chaitops/).
+    [staffops.github.io/chaitops/](https://staffops.github.io/chaitops/).
 
 ---
 

@@ -56,7 +56,7 @@ helm install aigent-squad staffops/aigent-squad \
 
 ## Links
 
-- [Full documentation](https://staffops.github.io/staffops-aigent-squad/) — architecture, setup, agent reference, runbooks
+- [Full documentation](https://staffops.github.io/aigent-squad/) — architecture, setup, agent reference, runbooks
 - [Source code](https://github.com/StaffOps/staffops-aigent-squad) — Apache 2.0
 
 ---
