@@ -6,6 +6,10 @@ Bedrock call, and routes them to the right specialist agent — each of which
 collects read-only context from its data sources and synthesizes a structured
 answer using Claude on AWS Bedrock.
 
+!!! info "Full documentation"
+    The complete AIgent Squad documentation lives in the project repository and is available at
+    [staffops.github.io/aigent-squad/](https://staffops.github.io/aigent-squad/).
+
 ---
 
 ## Specialist agents
@@ -54,13 +58,6 @@ helm install aigent-squad staffops/aigent-squad \
 
 ---
 
-## Links
+## Source
 
-- [Full documentation](https://staffops.github.io/aigent-squad/) — architecture, setup, agent reference, runbooks
-- [Source code](https://github.com/StaffOps/staffops-aigent-squad) — Apache 2.0
-
----
-
-## License
-
-Apache 2.0 — see [LICENSE](https://github.com/StaffOps/staffops-aigent-squad/blob/main/LICENSE).
+[github.com/StaffOps/staffops-aigent-squad](https://github.com/StaffOps/staffops-aigent-squad) — Apache 2.0

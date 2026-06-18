@@ -12,7 +12,7 @@ Multi-agent platform for AWS and Kubernetes operations. A supervisor agent route
 
 **Read-only by default. Config-driven. Fully observable.**
 
-[Documentation :octicons-arrow-right-24:](aigent-squad.md){ .md-button }
+[Documentation →](aigent-squad.md){ .md-button }
 
 ---
 
@@ -20,7 +20,7 @@ Multi-agent platform for AWS and Kubernetes operations. A supervisor agent route
 
 Conversational orchestrator for observability stacks. Provides a chat interface (LibreChat) backed by a FastAPI orchestrator that integrates with multiple AI CLI adapters. Designed for querying and diagnosing OpenTelemetry, VictoriaMetrics, Tempo, and Loki pipelines.
 
-[Documentation :octicons-arrow-right-24:](chaitops.md){ .md-button }
+[Documentation →](chaitops.md){ .md-button }
 
 ---
 
@@ -28,7 +28,7 @@ Conversational orchestrator for observability stacks. Provides a chat interface 
 
 Distributed anomaly detection service for Kubernetes. A Go controller orchestrates parallel workers that query VictoriaMetrics (PromQL) and Loki (LogQL), then correlate signals to fire meaningful alerts through Alertmanager. A Python ML service provides adaptive detection via Isolation Forest and Prophet.
 
-[Documentation :octicons-arrow-right-24:](anomaly-detection.md){ .md-button }
+[Documentation →](anomaly-detection.md){ .md-button }
 
 ---
 
@@ -36,7 +36,7 @@ Distributed anomaly detection service for Kubernetes. A Go controller orchestrat
 
 The source of truth for all StaffOps agent behavior. Defines the core agent, 11 specialist subagents, 58+ lazy-loaded skills, and 21+ global steering rules. Template-driven, version-controlled, and installable via symlinks in Claude Code or Kiro CLI.
 
-[Documentation :octicons-arrow-right-24:](agent-definition.md){ .md-button }
+[Documentation →](agent-definition.md){ .md-button }
 
 ---
 
@@ -46,4 +46,4 @@ Kubernetes-ready Helm charts for the full StaffOps suite. Published to GitHub Pa
 
 Charts available: `aigent-squad`, `staffops-anomaly-detection`.
 
-[Documentation :octicons-arrow-right-24:](helm-charts.md){ .md-button }
+[Documentation →](helm-charts.md){ .md-button }
