@@ -42,8 +42,11 @@ The source of truth for all StaffOps agent behavior. Defines the core agent, 11 
 
 ## Helm Charts
 
-Kubernetes-ready Helm charts for the full StaffOps suite. Published to GitHub Pages and installable with `helm repo add staffops https://staffops.github.io/helm-charts/`.
+Kubernetes-ready Helm charts for the full StaffOps suite. Charts available: `aigent-squad`, `staffops-anomaly-detection`.
 
-Charts available: `aigent-squad`, `staffops-anomaly-detection`.
+```bash
+helm repo add staffops https://staffops.github.io/helm-charts/
+helm repo update
+```
 
 [Documentation →](helm-charts.md){ .md-button }
