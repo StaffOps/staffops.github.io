@@ -42,7 +42,7 @@ The source of truth for all StaffOps agent behavior. Defines the core agent, 11 
 
 ## Helm Charts
 
-Kubernetes-ready Helm charts for the full StaffOps suite. Charts available: `aigent-squad`, `staffops-anomaly-detection`.
+Kubernetes-ready Helm charts for the full StaffOps suite. Charts available: `aigent-squad`, `anomaly-detection`.
 
 ```bash
 helm repo add staffops https://staffops.github.io/helm-charts/
