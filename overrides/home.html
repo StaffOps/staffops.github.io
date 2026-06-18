@@ -1,0 +1,131 @@
+{% extends "main.html" %}
+
+{% block styles %}
+{{ super() }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="so-home">
+
+  <!-- Hero -->
+  <section class="so-hero">
+    <div class="so-hero__terminal">
+      <div class="so-terminal-bar">
+        <span class="so-dot so-dot--red"></span>
+        <span class="so-dot so-dot--yellow"></span>
+        <span class="so-dot so-dot--green"></span>
+        <span class="so-terminal-title">staffops — bash</span>
+      </div>
+      <div class="so-terminal-body">
+        <p class="so-terminal-prompt"><span class="so-prompt-char">$</span> staffops <span class="so-cursor">▋</span></p>
+        <p class="so-terminal-output">→ open source operations platform</p>
+        <p class="so-terminal-output">→ built for DevOps, SRE &amp; Platform Engineering</p>
+        <p class="so-terminal-output">→ collaborative, free, community-driven</p>
+        <p class="so-terminal-output so-terminal-output--blank">&nbsp;</p>
+        <p class="so-terminal-prompt so-terminal-prompt--dim"><span class="so-prompt-char">$</span> <span class="so-cursor so-cursor--slow">▋</span></p>
+      </div>
+    </div>
+    <div class="so-hero__cta">
+      <a href="products/" class="so-btn so-btn--primary">Explore products</a>
+      <a href="https://github.com/StaffOps" class="so-btn so-btn--ghost" target="_blank" rel="noopener">GitHub →</a>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section class="so-section">
+    <h2 class="so-section__title">What we build</h2>
+    <div class="so-cards">
+
+      <a href="products/aigent-squad/" class="so-card">
+        <div class="so-card__tag">agents</div>
+        <h3 class="so-card__name">Aigent Squad</h3>
+        <p class="so-card__desc">Multi-agent platform for AWS and Kubernetes operations. Supervisor routes queries to domain specialists. Read-only by default.</p>
+        <div class="so-card__stack">Python · FastAPI · Bedrock · K8s</div>
+      </a>
+
+      <a href="products/chaitops/" class="so-card">
+        <div class="so-card__tag">orchestration</div>
+        <h3 class="so-card__name">ChaiTops</h3>
+        <p class="so-card__desc">Conversational orchestrator for observability stacks. LibreChat frontend with multi-CLI adapter support.</p>
+        <div class="so-card__stack">Python · LibreChat · Redis · OTel</div>
+      </a>
+
+      <a href="products/anomaly-detection/" class="so-card">
+        <div class="so-card__tag">detection</div>
+        <h3 class="so-card__name">Anomaly Detection</h3>
+        <p class="so-card__desc">Distributed anomaly detection for Kubernetes. Go workers query VictoriaMetrics and Loki, ML service correlates signals.</p>
+        <div class="so-card__stack">Go · Python · gRPC · VictoriaMetrics</div>
+      </a>
+
+      <a href="products/agent-definition/" class="so-card">
+        <div class="so-card__tag">core</div>
+        <h3 class="so-card__name">Agent Definition</h3>
+        <p class="so-card__desc">Source of truth for agent behavior. Steering rules, lazy-loaded skills, and subagent definitions. Works with Claude Code and Kiro.</p>
+        <div class="so-card__stack">Markdown · YAML · Bash</div>
+      </a>
+
+      <a href="products/helm-charts/" class="so-card">
+        <div class="so-card__tag">deploy</div>
+        <h3 class="so-card__name">Helm Charts</h3>
+        <p class="so-card__desc">Kubernetes-ready charts for the full suite. Auto-published via GitHub Actions on every release.</p>
+        <div class="so-card__stack">Helm · GitHub Actions · K8s</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Philosophy -->
+  <section class="so-section so-section--alt">
+    <h2 class="so-section__title">Philosophy</h2>
+    <div class="so-pillars">
+      <div class="so-pillar">
+        <div class="so-pillar__label">01 — open</div>
+        <p>Code, architecture decisions, and operational learnings are all public. No enterprise edition, no feature gating.</p>
+      </div>
+      <div class="so-pillar">
+        <div class="so-pillar__label">02 — collaborative</div>
+        <p>Contributions are welcome from anyone. We build on and give back to the open source ecosystem we depend on.</p>
+      </div>
+      <div class="so-pillar">
+        <div class="so-pillar__label">03 — free</div>
+        <p>No paywall, no SaaS lock-in. Every tool runs on your own infrastructure, under your control.</p>
+      </div>
+      <div class="so-pillar">
+        <div class="so-pillar__label">04 — pragmatic</div>
+        <p>Ship working solutions first, optimize second, document always. A working tool beats a perfect unshipped one.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick install -->
+  <section class="so-section">
+    <h2 class="so-section__title">Quick start</h2>
+    <div class="so-install">
+      <div class="so-install__bar">
+        <span class="so-install__label">helm</span>
+      </div>
+      <pre class="so-install__code"><code><span class="so-c-dim">// add the chart repository</span>
+helm repo add staffops https://staffops.github.io/helm-charts/
+helm repo update
+
+<span class="so-c-dim">// deploy aigent squad</span>
+helm install aigent-squad staffops/aigent-squad \
+  --namespace staffops \
+  --create-namespace</code></pre>
+    </div>
+  </section>
+
+  <!-- License -->
+  <section class="so-footer-note">
+    <span>Apache 2.0</span>
+    <span class="so-sep">·</span>
+    <span>Copyright © StaffOps Contributors</span>
+    <span class="so-sep">·</span>
+    <a href="https://github.com/StaffOps" target="_blank" rel="noopener">github.com/StaffOps</a>
+  </section>
+
+</div>
+{% endblock %}
