@@ -843,13 +843,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#required-status-checks-branch-protection" class="md-nav__link">
+  <a href="#required-status-checks-branch-protection-to-enable-once-plan-allows" class="md-nav__link">
     <span class="md-ellipsis">
-      Required status checks (branch protection)
+      Required status checks (branch protection — TO ENABLE once plan allows)
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Required status checks (branch protection)">
+    <nav class="md-nav" aria-label="Required status checks (branch protection — TO ENABLE once plan allows)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -993,13 +993,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#required-status-checks-branch-protection" class="md-nav__link">
+  <a href="#required-status-checks-branch-protection-to-enable-once-plan-allows" class="md-nav__link">
     <span class="md-ellipsis">
-      Required status checks (branch protection)
+      Required status checks (branch protection — TO ENABLE once plan allows)
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Required status checks (branch protection)">
+    <nav class="md-nav" aria-label="Required status checks (branch protection — TO ENABLE once plan allows)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1099,12 +1099,12 @@ publishes — and nothing reaches a registry without passing Trivy first.</stron
 <tr>
 <td><code>main</code></td>
 <td>Production source of truth</td>
-<td>Protected. PRs <strong>only from <code>dev</code></strong>. No direct push.</td>
+<td>Policy: PRs <strong>only from <code>dev</code></strong> (guard job).</td>
 </tr>
 <tr>
 <td><code>dev</code></td>
 <td>Integration</td>
-<td>Protected. PRs from <code>feature/*</code>. No direct push.</td>
+<td>Policy: PRs from <code>feature/*</code>.</td>
 </tr>
 <tr>
 <td><code>feature/*</code>, <code>fix/*</code></td>
@@ -1114,8 +1114,18 @@ publishes — and nothing reaches a registry without passing Trivy first.</stron
 </tbody>
 </table>
 <p>Flow: <code>feature/* ──PR──▶ dev ──PR──▶ main</code></p>
+<blockquote>
+<p>⚠️ <strong>Branch protection is not yet enforced.</strong> GitHub branch protection and
+rulesets require <strong>GitHub Pro/Team</strong> (or a public repo) for private repos —
+the current plan returns HTTP 403. So "no direct push" is <strong>policy, not
+enforced</strong>; a <code>git push</code> straight to <code>main</code>/<code>dev</code> is still technically
+possible. What <em>is</em> enforced today: the <code>guard</code> job fails any PR to <code>main</code>
+whose source isn't <code>dev</code>, and all CI checks run on every PR. To get true
+enforcement, upgrade the plan or make the repo public, then enable the
+required checks below. Tracked in <code>HANDOFF.md</code>.</p>
+</blockquote>
 <p><code>main</code> accepting PRs only from <code>dev</code> is enforced by a guard job (below) — GitHub
-branch protection alone cannot restrict the source branch.</p>
+branch protection alone cannot restrict the source branch anyway.</p>
 <hr />
 <h2 id="what-runs-and-when">What runs, and WHEN<a class="headerlink" href="#what-runs-and-when" title="Permanent link">&para;</a></h2>
 <p>Code checks (<code>lint</code>, <code>test</code>, <code>dep_scan</code>, <code>bandit</code>) run on <strong>every</strong> PR — they are
@@ -1176,7 +1186,9 @@ multi-arch build + push run. A vulnerable image never reaches the registry.</p>
 <p>Both <code>build.yml</code> (per-merge <code>latest</code>/<code>sha</code>) and <code>release.yml</code> (versioned
 <code>X.Y.Z</code>) use the same build-local → Trivy gate → push order.</p>
 <hr />
-<h2 id="required-status-checks-branch-protection">Required status checks (branch protection)<a class="headerlink" href="#required-status-checks-branch-protection" title="Permanent link">&para;</a></h2>
+<h2 id="required-status-checks-branch-protection-to-enable-once-plan-allows">Required status checks (branch protection — TO ENABLE once plan allows)<a class="headerlink" href="#required-status-checks-branch-protection-to-enable-once-plan-allows" title="Permanent link">&para;</a></h2>
+<p>Not active yet (plan-gated, see warning above). When branch protection becomes
+available, configure:</p>
 <ul>
 <li><strong><code>dev</code></strong>: Require PR · Require status checks → <code>lint</code>, <code>test</code>, <code>dep_scan</code>, <code>bandit</code> · Require up to date</li>
 <li><strong><code>main</code></strong>: Require PR · Require status checks → <code>guard</code>, <code>lint</code>, <code>test</code>, <code>dep_scan</code>, <code>bandit</code> · Require up to date</li>
