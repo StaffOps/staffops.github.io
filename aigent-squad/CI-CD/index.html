@@ -10,8 +10,10 @@
       
       
       
-        <link rel="canonical" href="https://staffops.github.io/aigent-squad/PREREQUISITES/">
+        <link rel="canonical" href="https://staffops.github.io/aigent-squad/CI-CD/">
       
+      
+        <link rel="prev" href="../reference/metrics/">
       
       
       
@@ -20,7 +22,7 @@
     
     
       
-        <title>Prerequisites - StaffOps — Aigent Squad</title>
+        <title>CI/CD & Versioning - StaffOps — Aigent Squad</title>
       
     
     
@@ -74,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#prerequisites" class="md-skip">
+        <a href="#cicd-branch-strategy-pipeline-versioning-model-a" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Prerequisites
+              CI/CD & Versioning
             
           </span>
         </div>
@@ -267,7 +269,7 @@
         <li class="md-tabs__item">
           
             <a href="../reference/helm/"
-               class="md-tabs__link">
+               class="md-tabs__link md-tabs__link--active">
               Reference
             </a>
           
@@ -666,8 +668,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -677,11 +681,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
@@ -695,7 +699,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             Reference
@@ -748,10 +752,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../CI-CD/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    CI/CD & Versioning
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -760,6 +784,134 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#branching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Branching
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-runs-and-when" class="md-nav__link">
+    <span class="md-ellipsis">
+      What runs, and WHEN
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What runs, and WHEN">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-scan-happens-at-two-scopes-not-twice" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why scan happens at two scopes (not twice)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scan-before-publish-supply-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scan-before-publish (supply chain)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#required-status-checks-branch-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Required status checks (branch protection)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Required status checks (branch protection)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#only-from-dev-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Only from dev" guard
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Versioning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Versioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cutting-a-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cutting a release
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Secrets
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflows
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -799,19 +951,37 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#required" class="md-nav__link">
+  <a href="#branching" class="md-nav__link">
     <span class="md-ellipsis">
-      Required
+      Branching
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Required">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-runs-and-when" class="md-nav__link">
+    <span class="md-ellipsis">
+      What runs, and WHEN
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What runs, and WHEN">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#enable-bedrock-models" class="md-nav__link">
+  <a href="#why-scan-happens-at-two-scopes-not-twice" class="md-nav__link">
     <span class="md-ellipsis">
-      Enable Bedrock models
+      Why scan happens at two scopes (not twice)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scan-before-publish-supply-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scan-before-publish (supply chain)
     </span>
   </a>
   
@@ -823,18 +993,66 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#optional-for-full-functionality" class="md-nav__link">
+  <a href="#required-status-checks-branch-protection" class="md-nav__link">
     <span class="md-ellipsis">
-      Optional (for full functionality)
+      Required status checks (branch protection)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Required status checks (branch protection)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#only-from-dev-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      "Only from dev" guard
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Versioning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Versioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cutting-a-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cutting a release
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Secrets
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#production-only" class="md-nav__link">
+  <a href="#workflows" class="md-nav__link">
     <span class="md-ellipsis">
-      Production-only
+      Workflows
     </span>
   </a>
   
@@ -855,7 +1073,7 @@
                   
 
   
-    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/PREREQUISITES.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/CI-CD.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -863,81 +1081,225 @@
   
 
 
-<h1 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h1>
-<h2 id="required">Required<a class="headerlink" href="#required" title="Permanent link">&para;</a></h2>
+<h1 id="cicd-branch-strategy-pipeline-versioning-model-a">CI/CD — branch strategy, pipeline &amp; versioning (Model A)<a class="headerlink" href="#cicd-branch-strategy-pipeline-versioning-model-a" title="Permanent link">&para;</a></h1>
+<p>How code and docs move from a feature branch to production, what runs at each
+step, and how versions are assigned. The guiding rule: <strong>a PR validates, a merge
+publishes — and nothing reaches a registry without passing Trivy first.</strong></p>
+<hr />
+<h2 id="branching">Branching<a class="headerlink" href="#branching" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Requirement</th>
-<th>Purpose</th>
+<th>Branch</th>
+<th>Role</th>
+<th>Protection</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Docker + Docker Compose</td>
-<td>Build and run all services</td>
+<td><code>main</code></td>
+<td>Production source of truth</td>
+<td>Protected. PRs <strong>only from <code>dev</code></strong>. No direct push.</td>
 </tr>
 <tr>
-<td>ssh-agent with GitHub key</td>
-<td>Private <code>otel-helper</code> repo cloned during <code>docker build</code></td>
+<td><code>dev</code></td>
+<td>Integration</td>
+<td>Protected. PRs from <code>feature/*</code>. No direct push.</td>
 </tr>
 <tr>
-<td>AWS Bedrock model access</td>
-<td>Claude Sonnet + Titan Embeddings v2 in <code>us-east-1</code></td>
+<td><code>feature/*</code>, <code>fix/*</code></td>
+<td>Day-to-day work</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
-<h3 id="enable-bedrock-models">Enable Bedrock models<a class="headerlink" href="#enable-bedrock-models" title="Permanent link">&para;</a></h3>
+<p>Flow: <code>feature/* ──PR──▶ dev ──PR──▶ main</code></p>
+<p><code>main</code> accepting PRs only from <code>dev</code> is enforced by a guard job (below) — GitHub
+branch protection alone cannot restrict the source branch.</p>
+<hr />
+<h2 id="what-runs-and-when">What runs, and WHEN<a class="headerlink" href="#what-runs-and-when" title="Permanent link">&para;</a></h2>
+<p>Two lanes selected by what the PR touches (path filters). Jobs always report a
+status so required checks never hang on a docs-only change.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Code lane</th>
+<th>Docs lane</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PR → dev</strong></td>
+<td><code>lint</code> · <code>test</code> (cov ≥90%) · SAST (CodeQL) · Trivy <strong>fs</strong> (deps)</td>
+<td><code>mkdocs build</code></td>
+</tr>
+<tr>
+<td><strong>push: dev</strong> (post-merge)</td>
+<td>nothing required (optional re-<code>test</code>)</td>
+<td>nothing (prod docs only from <code>main</code>)</td>
+</tr>
+<tr>
+<td><strong>PR → main</strong> (only from <code>dev</code>)</td>
+<td><code>guard</code> (head==dev) · <code>lint</code> · <code>test</code> · Trivy <strong>fs</strong> (deps)</td>
+<td><code>mkdocs build</code></td>
+</tr>
+<tr>
+<td><strong>push: main</strong> (post-merge)</td>
+<td><code>build.yml</code>: build → scan → push <code>latest</code>+<code>sha</code></td>
+<td><code>docs.yml</code>: deploy → <code>staffops.github.io/aigent-squad/</code></td>
+</tr>
+<tr>
+<td><strong>tag <code>v*</code></strong> (release)</td>
+<td><code>release.yml</code>: build local → <strong>Trivy gate</strong> → push <strong><code>X.Y.Z</code></strong>+<code>latest</code> · SBOM · GitHub Release</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-scan-happens-at-two-scopes-not-twice">Why scan happens at two scopes (not twice)<a class="headerlink" href="#why-scan-happens-at-two-scopes-not-twice" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>PR → Trivy <code>fs</code></strong>: scans <code>requirements.txt</code> for vulnerable <strong>dependencies</strong>.
+  Fast, no image build. Early feedback (most CVEs here are Python deps).</li>
+<li><strong>publish → Trivy <code>image</code></strong>: scans the <strong>actual image</strong> (OS + deps) on the exact
+  artifact, with a fresh CVE DB, as a <strong>gate before push</strong>. This is the binding
+  check — it also catches CVEs disclosed <em>after</em> the PR was scanned.</li>
+</ul>
+<p>The image gate runs <strong>once</strong>, at publish, on what is actually shipped. The PR
+scan is a different scope (source deps), not a duplicate.</p>
+<h3 id="scan-before-publish-supply-chain">Scan-before-publish (supply chain)<a class="headerlink" href="#scan-before-publish-supply-chain" title="Permanent link">&para;</a></h3>
+<p>Publishing never precedes scanning. The release builds a single-arch image into
+the local daemon (<code>load</code>, no push), Trivy scans it (<code>exit-code 1</code> on
+HIGH/CRITICAL, exceptions in <code>.trivyignore</code>), and only if it passes does the
+multi-arch build + push run. A vulnerable image never reaches the registry.</p>
+<blockquote>
+<p>Known gap: <code>build.yml</code> (the per-merge <code>latest</code>/<code>sha</code> path) currently scans
+<em>after</em> push. Follow-up: align it to the same build-local → gate → push order
+used by <code>release.yml</code>.</p>
+</blockquote>
+<hr />
+<h2 id="required-status-checks-branch-protection">Required status checks (branch protection)<a class="headerlink" href="#required-status-checks-branch-protection" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>dev</code></strong>: Require PR · Require status checks → <code>lint</code>, <code>test</code> · Require up to date</li>
+<li><strong><code>main</code></strong>: Require PR · Require status checks → <code>guard</code>, <code>lint</code>, <code>test</code>, <code>build</code> · Require up to date</li>
+</ul>
+<p>A check must have run once before it can be marked required. The coverage gate is
+<code>pytest --cov --cov-fail-under=90</code>: exit code 1 → red <code>test</code> check → merge blocked.</p>
+<h3 id="only-from-dev-guard">"Only from <code>dev</code>" guard<a class="headerlink" href="#only-from-dev-guard" title="Permanent link">&para;</a></h3>
+<p>A required job on PRs targeting <code>main</code> that fails when the head branch is not
+<code>dev</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">guard</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.base_ref == &#39;main&#39;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="no">test &quot;${{ github.head_ref }}&quot; = &quot;dev&quot; \</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">          </span><span class="no">|| { echo &quot;main only accepts PRs from dev&quot;; exit 1; }</span>
+</code></pre></div>
+<hr />
+<h2 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">&para;</a></h2>
+<p>Three SemVer numbers, <strong>linked</strong> so a deployment is reproducible.</p>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>Where</th>
+<th>Bumps when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>App version</strong> <code>vX.Y.Z</code></td>
+<td>git tag on this repo + image tag</td>
+<td>a validated milestone ships</td>
+</tr>
+<tr>
+<td><strong><code>appVersion</code></strong></td>
+<td><code>helm-charts</code> <code>Chart.yaml</code></td>
+<td>= the app version the chart deploys</td>
+</tr>
+<tr>
+<td><strong>Chart <code>version</code></strong> <code>A.B.C</code></td>
+<td><code>helm-charts</code> <code>Chart.yaml</code></td>
+<td>the <strong>chart</strong> changes (templates/values)</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>App  vX.Y.Z ─┬─ git tag (this repo) ──▶ release.yml ──▶ image :X.Y.Z
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>             └─ Chart.appVersion: &quot;X.Y.Z&quot; ──▶ image.tag (values) = appVersion
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Chart A.B.C ── chart-releaser ──▶ Helm repo (staffops.github.io/helm-charts)
+</code></pre></div>
+<p><strong>Rules (the minimum):</strong>
+- App tag is SemVer: <code>MAJOR</code>=breaking (API/config), <code>MINOR</code>=compatible feature,
+  <code>PATCH</code>=fix/security.
+- Pre-1.0 (<code>0.x</code>): anything may change. Do <strong>not</strong> cut <code>1.0.0</code> without a real
+  deploy + tests (steering <code>version-management</code>).
+- The chart's <code>image.tag</code> resolves to <code>Chart.AppVersion</code> — never <code>latest</code> in prod.
+- Bump chart <code>version</code> on any chart change; bump <code>appVersion</code> when it targets a
+  new app release.
+- <code>CHANGES.md</code> follows Keep-a-Changelog: <code>[Unreleased]</code> becomes <code>[X.Y.Z] - date</code>
+  when a tag is cut.</p>
+<h3 id="cutting-a-release">Cutting a release<a class="headerlink" href="#cutting-a-release" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Go to https://console.aws.amazon.com/bedrock/home?region=us-east-1#/modelaccess</li>
-<li>Enable: <code>anthropic.claude-3-5-sonnet-20241022-v2:0</code> and <code>amazon.titan-embed-text-v2:0</code></li>
+<li>Land all changes on <code>main</code> (via <code>dev</code>), CI green.</li>
+<li>Set <code>CHANGES.md</code> heading <code>[Unreleased]</code> → <code>[X.Y.Z] - &lt;date&gt;</code>.</li>
+<li>In <code>helm-charts</code>: <code>appVersion: "X.Y.Z"</code>, <code>image.tag</code> → <code>X.Y.Z</code> (or empty to
+   inherit <code>appVersion</code>), bump chart <code>version</code>.</li>
+<li><code>git tag vX.Y.Z &amp;&amp; git push origin vX.Y.Z</code> → <code>release.yml</code> builds, scans
+   (gate), pushes <code>:X.Y.Z</code>, generates SBOM + GitHub Release.</li>
 </ol>
-<h2 id="optional-for-full-functionality">Optional (for full functionality)<a class="headerlink" href="#optional-for-full-functionality" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="secrets">Secrets<a class="headerlink" href="#secrets" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Requirement</th>
+<th>Secret</th>
+<th>Used by</th>
 <th>Purpose</th>
-<th>Without it</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>AWS credentials (<code>~/.aws/</code>)</td>
-<td>AWS/FinOps agent datasources</td>
-<td>Agents degrade gracefully (return empty data)</td>
+<td><code>DOCS_DEPLOY_TOKEN</code></td>
+<td>test, build, docs, release</td>
+<td>clone private dep (HTTPS) + deploy portal</td>
 </tr>
 <tr>
-<td>Kubernetes config (<code>~/.kube/config</code>)</td>
-<td>K8s agent datasource</td>
-<td>K8s agent returns empty data</td>
+<td><code>DOCKERHUB_USERNAME</code> / <code>DOCKERHUB_TOKEN</code></td>
+<td>build, release</td>
+<td>Docker Hub login</td>
 </tr>
 </tbody>
 </table>
-<h2 id="production-only">Production-only<a class="headerlink" href="#production-only" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="workflows">Workflows<a class="headerlink" href="#workflows" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Requirement</th>
+<th>File</th>
+<th>Trigger</th>
 <th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>EKS cluster with IRSA</td>
-<td>Pod-level AWS auth (no access keys)</td>
+<td><code>test.yml</code></td>
+<td>push/PR (main, dev)</td>
+<td>lint + test (coverage gate)</td>
 </tr>
 <tr>
-<td>Helm 3.x</td>
-<td>Chart deployment</td>
+<td><code>build.yml</code></td>
+<td>push: main</td>
+<td>build + push <code>latest</code>/<code>sha</code> to Docker Hub + Trivy</td>
 </tr>
 <tr>
-<td>ECR/Harbor registry</td>
-<td>Image storage</td>
+<td><code>docs.yml</code></td>
+<td>push: main (docs/**)</td>
+<td>deploy MkDocs to the portal</td>
 </tr>
 <tr>
-<td>AWS Secrets Manager + ESO</td>
-<td>Secret injection</td>
+<td><code>release.yml</code></td>
+<td>tag <code>v*</code> / manual</td>
+<td>versioned, scan-gated image <code>:X.Y.Z</code> + SBOM + Release</td>
 </tr>
 </tbody>
 </table>
