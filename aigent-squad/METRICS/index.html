@@ -787,27 +787,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#red-metrics-per-agent" class="md-nav__link">
+  <a href="#red-is-it-working-per-agent" class="md-nav__link">
     <span class="md-ellipsis">
-      RED metrics (per agent)
+      RED — is it working? (per agent)
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#cost-tokens" class="md-nav__link">
+  <a href="#efficiency-what-does-it-cost-specs-27-10" class="md-nav__link">
     <span class="md-ellipsis">
-      Cost / tokens
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cache" class="md-nav__link">
-    <span class="md-ellipsis">
-      Cache
+      Efficiency — what does it cost? (specs 27, 10)
     </span>
   </a>
   
@@ -832,9 +823,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#rca-investigation-spec-18" class="md-nav__link">
+  <a href="#quality-rca-investigation-specs-18-10" class="md-nav__link">
     <span class="md-ellipsis">
-      RCA Investigation (spec 18)
+      Quality — RCA Investigation (specs 18, 10)
     </span>
   </a>
   
@@ -853,6 +844,15 @@
   <a href="#alert-ingestion-spec-18-phase-2" class="md-nav__link">
     <span class="md-ellipsis">
       Alert Ingestion (spec 18 Phase 2)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-gaps-not-usable-yet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Known gaps (not usable yet)
     </span>
   </a>
   
@@ -941,7 +941,11 @@
 </tr>
 </tbody>
 </table>
-<h2 id="red-metrics-per-agent">RED metrics (per agent)<a class="headerlink" href="#red-metrics-per-agent" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>Metrics below are grouped by <strong>purpose</strong>: RED (is it working?), Efficiency
+(what does it cost?), Quality (is the answer good?), and Domain (feature-specific).</p>
+</blockquote>
+<h2 id="red-is-it-working-per-agent">RED — is it working? (per agent)<a class="headerlink" href="#red-is-it-working-per-agent" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -972,7 +976,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="cost-tokens">Cost / tokens<a class="headerlink" href="#cost-tokens" title="Permanent link">&para;</a></h2>
+<h2 id="efficiency-what-does-it-cost-specs-27-10">Efficiency — what does it cost? (specs 27, 10)<a class="headerlink" href="#efficiency-what-does-it-cost-specs-27-10" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -986,8 +990,8 @@
 <tr>
 <td><code>aigent.tokens.total</code></td>
 <td>Counter</td>
-<td><code>agent_id</code>, <code>direction</code></td>
-<td>Tokens consumed</td>
+<td><code>agent_id</code>, <code>model</code>, <code>direction</code></td>
+<td>Tokens consumed (running total)</td>
 </tr>
 <tr>
 <td><code>aigent.cost.estimated</code></td>
@@ -995,33 +999,31 @@
 <td><code>agent_id</code>, <code>model</code></td>
 <td>Estimated USD cost</td>
 </tr>
-</tbody>
-</table>
-<h2 id="cache">Cache<a class="headerlink" href="#cache" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
 <tr>
-<th>Metric</th>
-<th>Type</th>
-<th>Labels</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>aigent.cache.hits</code></td>
-<td>Counter</td>
-<td><code>agent_id</code>, <code>namespace</code></td>
-<td>Data cache hits</td>
+<td><code>aigent.collect.duration</code></td>
+<td>Histogram</td>
+<td><code>agent_id</code></td>
+<td>Datasource collection latency (adapter fan-out, ms)</td>
 </tr>
 <tr>
-<td><code>aigent.cache.misses</code></td>
-<td>Counter</td>
-<td><code>agent_id</code>, <code>namespace</code></td>
-<td>Data cache misses</td>
+<td><code>aigent.llm.duration</code></td>
+<td>Histogram</td>
+<td><code>agent_id</code></td>
+<td>Bedrock round-trip latency (ms, excludes retry backoff)</td>
+</tr>
+<tr>
+<td><code>aigent.prompt.size_tokens</code></td>
+<td>Histogram</td>
+<td><code>agent_id</code></td>
+<td>Input-token distribution per call (detect prompt bloat; p50/p95)</td>
 </tr>
 </tbody>
 </table>
+<p><code>aigent.collect.duration</code> + <code>aigent.llm.duration</code> split request latency into
+data-collection vs LLM time — the two have different fixes (cache/truncate vs
+model tiering). <code>aigent.prompt.size_tokens</code> is a <strong>histogram</strong> of the same input
+tokens <code>aigent.tokens.total</code> sums, but exposes the <em>distribution</em> to catch
+context bloat (efficiency-cost steering).</p>
 <h2 id="resilience-spec-06">Resilience (spec 06)<a class="headerlink" href="#resilience-spec-06" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1078,7 +1080,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="rca-investigation-spec-18">RCA Investigation (spec 18)<a class="headerlink" href="#rca-investigation-spec-18" title="Permanent link">&para;</a></h2>
+<h2 id="quality-rca-investigation-specs-18-10">Quality — RCA Investigation (specs 18, 10)<a class="headerlink" href="#quality-rca-investigation-specs-18-10" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1112,6 +1114,12 @@
 <td>Histogram</td>
 <td>—</td>
 <td>Evidence items per investigation</td>
+</tr>
+<tr>
+<td><code>aigent.investigation.rounds</code></td>
+<td>Histogram</td>
+<td>—</td>
+<td>Rounds completed per investigation (vs cost cap; 1 today, single-round)</td>
 </tr>
 </tbody>
 </table>
@@ -1195,6 +1203,39 @@
 </tr>
 </tbody>
 </table>
+<h2 id="known-gaps-not-usable-yet">Known gaps (not usable yet)<a class="headerlink" href="#known-gaps-not-usable-yet" title="Permanent link">&para;</a></h2>
+<p>Do not build alerts on these — they will read as permanently zero (or do not
+exist yet). All belong to the deferred datasource-cache work.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>State</th>
+<th>Why</th>
+<th>Tracked in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aigent.cache.hits</code></td>
+<td><strong>Defined, never emitted</strong></td>
+<td>The <code>CacheStore</code> is not used by the datasource adapters (<code>Boto3Adapter</code>, <code>HttpAdapter</code>, …) — they fetch fresh every call. Only <code>kb/budget</code> and alert dedup use the cache.</td>
+<td>future spec (datasource-cache-layer)</td>
+</tr>
+<tr>
+<td><code>aigent.cache.misses</code></td>
+<td><strong>Defined, never emitted</strong></td>
+<td>Same as above — requires wiring a deterministic-key (<code>hashlib.sha256</code>) TTL cache into the adapter layer.</td>
+<td>future spec (datasource-cache-layer)</td>
+</tr>
+<tr>
+<td><code>aigent.cache.tokens_saved</code></td>
+<td><strong>Not defined</strong></td>
+<td>Planned metric; depends on a working datasource cache (above). Not yet in <code>metrics.py</code>.</td>
+<td>future spec (datasource-cache-layer)</td>
+</tr>
+</tbody>
+</table>
 <h2 id="labels-attributes">Labels (attributes)<a class="headerlink" href="#labels-attributes" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1207,8 +1248,8 @@
 <tbody>
 <tr>
 <td><code>agent_id</code></td>
-<td>aws, kubernetes, finops, devops, observability, supervisor, security</td>
-<td>7</td>
+<td>aws, kubernetes, finops, devops, observability, supervisor, security, classifier, synthesizer, unknown</td>
+<td>~10</td>
 </tr>
 <tr>
 <td><code>error_type</code></td>

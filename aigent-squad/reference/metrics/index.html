@@ -816,6 +816,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#efficiency-where-time-and-tokens-go-spec-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Efficiency — where time and tokens go (spec 10)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cache" class="md-nav__link">
     <span class="md-ellipsis">
       Cache
@@ -984,6 +993,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#efficiency-where-time-and-tokens-go-spec-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Efficiency — where time and tokens go (spec 10)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cache" class="md-nav__link">
     <span class="md-ellipsis">
       Cache
@@ -1114,8 +1132,8 @@ HTTP metrics follow the OpenTelemetry semantic conventions namespace.</p>
 <tbody>
 <tr>
 <td><code>agent_id</code></td>
-<td><code>aws</code>, <code>kubernetes</code>, <code>finops</code>, <code>devops</code>, <code>observability</code>, <code>supervisor</code>, <code>security</code></td>
-<td>7</td>
+<td><code>aws</code>, <code>kubernetes</code>, <code>finops</code>, <code>devops</code>, <code>observability</code>, <code>supervisor</code>, <code>security</code>, <code>classifier</code>, <code>synthesizer</code>, <code>unknown</code></td>
+<td>~10</td>
 </tr>
 <tr>
 <td><code>error_type</code></td>
@@ -1262,7 +1280,7 @@ and by model.</p>
 <tr>
 <td><code>aigent.tokens.total</code></td>
 <td>Counter</td>
-<td><code>agent_id</code>, <code>direction</code></td>
+<td><code>agent_id</code>, <code>model</code>, <code>direction</code></td>
 <td>Tokens consumed (input and output tracked separately)</td>
 </tr>
 <tr>
@@ -1276,9 +1294,10 @@ and by model.</p>
 <p>The <code>direction</code> label (<code>input</code> / <code>output</code>) is important: output tokens are
 approximately 5x more expensive than input tokens on Claude models.</p>
 <hr />
-<h2 id="cache">Cache<a class="headerlink" href="#cache" title="Permanent link">&para;</a></h2>
-<p>Redis data cache hit/miss tracking. LLM responses are <strong>not</strong> cached — only
-infrastructure data with deterministic, TTL-bounded values.</p>
+<h2 id="efficiency-where-time-and-tokens-go-spec-10">Efficiency — where time and tokens go (spec 10)<a class="headerlink" href="#efficiency-where-time-and-tokens-go-spec-10" title="Permanent link">&para;</a></h2>
+<p>These split a request's latency into data-collection vs LLM time and expose the
+prompt-size distribution, so cost regressions can be attributed (the two halves
+have different fixes: cache/truncate vs model tiering).</p>
 <table>
 <thead>
 <tr>
@@ -1290,16 +1309,59 @@ infrastructure data with deterministic, TTL-bounded values.</p>
 </thead>
 <tbody>
 <tr>
+<td><code>aigent.collect.duration</code></td>
+<td>Histogram</td>
+<td><code>agent_id</code></td>
+<td>Datasource collection latency (adapter fan-out, ms)</td>
+</tr>
+<tr>
+<td><code>aigent.llm.duration</code></td>
+<td>Histogram</td>
+<td><code>agent_id</code></td>
+<td>Bedrock round-trip latency per call (ms, excludes retry backoff)</td>
+</tr>
+<tr>
+<td><code>aigent.prompt.size_tokens</code></td>
+<td>Histogram</td>
+<td><code>agent_id</code></td>
+<td>Bedrock-reported input tokens per call — distribution to detect prompt bloat (p50/p95)</td>
+</tr>
+</tbody>
+</table>
+<p><code>aigent.prompt.size_tokens</code> is a <strong>histogram</strong> of the same input tokens that
+<code>aigent.tokens.total</code> sums as a counter: the histogram exposes the per-call
+<em>distribution</em> (catch bloat), the counter exposes total <em>spend</em>.</p>
+<hr />
+<h2 id="cache">Cache<a class="headerlink" href="#cache" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Defined but not emitted yet</p>
+<p>The cache metrics below exist in <code>metrics.py</code> but are <strong>not wired into any
+code path</strong> — the <code>CacheStore</code> is not used by the datasource adapters
+(<code>Boto3Adapter</code>, <code>HttpAdapter</code>, …), which fetch fresh on every call. Do not
+build alerts on them; they read as permanently zero until the
+datasource-cache layer ships (future spec). See "Gaps and upcoming metrics".</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Labels</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
 <td><code>aigent.cache.hits</code></td>
 <td>Counter</td>
 <td><code>agent_id</code>, <code>namespace</code></td>
-<td>Infra data cache hits</td>
+<td>Defined, never emitted</td>
 </tr>
 <tr>
 <td><code>aigent.cache.misses</code></td>
 <td>Counter</td>
 <td><code>agent_id</code>, <code>namespace</code></td>
-<td>Infra data cache misses</td>
+<td>Defined, never emitted</td>
 </tr>
 </tbody>
 </table>
@@ -1403,6 +1465,12 @@ tracking RCA quality over time.</p>
 <td>Histogram</td>
 <td>—</td>
 <td>Evidence items collected per investigation</td>
+</tr>
+<tr>
+<td><code>aigent.investigation.rounds</code></td>
+<td>Histogram</td>
+<td>—</td>
+<td>Rounds completed per investigation (vs cost cap; 1 today, single-round)</td>
 </tr>
 </tbody>
 </table>
@@ -1572,30 +1640,27 @@ reusable KB entries, and the RAG injection path that retrieves them at query tim
 </ul>
 <hr />
 <h2 id="gaps-and-upcoming-metrics">Gaps and upcoming metrics<a class="headerlink" href="#gaps-and-upcoming-metrics" title="Permanent link">&para;</a></h2>
-<p>The following metrics are planned but not yet instrumented:</p>
+<p><code>aigent.collect.duration</code>, <code>aigent.llm.duration</code>, <code>aigent.prompt.size_tokens</code>,
+and <code>aigent.investigation.rounds</code> shipped in spec 10 (see Efficiency / RCA
+sections above). Still planned:</p>
 <table>
 <thead>
 <tr>
 <th>Metric</th>
+<th>State</th>
 <th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>aigent.prompt.size_tokens</code></td>
-<td>Track prompt size growth over time</td>
-</tr>
-<tr>
-<td><code>aigent.investigation.rounds</code></td>
-<td>Multi-round RCA round count (Phase 3)</td>
-</tr>
-<tr>
-<td><code>aigent.llm.duration</code></td>
-<td>LLM-only latency, separate from collection time</td>
+<td><code>aigent.cache.hits</code> / <code>aigent.cache.misses</code></td>
+<td>Defined, not emitted</td>
+<td>Need datasource cache wired into the adapter layer (future spec)</td>
 </tr>
 <tr>
 <td><code>aigent.cache.tokens_saved</code></td>
-<td>Estimated token savings from Bedrock prompt cache</td>
+<td>Not defined</td>
+<td>Estimated token savings once the datasource cache exists (future spec)</td>
 </tr>
 </tbody>
 </table>
