@@ -4,8 +4,7 @@ Kubernetes-ready Helm charts for the StaffOps suite.
 
 !!! info "Full documentation"
     The complete documentation lives at
-    [staffops.github.io/helm-charts/](https://staffops.github.io/helm-charts/)
-    — the same URL also serves the Helm chart index (`index.yaml`).
+    [staffops.github.io/helm-charts/](https://staffops.github.io/helm-charts/).
 
 ---
 
