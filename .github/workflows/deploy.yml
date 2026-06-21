@@ -23,5 +23,13 @@ jobs:
       - name: Install dependencies
         run: pip install mkdocs-material
 
-      - name: Build and deploy
-        run: mkdocs gh-deploy --force
+      - name: Build docs
+        run: mkdocs build --site-dir site
+
+      - name: Deploy to gh-pages (root, keep sub-repos)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./site
+          keep_files: true
