@@ -10,9 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://staffops.github.io/aigent-squad/PREREQUISITES/">
+        <link rel="canonical" href="https://staffops.github.io/aigent-squad/architecture/">
       
       
+        <link rel="prev" href="../getting-started/quickstart/">
+      
+      
+        <link rel="next" href="../agents/overview/">
       
       
       <link rel="icon" href="../assets/logo.png">
@@ -20,7 +24,7 @@
     
     
       
-        <title>Prerequisites - StaffOps — Aigent Squad</title>
+        <title>Architecture - StaffOps — Aigent Squad</title>
       
     
     
@@ -74,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#prerequisites" class="md-skip">
+        <a href="#architecture" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Prerequisites
+              Architecture
             
           </span>
         </div>
@@ -239,8 +243,8 @@
       
         <li class="md-tabs__item">
           
-            <a href="../architecture/"
-               class="md-tabs__link">
+            <a href="./"
+               class="md-tabs__link md-tabs__link--active">
               Architecture
             </a>
           
@@ -447,10 +451,30 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../architecture/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -459,6 +483,146 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-design-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key design decisions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      Classifier
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentregistry" class="md-nav__link">
+    <span class="md-ellipsis">
+      AgentRegistry
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fan-out-spec-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fan-out (spec 17)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rca-investigation-spec-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      RCA Investigation (spec 18)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skills-spec-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      Skills (spec 26)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#knowledge-base-spec-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      Knowledge Base (spec 21)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ports-and-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ports and endpoints
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ports and endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#supervisor-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supervisor API
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-stores" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data stores
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -799,19 +963,82 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#required" class="md-nav__link">
+  <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Required
+      Overview
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Required">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-design-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key design decisions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core components">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#enable-bedrock-models" class="md-nav__link">
+  <a href="#classifier" class="md-nav__link">
     <span class="md-ellipsis">
-      Enable Bedrock models
+      Classifier
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentregistry" class="md-nav__link">
+    <span class="md-ellipsis">
+      AgentRegistry
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fan-out-spec-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fan-out (spec 17)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rca-investigation-spec-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      RCA Investigation (spec 18)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skills-spec-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      Skills (spec 26)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#knowledge-base-spec-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      Knowledge Base (spec 21)
     </span>
   </a>
   
@@ -823,18 +1050,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#optional-for-full-functionality" class="md-nav__link">
+  <a href="#ports-and-endpoints" class="md-nav__link">
     <span class="md-ellipsis">
-      Optional (for full functionality)
+      Ports and endpoints
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ports and endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#supervisor-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supervisor API
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#production-only" class="md-nav__link">
+  <a href="#data-stores" class="md-nav__link">
     <span class="md-ellipsis">
-      Production-only
+      Data stores
     </span>
   </a>
   
@@ -855,7 +1097,7 @@
                   
 
   
-    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/PREREQUISITES.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/architecture.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -863,81 +1105,183 @@
   
 
 
-<h1 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h1>
-<h2 id="required">Required<a class="headerlink" href="#required" title="Permanent link">&para;</a></h2>
+<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>A single supervisor process runs all specialist agents in-process, loaded from YAML config at startup. No inter-container HTTP between agents — just function calls.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>                   ┌─────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                   │  Kiro CLI   │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                   └──────┬──────┘
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                          │ HTTP (MCP protocol)
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                          ▼
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                   ┌─────────────┐
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                   │ MCP Server  │ :8006
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                   └──────┬──────┘
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                          │ X-Internal-Token
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                          ▼
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>┌──────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│                  Supervisor (:8000)                       │
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│                                                          │
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│  ┌────────────┐  ┌────────────────┐  ┌──────────────┐   │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│  │ Classifier │  │ AgentRegistry  │  │ Fan-out/RCA  │   │
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│  │ (routing)  │  │ (auto-discover)│  │ (orchestr.)  │   │
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│  └────────────┘  └────────────────┘  └──────────────┘   │
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│                                                          │
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│  ┌─────┐ ┌─────┐ ┌───────┐ ┌───────┐ ┌─────┐          │
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│  │ AWS │ │ K8s │ │FinOps │ │DevOps │ │ Obs │  ...     │
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│  └──┬──┘ └──┬──┘ └───┬───┘ └───┬───┘ └──┬──┘          │
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│     └───────┴─────────┴─────────┴────────┘              │
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│                  DatasourceAdapter layer                  │
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│        Boto3 │ Kubernetes │ HTTP │ Athena │ MCP          │
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>└──────────────────────────────────────────────────────────┘
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>         │          │           │            │
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    ┌────────┐ ┌────────┐ ┌─────────┐ ┌──────────────┐
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    │ Redis  │ │Postgres│ │DynamoDB │ │ OTel Collect.│
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    │ cache  │ │pgvector│ │(history)│ │  → Prometheus│
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    └────────┘ └────────┘ └─────────┘ └──────────────┘
+</code></pre></div>
+<h2 id="key-design-decisions">Key design decisions<a class="headerlink" href="#key-design-decisions" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Requirement</th>
-<th>Purpose</th>
+<th>Decision</th>
+<th>Rationale</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Docker + Docker Compose</td>
-<td>Build and run all services</td>
+<td>Single image, in-process agents</td>
+<td>No inter-container HTTP; simpler deploy; lower resource footprint</td>
 </tr>
 <tr>
-<td>ssh-agent with GitHub key</td>
-<td>Private <code>otel-helper</code> repo cloned during <code>docker build</code></td>
+<td>Config-driven agents (<code>agent.yaml</code> + <code>prompt.md</code>)</td>
+<td>Zero-code agent creation; git-managed; hot-reload on restart</td>
 </tr>
 <tr>
-<td>AWS Bedrock model access</td>
-<td>Claude Sonnet + Titan Embeddings v2 in <code>us-east-1</code></td>
+<td>DatasourceAdapter pattern</td>
+<td>Decouples data fetching from agent logic; enforces read-only at the code level</td>
+</tr>
+<tr>
+<td>Bedrock-direct (no framework)</td>
+<td>No LangGraph or similar — direct <code>bedrock-runtime</code> API calls for full control of prompts and cost</td>
 </tr>
 </tbody>
 </table>
-<h3 id="enable-bedrock-models">Enable Bedrock models<a class="headerlink" href="#enable-bedrock-models" title="Permanent link">&para;</a></h3>
-<ol>
-<li>Go to https://console.aws.amazon.com/bedrock/home?region=us-east-1#/modelaccess</li>
-<li>Enable: <code>anthropic.claude-3-5-sonnet-20241022-v2:0</code> and <code>amazon.titan-embed-text-v2:0</code></li>
-</ol>
-<h2 id="optional-for-full-functionality">Optional (for full functionality)<a class="headerlink" href="#optional-for-full-functionality" title="Permanent link">&para;</a></h2>
+<h2 id="core-components">Core components<a class="headerlink" href="#core-components" title="Permanent link">&para;</a></h2>
+<h3 id="classifier">Classifier<a class="headerlink" href="#classifier" title="Permanent link">&para;</a></h3>
+<p>Routes user queries to the best-fit agent using a fast-path keyword match and, when ambiguous, a lightweight LLM classification call (Haiku tier).</p>
+<h3 id="agentregistry">AgentRegistry<a class="headerlink" href="#agentregistry" title="Permanent link">&para;</a></h3>
+<p>Auto-discovers agents from the <code>agents/</code> directory at startup. Each agent directory contains:</p>
+<ul>
+<li><code>agent.yaml</code> — datasources, routing keywords, model tier, cache TTL, skills allowlist</li>
+<li><code>prompt.md</code> — system prompt sent to the LLM</li>
+</ul>
+<h3 id="fan-out-spec-17">Fan-out (spec 17)<a class="headerlink" href="#fan-out-spec-17" title="Permanent link">&para;</a></h3>
+<p>Multi-agent parallel execution when a query spans N≥2 domains. Results are synthesized by a separate LLM call.</p>
+<h3 id="rca-investigation-spec-18">RCA Investigation (spec 18)<a class="headerlink" href="#rca-investigation-spec-18" title="Permanent link">&para;</a></h3>
+<p>Structured investigation: symptom → parallel evidence collection → LLM synthesis with confidence scoring (alta / média / baixa).</p>
+<h3 id="skills-spec-26">Skills (spec 26)<a class="headerlink" href="#skills-spec-26" title="Permanent link">&para;</a></h3>
+<p>Reusable markdown knowledge files (<code>skills/&lt;name&gt;/SKILL.md</code>) lazy-injected into the prompt only when the query matches the skill's keywords. Reduces prompt size (and cost) for queries that don't need the extra knowledge.</p>
+<h3 id="knowledge-base-spec-21">Knowledge Base (spec 21)<a class="headerlink" href="#knowledge-base-spec-21" title="Permanent link">&para;</a></h3>
+<p>Learns from completed investigations. Distills RCA results into KB items stored in Postgres+pgvector. Injects similar past cases via RAG on new investigations.</p>
+<h2 id="ports-and-endpoints">Ports and endpoints<a class="headerlink" href="#ports-and-endpoints" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Requirement</th>
-<th>Purpose</th>
-<th>Without it</th>
+<th>Port</th>
+<th>Service</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>AWS credentials (<code>~/.aws/</code>)</td>
-<td>AWS/FinOps agent datasources</td>
-<td>Agents degrade gracefully (return empty data)</td>
+<td>8000</td>
+<td>Supervisor API</td>
 </tr>
 <tr>
-<td>Kubernetes config (<code>~/.kube/config</code>)</td>
-<td>K8s agent datasource</td>
-<td>K8s agent returns empty data</td>
+<td>8006</td>
+<td>MCP Server</td>
 </tr>
 </tbody>
 </table>
-<h2 id="production-only">Production-only<a class="headerlink" href="#production-only" title="Permanent link">&para;</a></h2>
+<p>All specialist agents run in-process in the supervisor — no per-agent ports.</p>
+<h3 id="supervisor-api">Supervisor API<a class="headerlink" href="#supervisor-api" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Requirement</th>
+<th>Path</th>
+<th style="text-align: center;">Method</th>
+<th style="text-align: center;">Auth</th>
 <th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>EKS cluster with IRSA</td>
-<td>Pod-level AWS auth (no access keys)</td>
+<td><code>/healthz</code></td>
+<td style="text-align: center;">GET</td>
+<td style="text-align: center;">—</td>
+<td>Liveness probe (always 200)</td>
 </tr>
 <tr>
-<td>Helm 3.x</td>
-<td>Chart deployment</td>
+<td><code>/ready</code></td>
+<td style="text-align: center;">GET</td>
+<td style="text-align: center;">—</td>
+<td>Readiness probe (checks Redis + DynamoDB + agents)</td>
 </tr>
 <tr>
-<td>ECR/Harbor registry</td>
-<td>Image storage</td>
+<td><code>/health</code></td>
+<td style="text-align: center;">GET</td>
+<td style="text-align: center;">—</td>
+<td>Legacy alias for <code>/healthz</code></td>
 </tr>
 <tr>
-<td>AWS Secrets Manager + ESO</td>
-<td>Secret injection</td>
+<td><code>/query</code></td>
+<td style="text-align: center;">POST</td>
+<td style="text-align: center;"><code>X-Internal-Token</code></td>
+<td>Single query (optional <code>mode=investigate</code>)</td>
+</tr>
+<tr>
+<td><code>/alerts/incoming</code></td>
+<td style="text-align: center;">POST</td>
+<td style="text-align: center;"><code>X-Internal-Token</code></td>
+<td>Alertmanager webhook → auto-RCA</td>
+</tr>
+<tr>
+<td><code>/v1/models</code></td>
+<td style="text-align: center;">GET</td>
+<td style="text-align: center;">Bearer</td>
+<td>OpenAI-compatible model list</td>
+</tr>
+<tr>
+<td><code>/v1/chat/completions</code></td>
+<td style="text-align: center;">POST</td>
+<td style="text-align: center;">Bearer</td>
+<td>OpenAI-compatible chat (LibreChat)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="data-stores">Data stores<a class="headerlink" href="#data-stores" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Store</th>
+<th>Purpose</th>
+<th>Persistence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Redis</td>
+<td>Datasource cache (per-agent TTL 1–60 min)</td>
+<td>Ephemeral</td>
+</tr>
+<tr>
+<td>PostgreSQL + pgvector</td>
+<td>KB items + RAG embeddings</td>
+<td>Persistent</td>
+</tr>
+<tr>
+<td>DynamoDB</td>
+<td>Conversation history (TTL 24h)</td>
+<td>TTL-based</td>
 </tr>
 </tbody>
 </table>

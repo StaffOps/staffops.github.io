@@ -239,7 +239,7 @@
       
         <li class="md-tabs__item">
           
-            <a href="../architecture.md"
+            <a href="../architecture/"
                class="md-tabs__link">
               Architecture
             </a>
@@ -450,7 +450,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../architecture.md" class="md-nav__link">
+      <a href="../architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -870,7 +870,7 @@
 <p>AIgent-squad exposes an <strong>OpenAI-compatible API</strong> (<code>/v1/models</code>,
 <code>/v1/chat/completions</code>), so <a href="https://www.librechat.ai/">LibreChat</a> — or any
 OpenAI-compatible client — can talk to the squad <strong>directly</strong>, with no extra
-gateway. (Spec: <a href="../.kiro/specs/29-openai-compat-bridge/"><code>.kiro/specs/29-openai-compat-bridge/</code></a>.)</p>
+gateway. (Spec: <a href="https://github.com/StaffOps/staffops-aigent-squad/tree/main/.kiro/specs/29-openai-compat-bridge"><code>.kiro/specs/29-openai-compat-bridge/</code></a>.)</p>
 <h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>LibreChat ──OpenAI /v1/chat/completions──&gt; Supervisor (:8000)
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                                              └─ classifier → agents → synthesis
@@ -922,7 +922,7 @@ routing, fan-out, and RCA investigation as the native <code>/query</code> endpoi
 </li>
 <li>
 <p><strong>Point LibreChat at the bridge.</strong> Use
-   <a href="../infra/librechat/librechat.yaml"><code>infra/librechat/librechat.yaml</code></a> as a
+   <a href="https://github.com/StaffOps/staffops-aigent-squad/blob/main/infra/librechat/librechat.yaml"><code>infra/librechat/librechat.yaml</code></a> as a
    starting point — it registers the squad as a custom endpoint and forwards the
    token in the <code>X-Internal-Token</code> header. Set <code>AIGENT_SQUAD_API_KEY</code> to the
    squad's <code>INTERNAL_API_TOKEN</code>.</p>

@@ -241,7 +241,7 @@
       
         <li class="md-tabs__item">
           
-            <a href="../architecture.md"
+            <a href="../architecture/"
                class="md-tabs__link">
               Architecture
             </a>
@@ -452,7 +452,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../architecture.md" class="md-nav__link">
+      <a href="../architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1118,8 +1118,10 @@ publishes — and nothing reaches a registry without passing Trivy first.</stron
 branch protection alone cannot restrict the source branch.</p>
 <hr />
 <h2 id="what-runs-and-when">What runs, and WHEN<a class="headerlink" href="#what-runs-and-when" title="Permanent link">&para;</a></h2>
-<p>Two lanes selected by what the PR touches (path filters). Jobs always report a
-status so required checks never hang on a docs-only change.</p>
+<p>Code checks (<code>lint</code>, <code>test</code>, <code>dep_scan</code>, <code>bandit</code>) run on <strong>every</strong> PR — they are
+cheap and are the required gates, so they always report and never hang a merge.
+The docs <code>build_check</code> is <strong>path-filtered</strong> (<code>docs/**</code>, <code>mkdocs.yml</code>) and is not a
+required gate — it runs only when docs change.</p>
 <table>
 <thead>
 <tr>
@@ -1131,7 +1133,7 @@ status so required checks never hang on a docs-only change.</p>
 <tbody>
 <tr>
 <td><strong>PR → dev</strong></td>
-<td><code>lint</code> · <code>test</code> (cov ≥90%) · SAST (CodeQL) · Trivy <strong>fs</strong> (deps)</td>
+<td><code>lint</code> · <code>test</code> (cov ≥90%) · SAST (Bandit) · Trivy <strong>fs</strong> (deps)</td>
 <td><code>mkdocs build</code></td>
 </tr>
 <tr>
@@ -1141,8 +1143,8 @@ status so required checks never hang on a docs-only change.</p>
 </tr>
 <tr>
 <td><strong>PR → main</strong> (only from <code>dev</code>)</td>
-<td><code>guard</code> (head==dev) · <code>lint</code> · <code>test</code> · Trivy <strong>fs</strong> (deps)</td>
-<td><code>mkdocs build</code></td>
+<td><code>guard</code> (head==dev) · <code>lint</code> · <code>test</code> · SAST (Bandit) · Trivy <strong>fs</strong> (deps)</td>
+<td><code>mkdocs build --strict</code></td>
 </tr>
 <tr>
 <td><strong>push: main</strong> (post-merge)</td>
@@ -1171,16 +1173,13 @@ scan is a different scope (source deps), not a duplicate.</p>
 the local daemon (<code>load</code>, no push), Trivy scans it (<code>exit-code 1</code> on
 HIGH/CRITICAL, exceptions in <code>.trivyignore</code>), and only if it passes does the
 multi-arch build + push run. A vulnerable image never reaches the registry.</p>
-<blockquote>
-<p>Known gap: <code>build.yml</code> (the per-merge <code>latest</code>/<code>sha</code> path) currently scans
-<em>after</em> push. Follow-up: align it to the same build-local → gate → push order
-used by <code>release.yml</code>.</p>
-</blockquote>
+<p>Both <code>build.yml</code> (per-merge <code>latest</code>/<code>sha</code>) and <code>release.yml</code> (versioned
+<code>X.Y.Z</code>) use the same build-local → Trivy gate → push order.</p>
 <hr />
 <h2 id="required-status-checks-branch-protection">Required status checks (branch protection)<a class="headerlink" href="#required-status-checks-branch-protection" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>dev</code></strong>: Require PR · Require status checks → <code>lint</code>, <code>test</code> · Require up to date</li>
-<li><strong><code>main</code></strong>: Require PR · Require status checks → <code>guard</code>, <code>lint</code>, <code>test</code>, <code>build</code> · Require up to date</li>
+<li><strong><code>dev</code></strong>: Require PR · Require status checks → <code>lint</code>, <code>test</code>, <code>dep_scan</code>, <code>bandit</code> · Require up to date</li>
+<li><strong><code>main</code></strong>: Require PR · Require status checks → <code>guard</code>, <code>lint</code>, <code>test</code>, <code>dep_scan</code>, <code>bandit</code> · Require up to date</li>
 </ul>
 <p>A check must have run once before it can be marked required. The coverage gate is
 <code>pytest --cov --cov-fail-under=90</code>: exit code 1 → red <code>test</code> check → merge blocked.</p>
@@ -1188,13 +1187,15 @@ used by <code>release.yml</code>.</p>
 <p>A required job on PRs targeting <code>main</code> that fails when the head branch is not
 <code>dev</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">guard</span><span class="p">:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.base_ref == &#39;main&#39;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.event_name == &#39;pull_request&#39; &amp;&amp; github.base_ref == &#39;main&#39;</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="no">test &quot;${{ github.head_ref }}&quot; = &quot;dev&quot; \</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">          </span><span class="no">|| { echo &quot;main only accepts PRs from dev&quot;; exit 1; }</span>
 </code></pre></div>
+<p>It runs (and is required) only on PRs targeting <code>main</code>; on PRs to <code>dev</code> it is
+skipped, so it never blocks a feature PR.</p>
 <hr />
 <h2 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">&para;</a></h2>
 <p>Three SemVer numbers, <strong>linked</strong> so a deployment is reproducible.</p>
@@ -1284,17 +1285,22 @@ used by <code>release.yml</code>.</p>
 <tr>
 <td><code>test.yml</code></td>
 <td>push/PR (main, dev)</td>
-<td>lint + test (coverage gate)</td>
+<td><code>guard</code> (PR→main from dev) · <code>lint</code> · <code>test</code> (coverage gate) · <code>dep_scan</code> (Trivy fs)</td>
+</tr>
+<tr>
+<td><code>sast.yml</code></td>
+<td>push/PR (main, dev)</td>
+<td><code>bandit</code> static analysis of Python source</td>
 </tr>
 <tr>
 <td><code>build.yml</code></td>
 <td>push: main</td>
-<td>build + push <code>latest</code>/<code>sha</code> to Docker Hub + Trivy</td>
+<td>build local → Trivy gate → push <code>latest</code>/<code>sha</code> + SBOM</td>
 </tr>
 <tr>
 <td><code>docs.yml</code></td>
-<td>push: main (docs/**)</td>
-<td>deploy MkDocs to the portal</td>
+<td>PR (docs/**): <code>mkdocs build --strict</code>; push: main: deploy</td>
+<td>MkDocs validation + portal deploy</td>
 </tr>
 <tr>
 <td><code>release.yml</code></td>
