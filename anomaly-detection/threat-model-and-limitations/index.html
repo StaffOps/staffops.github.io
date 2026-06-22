@@ -2336,7 +2336,7 @@ deviate from a learned per-series baseline:</p>
 </tbody>
 </table>
 <p>A fourth signal — <code>security</code> via <strong>Falco</strong> — is <strong>specced but not implemented</strong>
-(see <code>.kiro/specs/falco-integration/</code>, roadmap P2.7). Even when shipped, its v1 is
+(see <code>specs/falco-integration/</code>, roadmap P2.7). Even when shipped, its v1 is
 <strong>enrichment-only</strong>: it annotates an already-existing resource anomaly, it does not
 raise security alerts on its own.</p>
 <p>Audit logs are <strong>not</strong> ingested at all.</p>
@@ -2620,7 +2620,7 @@ README.</p>
 <li><strong>Absence-of-signal detection</strong> (weakness #3) — <strong>P2.10</strong>, high-value for SRE
   independent of any security goal.</li>
 <li><strong>Falco integration</strong> (closes part of the source ceiling) — P2.7,
-  <code>.kiro/specs/falco-integration/</code>. Enrichment-only in v1.</li>
+  <code>specs/falco-integration/</code>. Enrichment-only in v1.</li>
 <li><strong>Least-privilege RBAC + IRSA</strong> (weakness #6) — P5.2, plus the broader hardening
   bundle in <a href="../ROADMAP.md#phase-5-pre-reqs--production-hardening-blocks-phase-5-deploy">Phase 5 Pre-Reqs</a>
   (PH.1, PH.21, PH.22, PH.23).</li>
@@ -2647,13 +2647,15 @@ and dependencies</strong>. Concrete gaps observed in <code>controller/Dockerfile
   pseudo-version — a personal GitHub repository. Single account compromise →
   every consumer inherits the payload. There is no Harbor proxy mitigation
   because the dep is not in the org repo.</li>
-<li>The ML image keeps <code>gcc/g++</code> in the runtime layer (single-stage). A compromised
-  pod has an in-container compiler — convenient for staging additional payloads.</li>
-<li><code>grpcio==1.62.1</code> carries CVE-2024-7246 (DoS, fixed in 1.63). No
-  vulnerability-scanning gate exists.</li>
+<li>~~The ML image keeps <code>gcc/g++</code> in the runtime layer (single-stage).~~ <strong>Resolved
+  (PH.5)</strong>: the ML image is now multi-stage — the runtime layer has no compiler or
+  build tooling.</li>
+<li>~~<code>grpcio==1.62.1</code> carries CVE-2024-7246 (DoS).~~ <strong>Resolved (PH.24)</strong>: runtime
+  <code>grpcio</code> bumped to 1.65.4. A vulnerability-scanning gate still does not exist.</li>
 </ul>
-<p><strong>Mitigation</strong>: items PH.3 (golden bases + cosign), PH.5 (multi-stage ML), PH.13
-(org rename for the Go dep), PH.24 (grpcio bump) in Phase 5 Pre-Reqs.</p>
+<p><strong>Mitigation</strong>: PH.5 (multi-stage ML) ✅ and PH.24 (grpcio bump) ✅ are done;
+PH.3 (golden bases + cosign) and PH.13 (org rename for the Go dep) remain in
+Phase 5 Pre-Reqs.</p>
 <h3 id="b-redis-as-a-single-point-of-failure-for-state-integrity">B. Redis as a single point of failure for state integrity<a class="headerlink" href="#b-redis-as-a-single-point-of-failure-for-state-integrity" title="Permanent link">&para;</a></h3>
 <p><code>weakness #2</code> covers slow-and-low EWMA poisoning. It does <strong>not</strong> cover the more
 direct attack: <strong>flushing Redis</strong>. With <code>REDIS_PASSWORD=""</code> (the default in
