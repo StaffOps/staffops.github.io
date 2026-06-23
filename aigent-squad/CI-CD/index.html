@@ -1073,7 +1073,7 @@
                   
 
   
-    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/CI-CD.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/site/CI-CD.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1092,46 +1092,45 @@ publishes — and nothing reaches a registry without passing Trivy first.</stron
 <tr>
 <th>Branch</th>
 <th>Role</th>
-<th>Protection</th>
+<th>Workflow</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>main</code></td>
 <td>Production source of truth</td>
-<td>Policy: PRs <strong>only from <code>dev</code></strong> (guard job).</td>
+<td>Receives <strong>only PRs from <code>dev</code></strong> (guard job). Publishing happens here.</td>
 </tr>
 <tr>
 <td><code>dev</code></td>
-<td>Integration</td>
-<td>Policy: PRs from <code>feature/*</code>.</td>
+<td>Working / integration branch</td>
+<td><strong>Direct commits</strong> (solo dev). Every push runs the full validation suite.</td>
 </tr>
 <tr>
 <td><code>feature/*</code>, <code>fix/*</code></td>
-<td>Day-to-day work</td>
-<td>—</td>
+<td>Optional, for larger/risky changes</td>
+<td>PR into <code>dev</code></td>
 </tr>
 </tbody>
 </table>
-<p>Flow: <code>feature/* ──PR──▶ dev ──PR──▶ main</code></p>
+<p>Flow (solo, current): <code>commit ──▶ dev (validated on push) ──PR──▶ main ──▶ publish</code></p>
+<p>Because the project is single-developer for now, <code>dev</code> is committed to directly —
+no <code>feature/* → dev</code> PR step. The same checks that would run on a PR (<code>lint</code>,
+<code>test</code>+coverage, <code>dep_scan</code>, <code>bandit</code>) run on <strong>every push to <code>dev</code></strong>, so each
+commit is validated. The difference vs a PR gate: validation is <strong>post-commit</strong>
+(fix-forward if a push goes red) rather than blocking. <code>main</code> keeps the PR gate.</p>
 <blockquote>
-<p>⚠️ <strong>Branch protection is not yet enforced.</strong> GitHub branch protection and
-rulesets require <strong>GitHub Pro/Team</strong> (or a public repo) for private repos —
-the current plan returns HTTP 403. So "no direct push" is <strong>policy, not
-enforced</strong>; a <code>git push</code> straight to <code>main</code>/<code>dev</code> is still technically
-possible. What <em>is</em> enforced today: the <code>guard</code> job fails any PR to <code>main</code>
-whose source isn't <code>dev</code>, and all CI checks run on every PR. To get true
-enforcement, upgrade the plan or make the repo public, then enable the
-required checks below. Tracked in <code>HANDOFF.md</code>.</p>
+<p>⚠️ <strong>Branch protection is not enforced.</strong> GitHub branch protection / rulesets
+need <strong>GitHub Pro/Team</strong> (or a public repo) for private repos — the current
+plan returns HTTP 403. So the rules above are <strong>policy, not a technical lock</strong>.
+What <em>is</em> enforced today: the <code>guard</code> job fails any PR to <code>main</code> not from <code>dev</code>,
+and CI runs on every push/PR. Tracked in <code>HANDOFF.md</code>.</p>
 </blockquote>
-<p><code>main</code> accepting PRs only from <code>dev</code> is enforced by a guard job (below) — GitHub
-branch protection alone cannot restrict the source branch anyway.</p>
 <hr />
 <h2 id="what-runs-and-when">What runs, and WHEN<a class="headerlink" href="#what-runs-and-when" title="Permanent link">&para;</a></h2>
-<p>Code checks (<code>lint</code>, <code>test</code>, <code>dep_scan</code>, <code>bandit</code>) run on <strong>every</strong> PR — they are
-cheap and are the required gates, so they always report and never hang a merge.
-The docs <code>build_check</code> is <strong>path-filtered</strong> (<code>docs/**</code>, <code>mkdocs.yml</code>) and is not a
-required gate — it runs only when docs change.</p>
+<p>Code checks (<code>lint</code>, <code>test</code>, <code>dep_scan</code>, <code>bandit</code>) run on <strong>every push and PR</strong> to
+<code>dev</code>/<code>main</code> — cheap, and the validation/gate. The docs <code>build_check</code> is
+<strong>path-filtered</strong> (<code>docs/**</code>, <code>mkdocs.yml</code>) and runs only on PRs that touch docs.</p>
 <table>
 <thead>
 <tr>
@@ -1142,14 +1141,9 @@ required gate — it runs only when docs change.</p>
 </thead>
 <tbody>
 <tr>
-<td><strong>PR → dev</strong></td>
+<td><strong>push: dev</strong> (direct commit)</td>
 <td><code>lint</code> · <code>test</code> (cov ≥90%) · SAST (Bandit) · Trivy <strong>fs</strong> (deps)</td>
-<td><code>mkdocs build</code></td>
-</tr>
-<tr>
-<td><strong>push: dev</strong> (post-merge)</td>
-<td>nothing required (optional re-<code>test</code>)</td>
-<td>nothing (prod docs only from <code>main</code>)</td>
+<td>—</td>
 </tr>
 <tr>
 <td><strong>PR → main</strong> (only from <code>dev</code>)</td>
@@ -1157,8 +1151,8 @@ required gate — it runs only when docs change.</p>
 <td><code>mkdocs build --strict</code></td>
 </tr>
 <tr>
-<td><strong>push: main</strong> (post-merge)</td>
-<td><code>build.yml</code>: build → scan → push <code>latest</code>+<code>sha</code></td>
+<td><strong>push: main</strong> (merge)</td>
+<td><code>build.yml</code>: build local → <strong>Trivy gate</strong> → push <code>latest</code>+<code>sha</code> · SBOM</td>
 <td><code>docs.yml</code>: deploy → <code>staffops.github.io/aigent-squad/</code></td>
 </tr>
 <tr>

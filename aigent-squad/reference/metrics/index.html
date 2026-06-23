@@ -845,6 +845,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#edge-gateway-and-admission-spec-31" class="md-nav__link">
+    <span class="md-ellipsis">
+      Edge gateway and admission (spec 31)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fan-out-and-synthesis-spec-17" class="md-nav__link">
     <span class="md-ellipsis">
       Fan-out and synthesis (spec 17)
@@ -1043,6 +1052,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#edge-gateway-and-admission-spec-31" class="md-nav__link">
+    <span class="md-ellipsis">
+      Edge gateway and admission (spec 31)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fan-out-and-synthesis-spec-17" class="md-nav__link">
     <span class="md-ellipsis">
       Fan-out and synthesis (spec 17)
@@ -1129,7 +1147,7 @@
                   
 
   
-    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/reference/metrics.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/site/reference/metrics.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1410,6 +1428,57 @@ build Prometheus rules that alert on <code>closed → open</code> transitions.</
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="edge-gateway-and-admission-spec-31">Edge gateway and admission (spec 31)<a class="headerlink" href="#edge-gateway-and-admission-spec-31" title="Permanent link">&para;</a></h2>
+<p>Emitted by the edge gateway. The worker-pool metrics reflect the <strong>per-replica</strong>
+local concurrency cap; the admission metric reflects the <strong>global</strong> Redis-backed
+rate/budget guards (see Architecture → Concurrency model).</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Labels</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aigent.gateway.pool_rejections</code></td>
+<td>Counter</td>
+<td>—</td>
+<td>Requests rejected with <code>503</code> because the worker pool was at capacity (backpressure)</td>
+</tr>
+<tr>
+<td><code>aigent.gateway.pool_depth</code></td>
+<td>UpDownCounter</td>
+<td>—</td>
+<td>In-flight jobs currently held by the pool</td>
+</tr>
+<tr>
+<td><code>aigent.gateway.queue_wait</code></td>
+<td>Histogram (ms)</td>
+<td>—</td>
+<td>Time a job waited to acquire a pool slot</td>
+</tr>
+<tr>
+<td><code>aigent.gateway.redis_fallback_active</code></td>
+<td>Counter</td>
+<td>—</td>
+<td>Times job lifecycle fell back to log-only (Redis unavailable)</td>
+</tr>
+<tr>
+<td><code>aigent.rate_limit.blocks</code></td>
+<td>Counter</td>
+<td><code>reason</code> (<code>user</code>/<code>global</code>)</td>
+<td>Requests blocked by the admission guards (per-user rate or global budget)</td>
+</tr>
+</tbody>
+</table>
+<p>Useful signals: a rising <code>pool_rejections</code> with low <code>pool_depth</code> variance means
+the cap is too low for the replica count; <code>queue_wait</code> p99 climbing toward the
+job timeout indicates saturation; <code>rate_limit.blocks{reason="global"}</code> firing
+means the daily budget is exhausted.</p>
 <hr />
 <h2 id="fan-out-and-synthesis-spec-17">Fan-out and synthesis (spec 17)<a class="headerlink" href="#fan-out-and-synthesis-spec-17" title="Permanent link">&para;</a></h2>
 <p>Emitted when the supervisor routes a query to two or more agents in parallel

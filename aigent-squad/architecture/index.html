@@ -509,6 +509,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#concurrency-model-spec-31" class="md-nav__link">
+    <span class="md-ellipsis">
+      Concurrency model (spec 31)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-design-decisions" class="md-nav__link">
     <span class="md-ellipsis">
       Key design decisions
@@ -597,9 +606,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#supervisor-api" class="md-nav__link">
+  <a href="#gateway-api-public-8000" class="md-nav__link">
     <span class="md-ellipsis">
-      Supervisor API
+      Gateway API (public, :8000)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supervisor-internal-8001" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supervisor (internal, :8001)
     </span>
   </a>
   
@@ -972,6 +990,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#concurrency-model-spec-31" class="md-nav__link">
+    <span class="md-ellipsis">
+      Concurrency model (spec 31)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#key-design-decisions" class="md-nav__link">
     <span class="md-ellipsis">
       Key design decisions
@@ -1060,9 +1087,18 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#supervisor-api" class="md-nav__link">
+  <a href="#gateway-api-public-8000" class="md-nav__link">
     <span class="md-ellipsis">
-      Supervisor API
+      Gateway API (public, :8000)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supervisor-internal-8001" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supervisor (internal, :8001)
     </span>
   </a>
   
@@ -1097,7 +1133,7 @@
                   
 
   
-    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/architecture.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/StaffOps/staffops-aigent-squad/edit/main/docs/site/architecture.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1107,38 +1143,91 @@
 
 <h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>A single supervisor process runs all specialist agents in-process, loaded from YAML config at startup. No inter-container HTTP between agents — just function calls.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>                   ┌─────────────┐
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                   │  Kiro CLI   │
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                   └──────┬──────┘
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                          │ HTTP (MCP protocol)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                          ▼
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                   ┌─────────────┐
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                   │ MCP Server  │ :8006
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                   └──────┬──────┘
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                          │ X-Internal-Token
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                          ▼
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>┌──────────────────────────────────────────────────────────┐
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│                  Supervisor (:8000)                       │
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│                                                          │
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│  ┌────────────┐  ┌────────────────┐  ┌──────────────┐   │
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│  │ Classifier │  │ AgentRegistry  │  │ Fan-out/RCA  │   │
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│  │ (routing)  │  │ (auto-discover)│  │ (orchestr.)  │   │
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│  └────────────┘  └────────────────┘  └──────────────┘   │
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│                                                          │
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│  ┌─────┐ ┌─────┐ ┌───────┐ ┌───────┐ ┌─────┐          │
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│  │ AWS │ │ K8s │ │FinOps │ │DevOps │ │ Obs │  ...     │
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│  └──┬──┘ └──┬──┘ └───┬───┘ └───┬───┘ └──┬──┘          │
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│     └───────┴─────────┴─────────┴────────┘              │
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│                  DatasourceAdapter layer                  │
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│        Boto3 │ Kubernetes │ HTTP │ Athena │ MCP          │
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>└──────────────────────────────────────────────────────────┘
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>         │          │           │            │
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    ┌────────┐ ┌────────┐ ┌─────────┐ ┌──────────────┐
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    │ Redis  │ │Postgres│ │DynamoDB │ │ OTel Collect.│
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    │ cache  │ │pgvector│ │(history)│ │  → Prometheus│
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    └────────┘ └────────┘ └─────────┘ └──────────────┘
+<p>A thin <strong>edge gateway</strong> fronts a <strong>supervisor</strong> backend (spec 31). The gateway is
+the only externally-exposed tier — it does edge auth, admission control (worker
+pool + backpressure, global rate/budget), and protocol translation (native
+<code>/query</code> + OpenAI <code>/v1</code>). It forwards to the supervisor over an internal-only
+<code>/internal/process</code>. The supervisor runs all specialist agents in-process,
+loaded from YAML config at startup — no inter-container HTTP between agents,
+just function calls.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>        ┌─────────────┐   ┌───────────┐   ┌─────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>        │  LibreChat  │   │ Kiro CLI  │   │ In-cluster callers          │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        │  (OpenAI)   │   │ (via MCP) │   │ (Alertmanager, anomaly-det, │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        └──────┬──────┘   └─────┬─────┘   │  Falco — NetworkPolicy      │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>               │                │         │  allowFrom)                 │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>               │                │         └──────────────┬──────────────┘
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>               └────────────────┴────────────────────────┘
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                                │  edge auth (X-Internal-Token / X-API-Key)
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                                ▼
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        ┌──────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        │                   GATEWAY (:8000)                         │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        │  edge auth · WorkerPool (backpressure) · admission        │
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        │  (rate + budget) · OpenAI /v1 + /query · /jobs/{id}/cancel│
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        └───────────────────────────┬──────────────────────────────┘
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>                                     │ /internal/process
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                                     │ X-Supervisor-Token (distinct secret)
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                                     │ NetworkPolicy: gateway-only
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>                                     ▼
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>┌──────────────────────────────────────────────────────────┐
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│                  Supervisor (:8001, backend)              │
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│                                                          │
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│  ┌────────────┐  ┌────────────────┐  ┌──────────────┐   │
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│  │ Classifier │  │ AgentRegistry  │  │ Fan-out/RCA  │   │
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│  │ (routing)  │  │ (auto-discover)│  │ (orchestr.)  │   │
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│  └────────────┘  └────────────────┘  └──────────────┘   │
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│  ┌─ Guardrail (spec 14, fail-closed) on every invoke ─┐  │
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│  ┌─────┐ ┌─────┐ ┌───────┐ ┌───────┐ ┌─────┐          │
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│  │ AWS │ │ K8s │ │FinOps │ │DevOps │ │ Obs │  ...     │
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>│  └──┬──┘ └──┬──┘ └───┬───┘ └───┬───┘ └──┬──┘          │
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>│     └───────┴─────────┴─────────┴────────┘              │
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>│                  DatasourceAdapter layer                  │
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│        Boto3 │ Kubernetes │ HTTP │ Athena │ MCP          │
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>└──────────────────────────────────────────────────────────┘
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>         │          │           │            │
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    ┌────────┐ ┌────────┐ ┌─────────┐ ┌──────────────┐
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    │ Redis  │ │Postgres│ │DynamoDB │ │ OTel Collect.│
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    │ cache  │ │pgvector│ │(history)│ │  → Prometheus│
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    └────────┘ └────────┘ └─────────┘ └──────────────┘
 </code></pre></div>
+<blockquote>
+<p><strong>Why two tiers?</strong> The edge is cheap/stateless/IO-bound; the supervisor is
+expensive/Bedrock-bound. Splitting them lets each scale on its own signal
+(gateway on RPS, supervisor on Bedrock concurrency) and gives a clean admission
+point that sheds load (<code>503 + Retry-After</code>) before the expensive process is
+touched. See <a href="../../specs/31-edge-gateway-worker-pool/">spec 31</a> for the full
+rationale. Both tiers run the <strong>same image</strong>, differing only in the launch
+command (<code>src.gateway.main</code> vs <code>src.supervisor.server</code>).</p>
+</blockquote>
+<h2 id="concurrency-model-spec-31">Concurrency model (spec 31)<a class="headerlink" href="#concurrency-model-spec-31" title="Permanent link">&para;</a></h2>
+<p>Two distinct, complementary limits — they protect different resources:</p>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Where</th>
+<th>Scope</th>
+<th>Protects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Worker pool semaphore</td>
+<td>Gateway, in-memory</td>
+<td><strong>per-replica</strong></td>
+<td>This pod's resources (event loop, memory). Survives Redis outage.</td>
+</tr>
+<tr>
+<td>Rate limit + daily budget</td>
+<td>Gateway, Redis</td>
+<td><strong>global</strong> (all replicas)</td>
+<td>Account-wide resources (Bedrock TPS, $/day)</td>
+</tr>
+</tbody>
+</table>
+<p>The local pool fails <em>open-to-reject</em> (<code>503</code> when full); the global guards fail
+<em>open-to-allow</em> (Redis down → permit, availability over a hard cap). This is the
+opposite of the spec-14 guardrail, which fails <strong>closed</strong> (security over
+availability).</p>
 <h2 id="key-design-decisions">Key design decisions<a class="headerlink" href="#key-design-decisions" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1149,8 +1238,20 @@
 </thead>
 <tbody>
 <tr>
+<td>Edge gateway in front of the supervisor</td>
+<td>Independent scaling; admission/backpressure before the expensive tier; client-protocol isolation (spec 31)</td>
+</tr>
+<tr>
+<td>One image, command override per tier</td>
+<td>No second build; gateway and supervisor can never drift in deps</td>
+</tr>
+<tr>
+<td>Gateway is the single front door</td>
+<td>External (LibreChat) AND in-cluster callers (Alertmanager, anomaly-detection, Falco) go through one authenticated, rate-limited entry — never the supervisor directly</td>
+</tr>
+<tr>
 <td>Single image, in-process agents</td>
-<td>No inter-container HTTP; simpler deploy; lower resource footprint</td>
+<td>No inter-container HTTP between agents; simpler; lower footprint</td>
 </tr>
 <tr>
 <td>Config-driven agents (<code>agent.yaml</code> + <code>prompt.md</code>)</td>
@@ -1162,7 +1263,7 @@
 </tr>
 <tr>
 <td>Bedrock-direct (no framework)</td>
-<td>No LangGraph or similar — direct <code>bedrock-runtime</code> API calls for full control of prompts and cost</td>
+<td>No LangGraph — direct <code>bedrock-runtime</code> API calls for full control of prompts and cost</td>
 </tr>
 </tbody>
 </table>
@@ -1189,21 +1290,28 @@
 <tr>
 <th>Port</th>
 <th>Service</th>
+<th>Exposure</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>8000</td>
-<td>Supervisor API</td>
+<td>Gateway API</td>
+<td>Public (Ingress + in-cluster callers)</td>
+</tr>
+<tr>
+<td>8001</td>
+<td>Supervisor (<code>/internal/*</code>)</td>
+<td>Internal — gateway-only (NetworkPolicy)</td>
 </tr>
 <tr>
 <td>8006</td>
 <td>MCP Server</td>
+<td>Public (Kiro CLI facade) — calls the gateway</td>
 </tr>
 </tbody>
 </table>
-<p>All specialist agents run in-process in the supervisor — no per-agent ports.</p>
-<h3 id="supervisor-api">Supervisor API<a class="headerlink" href="#supervisor-api" title="Permanent link">&para;</a></h3>
+<h3 id="gateway-api-public-8000">Gateway API (public, <code>:8000</code>)<a class="headerlink" href="#gateway-api-public-8000" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1218,25 +1326,78 @@
 <td><code>/healthz</code></td>
 <td style="text-align: center;">GET</td>
 <td style="text-align: center;">—</td>
-<td>Liveness probe (always 200)</td>
+<td>Liveness (always 200)</td>
 </tr>
 <tr>
 <td><code>/ready</code></td>
 <td style="text-align: center;">GET</td>
 <td style="text-align: center;">—</td>
-<td>Readiness probe (checks Redis + DynamoDB + agents)</td>
-</tr>
-<tr>
-<td><code>/health</code></td>
-<td style="text-align: center;">GET</td>
-<td style="text-align: center;">—</td>
-<td>Legacy alias for <code>/healthz</code></td>
+<td>Readiness (Redis + pool — NOT supervisor, decoupled)</td>
 </tr>
 <tr>
 <td><code>/query</code></td>
 <td style="text-align: center;">POST</td>
-<td style="text-align: center;"><code>X-Internal-Token</code></td>
-<td>Single query (optional <code>mode=investigate</code>)</td>
+<td style="text-align: center;"><code>X-Internal-Token</code> / <code>X-API-Key</code></td>
+<td>Native query (admission → forward)</td>
+</tr>
+<tr>
+<td><code>/v1/models</code></td>
+<td style="text-align: center;">GET</td>
+<td style="text-align: center;">edge auth</td>
+<td>OpenAI-compatible model list</td>
+</tr>
+<tr>
+<td><code>/v1/chat/completions</code></td>
+<td style="text-align: center;">POST</td>
+<td style="text-align: center;">edge auth</td>
+<td>OpenAI-compatible chat (LibreChat)</td>
+</tr>
+<tr>
+<td><code>/jobs/{id}/cancel</code></td>
+<td style="text-align: center;">POST</td>
+<td style="text-align: center;">edge auth</td>
+<td>Cancel an in-flight job</td>
+</tr>
+</tbody>
+</table>
+<p>Backpressure: <code>503</code> with <code>Retry-After</code> and a body <code>error.type</code> of
+<code>service_overloaded</code> (pool full, self-healing) or <code>backend_unavailable</code>
+(supervisor unreachable). Admission denials: <code>429 rate_limited</code> /
+<code>503 budget_exhausted</code> with <code>X-RateLimit-Remaining</code> / <code>X-Budget-Remaining-USD</code>.</p>
+<h3 id="supervisor-internal-8001">Supervisor (internal, <code>:8001</code>)<a class="headerlink" href="#supervisor-internal-8001" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th style="text-align: center;">Method</th>
+<th style="text-align: center;">Auth</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/healthz</code></td>
+<td style="text-align: center;">GET</td>
+<td style="text-align: center;">—</td>
+<td>Liveness</td>
+</tr>
+<tr>
+<td><code>/ready</code></td>
+<td style="text-align: center;">GET</td>
+<td style="text-align: center;">—</td>
+<td>Readiness (Redis + DynamoDB + agents)</td>
+</tr>
+<tr>
+<td><code>/internal/process</code></td>
+<td style="text-align: center;">POST</td>
+<td style="text-align: center;"><code>X-Supervisor-Token</code></td>
+<td>Orchestration entry (gateway-only)</td>
+</tr>
+<tr>
+<td><code>/internal/agents</code></td>
+<td style="text-align: center;">GET</td>
+<td style="text-align: center;"><code>X-Supervisor-Token</code></td>
+<td>Agent names for <code>/v1/models</code></td>
 </tr>
 <tr>
 <td><code>/alerts/incoming</code></td>
@@ -1244,20 +1405,11 @@
 <td style="text-align: center;"><code>X-Internal-Token</code></td>
 <td>Alertmanager webhook → auto-RCA</td>
 </tr>
-<tr>
-<td><code>/v1/models</code></td>
-<td style="text-align: center;">GET</td>
-<td style="text-align: center;">Bearer</td>
-<td>OpenAI-compatible model list</td>
-</tr>
-<tr>
-<td><code>/v1/chat/completions</code></td>
-<td style="text-align: center;">POST</td>
-<td style="text-align: center;">Bearer</td>
-<td>OpenAI-compatible chat (LibreChat)</td>
-</tr>
 </tbody>
 </table>
+<p>The guardrail (spec 14) runs inside <code>process_request</code> on <strong>every</strong> call, so the
+injection-defense trust boundary is the supervisor, not the gateway. All
+specialist agents run in-process — no per-agent ports.</p>
 <h2 id="data-stores">Data stores<a class="headerlink" href="#data-stores" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
