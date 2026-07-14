@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#degradation-model-net-python-go" class="md-skip">
+        <a href="#degradation-model-net-python-go-nodejs" class="md-skip">
           Skip to content
         </a>
       
@@ -450,6 +450,8 @@
       
         
       
+        
+      
     
     
       
@@ -744,6 +746,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#nodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Node.js
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Node.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chain-j1-blocked-event-loop-global-stall-timeouts-established" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chain J1 — Blocked event loop → global stall → timeouts (🟢 established)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chain-j2-heap-growth-major-gc-pressure-oomabort-established" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chain J2 — Heap growth → major GC pressure → OOM/abort (🟢 established)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chain-j3-libuv-threadpool-starvation-partial-io-latency-plausible" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chain J3 — libuv threadpool starvation → partial I/O latency (🟡 plausible)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cross-language-patterns-the-reusable-shapes" class="md-nav__link">
     <span class="md-ellipsis">
       Cross-language patterns (the reusable shapes)
@@ -842,6 +886,27 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../review-2026-07-04/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Critical Review (2026-07-04)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -860,6 +925,8 @@
       
         
           
+        
+      
         
       
         
@@ -913,6 +980,27 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../detection/methodology/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Methodology (signal definition)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -1821,6 +1909,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#nodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Node.js
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Node.js">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chain-j1-blocked-event-loop-global-stall-timeouts-established" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chain J1 — Blocked event loop → global stall → timeouts (🟢 established)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chain-j2-heap-growth-major-gc-pressure-oomabort-established" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chain J2 — Heap growth → major GC pressure → OOM/abort (🟢 established)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chain-j3-libuv-threadpool-starvation-partial-io-latency-plausible" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chain J3 — libuv threadpool starvation → partial I/O latency (🟡 plausible)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#cross-language-patterns-the-reusable-shapes" class="md-nav__link">
     <span class="md-ellipsis">
       Cross-language patterns (the reusable shapes)
@@ -1865,7 +1995,7 @@
   
 
 
-<h1 id="degradation-model-net-python-go">Degradation Model — .NET, Python, Go<a class="headerlink" href="#degradation-model-net-python-go" title="Permanent link">&para;</a></h1>
+<h1 id="degradation-model-net-python-go-nodejs">Degradation Model — .NET, Python, Go, Node.js<a class="headerlink" href="#degradation-model-net-python-go-nodejs" title="Permanent link">&para;</a></h1>
 <p>This document encodes <strong>how services fail, as causal chains</strong> — not as a list of
 metrics, but as ordered sequences of "X causes Y causes Z". It is the core asset of
 this system: the difference between <em>listing symptoms</em> and <em>explaining an incident</em>.</p>
@@ -2284,6 +2414,150 @@ Structurally the same as .NET N3, different metric name.</p>
 <p><strong>Validation hook</strong>: when a Go service's latency rises, did <code>go_sql_waiting</code> rise
 first? If yes → DB/pool root, not the service itself.</p>
 <hr />
+<h2 id="nodejs">Node.js<a class="headerlink" href="#nodejs" title="Permanent link">&para;</a></h2>
+<h3 id="chain-j1-blocked-event-loop-global-stall-timeouts-established">Chain J1 — Blocked event loop → global stall → timeouts (🟢 established)<a class="headerlink" href="#chain-j1-blocked-event-loop-global-stall-timeouts-established" title="Permanent link">&para;</a></h3>
+<p><strong>Trigger</strong>: synchronous/CPU-bound work runs on the main thread (large <code>JSON.parse</code>,
+sync crypto/zlib/fs calls, catastrophic regex backtracking). Node executes JS on a
+single thread — blocking it stalls <strong>everything</strong>, not just one request.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step</th>
+<th>Observable signal</th>
+<th>Metric already collected</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Event loop can't tick</td>
+<td>event loop lag rises</td>
+<td>❌ not collected (gap) — <code>nodejs_eventloop_lag_p99_seconds</code> (prom-client default)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ALL in-flight requests stall</td>
+<td>latency rises — <strong>p50 and p99 together</strong></td>
+<td><code>latency_p99_by_service</code> (spanmetrics)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Health checks / requests exceed timeout</td>
+<td>errors rise; liveness may kill the pod</td>
+<td><code>error_rate_by_service</code>, <code>restarts_5m</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Clients retry</td>
+<td>inbound rate rises → snowball</td>
+<td><code>request_rate_by_service</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Leading signal</strong>: event loop lag (step 1). <strong>Lagging</strong>: errors/restarts.</p>
+<p><strong>Distinguishing signature</strong>: p50 and p99 rise <em>together</em> (a blocked loop stalls
+everyone equally). In queueing-type saturation (.NET N1) the tail (p99) rises first.
+Same symptom, different shape — and a different fix (offload CPU work vs. scale).</p>
+<p><strong>Validation hook</strong>: in replay, find latency spikes where p50/p99 moved together on a
+Node service. Once event loop lag is collected, confirm it rose first.</p>
+<hr />
+<h3 id="chain-j2-heap-growth-major-gc-pressure-oomabort-established">Chain J2 — Heap growth → major GC pressure → OOM/abort (🟢 established)<a class="headerlink" href="#chain-j2-heap-growth-major-gc-pressure-oomabort-established" title="Permanent link">&para;</a></h3>
+<p><strong>Trigger</strong>: memory leak (closures retaining references, unbounded caches, listener
+leaks) or allocation spike grows the V8 old-space heap.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step</th>
+<th>Observable signal</th>
+<th>Metric already collected</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Old-space heap grows</td>
+<td>heap used climbs (monotonic = leak)</td>
+<td>❌ not collected (gap) — <code>nodejs_heap_size_used_bytes</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Major (mark-sweep) GC runs more/longer</td>
+<td>GC duration rises; <strong>GC pauses block the event loop</strong></td>
+<td>❌ not collected (gap) — <code>nodejs_gc_duration_seconds{kind="major"}</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Pauses stall requests</td>
+<td>latency saw-tooth + event loop lag spikes</td>
+<td><code>latency_p99_by_service</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Heap hits <code>--max-old-space-size</code></td>
+<td>V8 heap-OOM abort or OOMKilled → restart</td>
+<td><code>restarts_5m</code>, <code>oom_kills</code> (enrichment)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Leading signal</strong>: old-space growth (step 1). <strong>Lagging</strong>: restart (step 4).</p>
+<p><strong>Leak vs spike</strong>: same shape-distinction as .NET N2 — monotonic growth over hours
+ending in restart = leak; GC duration correlated with request rate, heap stable =
+allocation pressure. Note Node's V8 heap limit is <strong>independent of the container
+limit</strong> — a pod can die of V8 abort with container memory to spare, which looks like
+a crash, not an OOMKill. The model must know both ceilings.</p>
+<p><strong>Validation hook</strong>: replay windows ending in Node pod restarts — was heap growth
+monotonic? Did restarts happen <em>below</em> the container memory limit (→ V8 abort)?</p>
+<hr />
+<h3 id="chain-j3-libuv-threadpool-starvation-partial-io-latency-plausible">Chain J3 — libuv threadpool starvation → partial I/O latency (🟡 plausible)<a class="headerlink" href="#chain-j3-libuv-threadpool-starvation-partial-io-latency-plausible" title="Permanent link">&para;</a></h3>
+<p><strong>Trigger</strong>: heavy fs/dns/crypto/zlib load. These do <strong>not</strong> run on the event loop —
+they run on libuv's threadpool, which defaults to <strong>4 threads</strong> (<code>UV_THREADPOOL_SIZE</code>).</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Step</th>
+<th>Observable signal</th>
+<th>Metric already collected</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Threadpool slots exhausted</td>
+<td>fs/dns/crypto operations queue</td>
+<td>❌ not collected (no standard metric — deepest gap in Node observability)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>DNS lookups slow (dns.lookup uses the pool)</td>
+<td>outbound HTTP latency rises (connect phase)</td>
+<td>❌ partial — outbound duration via spanmetrics if traced</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Only I/O-touching endpoints degrade</td>
+<td>latency rises <strong>selectively</strong>, p99 first</td>
+<td><code>latency_p99_by_service</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Waits exceed timeouts</td>
+<td>errors on affected endpoints</td>
+<td><code>error_rate_by_service</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Leading signal</strong>: fs/dns operation duration (mostly invisible today). <strong>Lagging</strong>:
+selective endpoint errors.</p>
+<p><strong>Distinguishing signature vs J1</strong>: J1 stalls <em>everything</em> (p50+p99 together); J3
+degrades <em>only endpoints that touch the pool</em> while pure-CPU/memory endpoints stay
+fast. Event loop lag stays <strong>normal</strong> in J3 — that contrast is the disambiguator.</p>
+<p><strong>Validation hook</strong>: latency spike on a Node service where event loop lag stayed flat
+and only a subset of routes degraded → J3 candidate. Requires per-route latency or
+traces to confirm.</p>
+<hr />
 <h2 id="cross-language-patterns-the-reusable-shapes">Cross-language patterns (the reusable shapes)<a class="headerlink" href="#cross-language-patterns-the-reusable-shapes" title="Permanent link">&para;</a></h2>
 <p>Stepping back, the chains collapse into a few <strong>archetypes</strong> that repeat across
 languages with different metric names:</p>
@@ -2294,6 +2568,7 @@ languages with different metric names:</p>
 <th>.NET</th>
 <th>Python</th>
 <th>Go</th>
+<th>Node.js</th>
 </tr>
 </thead>
 <tbody>
@@ -2302,24 +2577,28 @@ languages with different metric names:</p>
 <td>threadpool (N1)</td>
 <td>event loop (P1)</td>
 <td>— (goroutines cheap; rarely the bottleneck)</td>
+<td>event loop (J1) + libuv pool (J3)</td>
 </tr>
 <tr>
 <td><strong>CPU/serialization limit</strong></td>
 <td>—</td>
 <td>GIL (P2)</td>
 <td>GC CPU (G2)</td>
+<td>single JS thread (J1)</td>
 </tr>
 <tr>
 <td><strong>Memory growth → OOMKill</strong></td>
 <td>heap leak (N2)</td>
 <td>RSS leak (P3)</td>
 <td>goroutine leak (G1)</td>
+<td>V8 old-space leak (J2)</td>
 </tr>
 <tr>
 <td><strong>Dependency / pool saturation</strong></td>
 <td>HikariCP (N3)</td>
 <td>(DB driver)</td>
 <td>database/sql (G3)</td>
+<td>http.Agent sockets / DNS via libuv (J3)</td>
 </tr>
 </tbody>
 </table>
@@ -2358,6 +2637,24 @@ a leading (root-cause) signal currently invisible:</p>
 <td>Go</td>
 <td>Distinguishes G2 from generic CPU</td>
 <td>Low</td>
+</tr>
+<tr>
+<td><code>nodejs_eventloop_lag_p99_seconds</code></td>
+<td>Node.js</td>
+<td>Root of J1; also the J1-vs-J3 disambiguator</td>
+<td>Low (prom-client default — likely already exported, just not queried)</td>
+</tr>
+<tr>
+<td><code>nodejs_heap_size_used_bytes</code> + <code>nodejs_gc_duration_seconds</code></td>
+<td>Node.js</td>
+<td>Root of J2; V8 abort vs OOMKill distinction</td>
+<td>Low (prom-client default)</td>
+</tr>
+<tr>
+<td>libuv threadpool queue/latency</td>
+<td>Node.js</td>
+<td>Root of J3; no standard exporter — deepest Node gap</td>
+<td>Medium (needs app-side instrumentation)</td>
 </tr>
 </tbody>
 </table>

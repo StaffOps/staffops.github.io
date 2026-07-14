@@ -450,6 +450,8 @@
       
         
       
+        
+      
     
     
       
@@ -863,6 +865,27 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../review-2026-07-04/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Critical Review (2026-07-04)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -881,6 +904,8 @@
       
         
           
+        
+      
         
       
         
@@ -934,6 +959,27 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../detection/methodology/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Methodology (signal definition)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -2258,13 +2304,13 @@ blinding the pipeline) but <strong>does not address attacks on the detector's ow
 and dependencies</strong>. Concrete gaps observed in <code>controller/Dockerfile</code>,
 <code>ml/Dockerfile</code>, and <code>go.mod</code>:</p>
 <ul>
-<li>Base images are <code>golang:1.22-alpine</code>, <code>alpine:3.20</code>, <code>python:3.11-slim</code> — <strong>not
+<li>Base images are <code>golang:1.25-alpine</code>, <code>alpine:3.20</code>, <code>python:3.11-slim</code> — <strong>not
   golden apko-built and not cosign-signed</strong>. A compromised upstream image (or its
   registry) ships malicious code into every replica.</li>
-<li><code>go.mod</code> imports <code>github.com/karlipegomes/staffops-otel-libs/go</code> at a
-  pseudo-version — a personal GitHub repository. Single account compromise →
-  every consumer inherits the payload. There is no Harbor proxy mitigation
-  because the dep is not in the org repo.</li>
+<li>~~<code>go.mod</code> imports <code>github.com/karlipegomes/staffops-otel-libs/go</code> at a
+  pseudo-version — a personal GitHub repository.~~ <strong>Resolved (2026-07-02, PH.13)</strong>:
+  moved to the org module <code>github.com/staffops/staffops-otel-libs/go</code> at tagged
+  release <code>v0.1.0</code>. No longer a personal-account single-point-of-compromise.</li>
 <li>~~The ML image keeps <code>gcc/g++</code> in the runtime layer (single-stage).~~ <strong>Resolved
   (PH.5)</strong>: the ML image is now multi-stage — the runtime layer has no compiler or
   build tooling.</li>
