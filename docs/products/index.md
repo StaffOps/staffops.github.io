@@ -16,27 +16,11 @@ Multi-agent platform for AWS and Kubernetes operations. A supervisor agent route
 
 ---
 
-## ChaiTops
-
-Conversational orchestrator for observability stacks. Provides a chat interface (LibreChat) backed by a FastAPI orchestrator that integrates with multiple AI CLI adapters. Designed for querying and diagnosing OpenTelemetry, VictoriaMetrics, Tempo, and Loki pipelines.
-
-[Documentation →](chaitops.md){ .md-button }
-
----
-
 ## Anomaly Detection
 
 Distributed anomaly detection service for Kubernetes. A Go controller orchestrates parallel workers that query VictoriaMetrics (PromQL) and Loki (LogQL), then correlate signals to fire meaningful alerts through Alertmanager. A Python ML service provides adaptive detection via Isolation Forest and Prophet.
 
 [Documentation →](anomaly-detection.md){ .md-button }
-
----
-
-## Agent Definition
-
-The source of truth for all StaffOps agent behavior. Defines the core agent, 11 specialist subagents, 58+ lazy-loaded skills, and 21+ global steering rules. Template-driven, version-controlled, and installable via symlinks in Claude Code or Kiro CLI.
-
-[Documentation →](agent-definition.md){ .md-button }
 
 ---
 
@@ -50,3 +34,19 @@ helm repo update
 ```
 
 [Documentation →](helm-charts.md){ .md-button }
+
+---
+
+## Maturity Score Card
+
+Stateless FastAPI service that receives CI/CD tool results and computes maturity scores (0–100) per metric — security, application, and reliability scorecards. State persists in PostgreSQL, metrics are scraped by VictoriaMetrics, and results are visualized in Grafana.
+
+[Documentation →](maturity-score-card.md){ .md-button }
+
+---
+
+## OTel Libs
+
+Standardized OpenTelemetry instrumentation libraries for .NET, Python, and Go. OpenTelemetry as the single standard — no vendor SDKs, everything routed through the Collector, with a Prometheus `/metrics` fallback when no OTLP endpoint is configured.
+
+[Documentation →](otel-libs.md){ .md-button }

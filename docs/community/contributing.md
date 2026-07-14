@@ -11,9 +11,10 @@ StaffOps is a community project. Every contribution matters — from fixing a ty
 Found a bug or something that doesn't work as documented? Open an issue in the relevant repository.
 
 - [Aigent Squad issues](https://github.com/StaffOps/staffops-aigent-squad/issues)
-- [ChaiTops issues](https://github.com/StaffOps/staffops-chaitops/issues)
 - [Anomaly Detection issues](https://github.com/StaffOps/staffops-anomaly-detection/issues)
 - [Helm Charts issues](https://github.com/StaffOps/helm-charts/issues)
+- [Maturity Score Card issues](https://github.com/StaffOps/maturity-score-card/issues)
+- [OTel Libs issues](https://github.com/StaffOps/otel-libs/issues)
 
 Be specific: what did you expect, what happened, and how to reproduce it.
 

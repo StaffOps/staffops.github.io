@@ -26,10 +26,10 @@ We build open source tools that bring AI-assisted operations to everyone — wit
 | Product | Description |
 |---|---|
 | [**Aigent Squad**](products/aigent-squad.md) | Multi-agent platform for AWS/Kubernetes operations. 1 supervisor + 5 specialist agents, config-driven, read-only by default. |
-| [**ChaiTops**](products/chaitops.md) | Conversational orchestrator for observability stacks. LibreChat frontend + FastAPI backend with multi-CLI adapter support. |
 | [**Anomaly Detection**](products/anomaly-detection.md) | Distributed anomaly detection for Kubernetes. Go controller + workers + Python ML (Isolation Forest, Prophet). |
-| [**Agent Definition**](products/agent-definition.md) | Core rules, global steering, lazy-loaded skills and agent definitions. The source of truth for all agent behavior. |
 | [**Helm Charts**](products/helm-charts.md) | Kubernetes-ready Helm charts for the full StaffOps suite. |
+| [**Maturity Score Card**](products/maturity-score-card.md) | Stateless scoring service for CI/CD maturity metrics. Computes 0–100 scores per team/app, visualized in Grafana. |
+| [**OTel Libs**](products/otel-libs.md) | Standardized OpenTelemetry instrumentation libraries for .NET, Python, and Go — one collector, no vendor SDKs. |
 
 ---
 
