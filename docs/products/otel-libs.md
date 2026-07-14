@@ -3,8 +3,8 @@
 Standardized OpenTelemetry instrumentation libraries for .NET, Python, and Go.
 
 !!! info "Full documentation"
-    The complete documentation lives in the project repository at
-    [github.com/StaffOps/otel-libs](https://github.com/StaffOps/otel-libs).
+    The complete documentation lives at
+    [staffops.github.io/otel-libs/](https://staffops.github.io/otel-libs/).
 
 ---
 
@@ -20,7 +20,7 @@ Gives every service the same OpenTelemetry setup regardless of language — one 
 |---|---|---|
 | .NET | `OtelHelper` (NuGet) | Production |
 | Python | `otel-helper` (PyPI) | Production |
-| Go | `otelhelper` (Go module) | In development |
+| Go | `otelhelper` (Go module) | Production |
 
 Optional AWS, Redis, and SQL instrumentation ship as opt-in extensions per language, so core packages stay lightweight.
 
