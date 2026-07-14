@@ -1,0 +1,1880 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Standardized OpenTelemetry instrumentation libraries for .NET, Python, and Go">
+      
+      
+      
+        <link rel="canonical" href="https://staffops.github.io/otel-libs/dotnet/example/EXAMPLES/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../../../python/">
+      
+      
+      <link rel="icon" href="../../../assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Example Details - StaffOps — OTel Libs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#examplesmd-detailed-check-and-simulation-descriptions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="StaffOps — OTel Libs" class="md-header__button md-logo" aria-label="StaffOps — OTel Libs" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            StaffOps — OTel Libs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Example Details
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/StaffOps/staffops-otel-libs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    StaffOps/otel-libs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+<div class="md-tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list" role="tablist">
+      <li class="md-tabs__item">
+        <a href="https://staffops.github.io/" class="md-tabs__link">Home</a>
+      </li>
+      <li class="md-tabs__item">
+        <a href="https://staffops.github.io/products/" class="md-tabs__link">Products</a>
+      </li>
+      <li class="md-tabs__item">
+        <a href="https://staffops.github.io/community/principles/" class="md-tabs__link">Community</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="md-tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list" role="tablist">
+      <li class="md-tabs__item">
+        <span class="md-tabs__link so-sub-brand">◈ OTel Libs</span>
+      </li>
+      
+        <li class="md-tabs__item">
+          
+            <a href="../../"
+               class="md-tabs__link md-tabs__link--active">
+              .NET
+            </a>
+          
+        </li>
+      
+        <li class="md-tabs__item">
+          
+            <a href="../../../python/"
+               class="md-tabs__link">
+              Python
+            </a>
+          
+        </li>
+      
+        <li class="md-tabs__item">
+          
+            <a href="../../../go/"
+               class="md-tabs__link">
+              Go
+            </a>
+          
+        </li>
+      
+        <li class="md-tabs__item">
+          
+            <a href="../../../CONSUMING/"
+               class="md-tabs__link">
+              Consuming Packages
+            </a>
+          
+        </li>
+      
+        <li class="md-tabs__item">
+          
+            <a href="../../../CHANGELOG/"
+               class="md-tabs__link">
+              Changelog
+            </a>
+          
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="StaffOps — OTel Libs" class="md-nav__button md-logo" aria-label="StaffOps — OTel Libs" data-md-component="logo">
+      
+  <img src="../../../assets/logo.png" alt="logo">
+
+    </a>
+    StaffOps — OTel Libs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/StaffOps/staffops-otel-libs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    StaffOps/otel-libs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    .NET
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            .NET
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../HOW-TO/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HOW-TO Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../TESTS/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Example Apps
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Example Details
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Example Details
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sampleapi-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      SampleApi — Endpoints
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleApi — Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-get-orderid-trace-distribuida-completa" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. GET /order/{id} — Trace distribuída completa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-post-order-criacao-com-body-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. POST /order — Criação com body JSON
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-get-orderidcancel-cancelamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. GET /order/{id}/cancel — Cancelamento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-get-slow-operacao-lenta" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. GET /slow — Operação lenta
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-get-batch-fan-out-sequencial" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. GET /batch — Fan-out sequencial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-get-error-exception-simulada" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. GET /error — Exception simulada
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-get-healthready-readiness-probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. GET /health/ready — Readiness probe
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-get-orderidtrace-baggage-propagation" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. GET /order/{id}/trace — Baggage propagation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-get-orderidevents-span-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. GET /order/{id}/events — Span Events
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-get-parallelcount-parallel-fan-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. GET /parallel/{count} — Parallel fan-out
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-get-retryid-retry-com-spans-por-tentativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      11. GET /retry/{id} — Retry com spans por tentativa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-get-cacheid-cache-hitmiss" class="md-nav__link">
+    <span class="md-ellipsis">
+      12. GET /cache/{id} — Cache hit/miss
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#samplebackend-rpcs" class="md-nav__link">
+    <span class="md-ellipsis">
+      SampleBackend — RPCs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleBackend — RPCs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unstableoperation" class="md-nav__link">
+    <span class="md-ellipsis">
+      UnstableOperation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readbaggage" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReadBaggage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sampleprocess-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      SampleProcess — Workers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleProcess — Workers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apihealthworker-a-cada-1-minuto" class="md-nav__link">
+    <span class="md-ellipsis">
+      ApiHealthWorker (a cada 1 minuto)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#heavyprocessworker-a-cada-2-minutos" class="md-nav__link">
+    <span class="md-ellipsis">
+      HeavyProcessWorker (a cada 2 minutos)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#queueconsumerworker-a-cada-30-segundos" class="md-nav__link">
+    <span class="md-ellipsis">
+      QueueConsumerWorker (a cada 30 segundos)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduledjobworker-a-cada-3-minutos" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScheduledJobWorker (a cada 3 minutos)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-de-funcionalidades-demonstradas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumo de funcionalidades demonstradas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dashboards-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboards Grafana
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Python
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../python/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../python/HOW-TO/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HOW-TO Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../python/TESTS/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../python/example/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Example Apps
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../python/example/EXAMPLES/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Example Details
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Go
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Go
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../go/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../go/HOW-TO/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HOW-TO Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../go/example/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Example Apps
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CONSUMING/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Consuming Packages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CHANGELOG/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sampleapi-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      SampleApi — Endpoints
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleApi — Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-get-orderid-trace-distribuida-completa" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. GET /order/{id} — Trace distribuída completa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-post-order-criacao-com-body-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. POST /order — Criação com body JSON
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-get-orderidcancel-cancelamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. GET /order/{id}/cancel — Cancelamento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-get-slow-operacao-lenta" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. GET /slow — Operação lenta
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-get-batch-fan-out-sequencial" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. GET /batch — Fan-out sequencial
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-get-error-exception-simulada" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. GET /error — Exception simulada
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-get-healthready-readiness-probe" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. GET /health/ready — Readiness probe
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-get-orderidtrace-baggage-propagation" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. GET /order/{id}/trace — Baggage propagation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-get-orderidevents-span-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. GET /order/{id}/events — Span Events
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-get-parallelcount-parallel-fan-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. GET /parallel/{count} — Parallel fan-out
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-get-retryid-retry-com-spans-por-tentativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      11. GET /retry/{id} — Retry com spans por tentativa
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-get-cacheid-cache-hitmiss" class="md-nav__link">
+    <span class="md-ellipsis">
+      12. GET /cache/{id} — Cache hit/miss
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#samplebackend-rpcs" class="md-nav__link">
+    <span class="md-ellipsis">
+      SampleBackend — RPCs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleBackend — RPCs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unstableoperation" class="md-nav__link">
+    <span class="md-ellipsis">
+      UnstableOperation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readbaggage" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReadBaggage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sampleprocess-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      SampleProcess — Workers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SampleProcess — Workers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apihealthworker-a-cada-1-minuto" class="md-nav__link">
+    <span class="md-ellipsis">
+      ApiHealthWorker (a cada 1 minuto)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#heavyprocessworker-a-cada-2-minutos" class="md-nav__link">
+    <span class="md-ellipsis">
+      HeavyProcessWorker (a cada 2 minutos)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#queueconsumerworker-a-cada-30-segundos" class="md-nav__link">
+    <span class="md-ellipsis">
+      QueueConsumerWorker (a cada 30 segundos)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduledjobworker-a-cada-3-minutos" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScheduledJobWorker (a cada 3 minutos)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumo-de-funcionalidades-demonstradas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Resumo de funcionalidades demonstradas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dashboards-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboards Grafana
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/StaffOps/staffops-otel-libs/edit/main/docs/site/dotnet/example/EXAMPLES.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="examplesmd-detailed-check-and-simulation-descriptions">EXAMPLES.md — Detailed Check and Simulation Descriptions<a class="headerlink" href="#examplesmd-detailed-check-and-simulation-descriptions" title="Permanent link">&para;</a></h1>
+<p>This document describes each check/simulation implemented in the samples, its objective, how it works internally, and how to query results in Grafana.</p>
+<hr />
+<h2 id="sampleapi-endpoints">SampleApi — Endpoints<a class="headerlink" href="#sampleapi-endpoints" title="Permanent link">&para;</a></h2>
+<h3 id="1-get-orderid-trace-distribuida-completa">1. <code>GET /order/{id}</code> — Trace distribuída completa<a class="headerlink" href="#1-get-orderid-trace-distribuida-completa" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar propagação de contexto entre 3 serviços via gRPC.</p>
+<p><strong>Fluxo:</strong>
+1. API cria span <code>api.get-order</code> com tag <code>order.id</code>
+2. Chama Backend via gRPC <code>ProcessOrder</code>
+3. Backend cria spans <code>backend.db-query-order</code> (10-80ms) + <code>backend.external-enrich-order</code> (httpbin ~1s)
+4. Resposta retorna com dados do pedido</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a># Tempo — trace completa
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.get-order&quot;}
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a># Ver os 3 serviços no mesmo trace
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>{resource.service.name=~&quot;sample-api|sample-backend|sample-process&quot; &amp;&amp; name=&quot;api.get-order&quot;}
+</span></code></pre></div></p>
+<hr />
+<h3 id="2-post-order-criacao-com-body-json">2. <code>POST /order</code> — Criação com body JSON<a class="headerlink" href="#2-post-order-criacao-com-body-json" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar instrumentação de endpoint POST com body parsing.</p>
+<p><strong>Fluxo:</strong>
+1. Lê body <code>{"product": "...", "quantity": N}</code>
+2. Gera ID aleatório
+3. Chama Backend via gRPC <code>ProcessOrder</code>
+4. Retorna 201 com dados</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.create-order&quot;}
+</span></code></pre></div></p>
+<hr />
+<h3 id="3-get-orderidcancel-cancelamento">3. <code>GET /order/{id}/cancel</code> — Cancelamento<a class="headerlink" href="#3-get-orderidcancel-cancelamento" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar operação de escrita (UPDATE) no Backend.</p>
+<p><strong>Fluxo:</strong>
+1. API cria span <code>api.cancel-order</code>
+2. Chama Backend via gRPC <code>CancelOrder</code>
+3. Backend cria span <code>backend.db-cancel-order</code> (5-30ms)</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.cancel-order&quot;}
+</span></code></pre></div></p>
+<hr />
+<h3 id="4-get-slow-operacao-lenta">4. <code>GET /slow</code> — Operação lenta<a class="headerlink" href="#4-get-slow-operacao-lenta" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar detecção de alta latência pelo tail sampling (traces &gt;1s sempre mantidos).</p>
+<p><strong>Fluxo:</strong>
+1. API cria span <code>api.slow-operation</code>
+2. Chama Backend via gRPC <code>SlowOperation</code>
+3. Backend: <code>backend.db-heavy-query</code> (3-5s) + <code>backend.external-slow-enrichment</code> (1-2s)
+4. Total: 4-7s</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a># Traces lentas
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; duration &gt; 3s}
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a># Especificamente o slow
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.slow-operation&quot;}
+</span></code></pre></div></p>
+<hr />
+<h3 id="5-get-batch-fan-out-sequencial">5. <code>GET /batch</code> — Fan-out sequencial<a class="headerlink" href="#5-get-batch-fan-out-sequencial" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar trace com muitos spans (fan-out pattern).</p>
+<p><strong>Fluxo:</strong>
+1. API cria span <code>api.batch-orders</code>
+2. Gera 5 IDs aleatórios
+3. Para cada ID, cria span <code>api.batch-item</code> e chama Backend <code>ProcessOrder</code> sequencialmente
+4. Total: ~37 spans no trace (5 × backend spans)</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.batch-orders&quot;}
+</span></code></pre></div></p>
+<hr />
+<h3 id="6-get-error-exception-simulada">6. <code>GET /error</code> — Exception simulada<a class="headerlink" href="#6-get-error-exception-simulada" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar que traces com erro são sempre mantidos pelo sampling (100% em qualquer ambiente).</p>
+<p><strong>Fluxo:</strong>
+1. API cria span <code>api.error-simulated</code> com <code>StatusCode.Error</code>
+2. Lança <code>InvalidOperationException</code>
+3. Retorna 500</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a># Traces com erro
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; status=error}
+</span></code></pre></div></p>
+<hr />
+<h3 id="7-get-healthready-readiness-probe">7. <code>GET /health/ready</code> — Readiness probe<a class="headerlink" href="#7-get-healthready-readiness-probe" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar health check que valida dependência (Backend).</p>
+<p><strong>Fluxo:</strong>
+1. API cria span <code>api.readiness-check</code>
+2. Chama Backend via gRPC <code>ProcessOrder</code> com ID 0
+3. Se sucesso → 200, se falha → 503</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.readiness-check&quot;}
+</span></code></pre></div></p>
+<hr />
+<h3 id="8-get-orderidtrace-baggage-propagation">8. <code>GET /order/{id}/trace</code> — Baggage propagation<a class="headerlink" href="#8-get-orderidtrace-baggage-propagation" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar propagação de metadados (baggage) entre serviços sem adicionar ao span diretamente. Também demonstra scoped logging.</p>
+<p><strong>Como funciona:</strong>
+1. API seta 3 baggage items: <code>tenant.id</code>, <code>order.id</code>, <code>feature.flag</code>
+2. Usa <code>logger.BeginScope(...)</code> para adicionar contexto ao log
+3. Chama Backend via gRPC <code>ReadBaggage</code>
+4. Backend lê <code>Baggage.Current</code> e retorna os items recebidos
+5. Baggage é propagado automaticamente via headers gRPC (sem código extra)</p>
+<p><strong>O que valida:</strong>
+- Baggage propaga entre serviços automaticamente
+- Backend recebe os 3 items sem configuração adicional
+- Scoped logging adiciona <code>TenantId</code> e <code>OrderId</code> aos logs</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a># Tempo
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.trace-with-baggage&quot;}
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a># Loki — ver baggage nos logs do Backend
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>{service_name=&quot;sample-backend&quot;} |= &quot;ReadBaggage&quot;
+</span></code></pre></div></p>
+<hr />
+<h3 id="9-get-orderidevents-span-events">9. <code>GET /order/{id}/events</code> — Span Events<a class="headerlink" href="#9-get-orderidevents-span-events" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar eventos dentro de um span (pontos no tempo, sem criar sub-spans).</p>
+<p><strong>Como funciona:</strong>
+1. API cria span <code>api.order-with-events</code>
+2. Adiciona 4 events ao span:
+   - <code>order.received</code> (com tags: order.id, order.source)
+   - <code>order.validated</code> (após delay de validação)
+   - <code>order.enriched</code> (após chamada ao Backend)
+   - <code>order.completed</code> (com tag: status)
+3. Events aparecem como timeline dentro do span no Grafana</p>
+<p><strong>O que valida:</strong>
+- Events são visíveis no detalhe do span no Tempo
+- Cada event tem timestamp próprio (mostra duração entre etapas)
+- Tags nos events adicionam contexto sem poluir o span</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a># Tempo — abrir o span e ver a aba &quot;Events&quot;
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.order-with-events&quot;}
+</span></code></pre></div></p>
+<hr />
+<h3 id="10-get-parallelcount-parallel-fan-out">10. <code>GET /parallel/{count}</code> — Parallel fan-out<a class="headerlink" href="#10-get-parallelcount-parallel-fan-out" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar spans concorrentes (paralelos) dentro de um trace.</p>
+<p><strong>Como funciona:</strong>
+1. API cria span <code>api.parallel-fan-out</code> com tag <code>fan_out.count</code>
+2. Dispara N chamadas ao Backend em paralelo via <code>Task.WhenAll</code>
+3. Cada chamada cria span <code>api.parallel-item</code> (children concorrentes)
+4. No Grafana, os spans aparecem lado a lado (não sequenciais)</p>
+<p><strong>O que valida:</strong>
+- Spans paralelos são visualizados corretamente no Tempo
+- Duração total ≈ duração do item mais lento (não soma)
+- Cada item tem seu próprio span com tags</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.parallel-fan-out&quot;}
+</span></code></pre></div></p>
+<hr />
+<h3 id="11-get-retryid-retry-com-spans-por-tentativa">11. <code>GET /retry/{id}</code> — Retry com spans por tentativa<a class="headerlink" href="#11-get-retryid-retry-com-spans-por-tentativa" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar padrão de retry onde cada tentativa é um span separado, com ERROR nas falhas e SUCCESS na última.</p>
+<p><strong>Como funciona:</strong>
+1. API cria span pai <code>api.retry-operation</code>
+2. Loop de até 3 tentativas, cada uma com span <code>api.retry-attempt</code>
+3. Chama Backend <code>UnstableOperation</code> (configurado para falhar 2x)
+4. Tentativas 1 e 2: span com <code>StatusCode.Error</code> + log warning
+5. Tentativa 3: sucesso
+6. Backoff exponencial entre tentativas (100ms, 200ms)</p>
+<p><strong>O que valida:</strong>
+- Cada tentativa é visível como span separado no trace
+- Spans de falha têm status ERROR (ícone vermelho no Grafana)
+- O span pai mostra a operação completa
+- Log com exception stack trace correlacionado ao trace</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a># Trace com retries
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.retry-operation&quot;}
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a># Só as falhas
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.retry-attempt&quot; &amp;&amp; status=error}
+</span></code></pre></div></p>
+<hr />
+<h3 id="12-get-cacheid-cache-hitmiss">12. <code>GET /cache/{id}</code> — Cache hit/miss<a class="headerlink" href="#12-get-cacheid-cache-hitmiss" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar padrão de cache com métricas de hit rate e spans diferenciados.</p>
+<p><strong>Como funciona:</strong>
+1. API cria span <code>api.cache-lookup</code> com tag <code>order.id</code>
+2. Verifica cache in-memory (ConcurrentDictionary)
+3. <strong>HIT</strong>: tag <code>cache.hit=true</code>, incrementa <code>cache.hits_total</code>, retorna imediato
+4. <strong>MISS</strong>: tag <code>cache.hit=false</code>, incrementa <code>cache.misses_total</code>, chama Backend, armazena resultado</p>
+<p><strong>O que valida:</strong>
+- Primeira chamada: MISS (span longo, chama Backend)
+- Segunda chamada mesmo ID: HIT (span curto, sem Backend)
+- Métricas <code>cache.hits_total</code> e <code>cache.misses_total</code> exportadas
+- Tag <code>cache.hit</code> no span permite filtrar no Tempo</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a># Tempo — filtrar por hit/miss
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>{resource.service.name=&quot;sample-api&quot; &amp;&amp; name=&quot;api.cache-lookup&quot; &amp;&amp; span.cache.hit=true}
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a># PromQL — cache hit rate
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>rate(cache_hits_total[5m]) / (rate(cache_hits_total[5m]) + rate(cache_misses_total[5m]))
+</span></code></pre></div></p>
+<hr />
+<h2 id="samplebackend-rpcs">SampleBackend — RPCs<a class="headerlink" href="#samplebackend-rpcs" title="Permanent link">&para;</a></h2>
+<h3 id="unstableoperation"><code>UnstableOperation</code><a class="headerlink" href="#unstableoperation" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Servir como target para o endpoint <code>/retry</code> da API. Simula serviço instável.</p>
+<p><strong>Como funciona:</strong>
+- Mantém contador global de chamadas
+- Falha nas primeiras N chamadas (retorna <code>StatusCode.Unavailable</code>)
+- Sucesso a cada N+1 chamadas
+- Span <code>backend.unstable-operation</code> com tag <code>attempt</code></p>
+<hr />
+<h3 id="readbaggage"><code>ReadBaggage</code><a class="headerlink" href="#readbaggage" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar que baggage propagado via gRPC é acessível no serviço downstream.</p>
+<p><strong>Como funciona:</strong>
+- Lê <code>Baggage.Current</code> (populado automaticamente pelo OTel SDK via headers gRPC)
+- Retorna todos os items como mapa key→value
+- Adiciona cada item como tag no span</p>
+<hr />
+<h2 id="sampleprocess-workers">SampleProcess — Workers<a class="headerlink" href="#sampleprocess-workers" title="Permanent link">&para;</a></h2>
+<h3 id="apihealthworker-a-cada-1-minuto">ApiHealthWorker (a cada 1 minuto)<a class="headerlink" href="#apihealthworker-a-cada-1-minuto" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Gerar traces distribuídas continuamente, validando a comunicação entre os 3 serviços.</p>
+<p><strong>Como funciona:</strong>
+- 6 chamadas sequenciais à API, cada uma com <code>StartRootActivity</code> (trace independente)
+- Span names descritivos por endpoint:
+  - <code>process-api-check</code> → <code>GET /</code>
+  - <code>process-api-order</code> → <code>GET /order/1</code>
+  - <code>process-api-cancel</code> → <code>GET /order/1/cancel</code>
+  - <code>process-api-health-ready</code> → <code>GET /health/ready</code>
+  - <code>process-api-batch</code> → <code>GET /batch</code>
+  - <code>process-api-simulate-error</code> → <code>GET /error</code></p>
+<p><strong>Métricas:</strong>
+- <code>api_health.checks_total</code> (por endpoint)
+- <code>api_health.checks_failed_total</code> (por endpoint)
+- <code>api_health.check_duration_seconds</code> (por endpoint)</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a># Tempo — todos os health checks
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>{resource.service.name=&quot;sample-process&quot; &amp;&amp; name=~&quot;process-api-.*&quot;}
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a># PromQL — success rate
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>1 - (rate(api_health_checks_failed_total[1h]) / rate(api_health_checks_total[1h]))
+</span></code></pre></div></p>
+<hr />
+<h3 id="heavyprocessworker-a-cada-2-minutos">HeavyProcessWorker (a cada 2 minutos)<a class="headerlink" href="#heavyprocessworker-a-cada-2-minutos" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Gerar carga de CPU e memória para observar no runtime metrics (.NET GC, thread pool).</p>
+<p><strong>Como funciona:</strong>
+- Batch de 8-20 itens em paralelo (<code>StartRootActivity</code>)
+- Cada item: SHA256 ×2000 (string 50KB) + 500 buffers (4-32KB)
+- 5% de chance de falha simulada por item
+- Span <code>process.heavy-batch</code> (root) → N× <code>process.heavy-process-item</code> (children paralelos)</p>
+<p><strong>Métricas:</strong>
+- <code>heavy_work.batches_total</code>
+- <code>heavy_work.items_total</code> (tag: status)
+- <code>heavy_work.errors_total</code>
+- <code>heavy_work.batch_duration_seconds</code>
+- <code>heavy_work.item_duration_seconds</code>
+- <code>heavy_work.items_active</code> (gauge)</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a># Tempo
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>{resource.service.name=&quot;sample-process&quot; &amp;&amp; name=&quot;process.heavy-batch&quot;}
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a># PromQL — throughput
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>rate(heavy_work_items_total[5m])
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a># PromQL — error rate
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>rate(heavy_work_errors_total[5m]) / rate(heavy_work_items_total[5m])
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a># Runtime — GC pressure (correlacionar com batch execution)
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>dotnet_gc_collections_total
+</span></code></pre></div></p>
+<hr />
+<h3 id="queueconsumerworker-a-cada-30-segundos">QueueConsumerWorker (a cada 30 segundos)<a class="headerlink" href="#queueconsumerworker-a-cada-30-segundos" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar o padrão de instrumentação para consumers de fila (SQS, Kafka, RabbitMQ).</p>
+<p><strong>Como funciona:</strong>
+- Simula poll de fila: gera 1-5 "mensagens" fictícias por ciclo
+- Cada mensagem é um trace independente (<code>StartRootActivity</code>)
+- Dentro do trace, 3 etapas: parse → validate → persist
+- 10% de chance de falha na validação (span com ERROR)
+- Observable gauge <code>queue.depth</code> mostra profundidade da fila</p>
+<p><strong>Span hierarchy por mensagem:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>process.queue-consume (root)
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>  ├── process.queue-parse
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>  ├── process.queue-validate
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>  └── process.queue-persist
+</span></code></pre></div></p>
+<p><strong>Tags no span root:</strong>
+- <code>messaging.message_id</code> — ID único da mensagem
+- <code>messaging.system</code> — "sqs"
+- <code>messaging.destination</code> — "orders-queue"</p>
+<p><strong>Métricas:</strong>
+- <code>queue.messages_processed_total</code> (tag: status)
+- <code>queue.messages_failed_total</code>
+- <code>queue.message_duration_seconds</code>
+- <code>queue.depth</code> (observable gauge)</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a># Tempo — traces de mensagens
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>{resource.service.name=&quot;sample-process&quot; &amp;&amp; name=&quot;process.queue-consume&quot;}
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a># Tempo — só falhas de validação
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>{resource.service.name=&quot;sample-process&quot; &amp;&amp; name=&quot;process.queue-validate&quot; &amp;&amp; status=error}
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a># PromQL — throughput de mensagens
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>rate(queue_messages_processed_total[5m])
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a># PromQL — queue depth
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>queue_depth
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a># PromQL — failure rate
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>rate(queue_messages_failed_total[5m]) / rate(queue_messages_processed_total[5m])
+</span></code></pre></div></p>
+<hr />
+<h3 id="scheduledjobworker-a-cada-3-minutos">ScheduledJobWorker (a cada 3 minutos)<a class="headerlink" href="#scheduledjobworker-a-cada-3-minutos" title="Permanent link">&para;</a></h3>
+<p><strong>Objetivo:</strong> Demonstrar job agendado com timeout, detecção de falha, e circuit breaker.</p>
+<p><strong>Como funciona:</strong>
+1. Job executa 3 etapas: fetch-data → transform → persist
+2. <code>fetch-data</code> tem delay aleatório (100ms-7s) — às vezes excede o timeout de 5s
+3. Se timeout: span com ERROR + tag <code>timeout=true</code>
+4. Após 3 falhas consecutivas: circuit breaker abre
+5. Circuit aberto: job é rejeitado (span com tag <code>circuit_breaker.action=rejected</code>)
+6. Após 30s: circuit vai para half-open, tenta novamente
+7. Se sucesso: circuit fecha, contador reseta</p>
+<p><strong>Span hierarchy (sucesso):</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>process.scheduled-job (root)
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>  ├── process.job-fetch-data
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>  ├── process.job-transform
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>  └── process.job-persist
+</span></code></pre></div></p>
+<p><strong>Span hierarchy (timeout):</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>process.scheduled-job (root, ERROR, timeout=true)
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  └── process.job-fetch-data (cancelado pelo timeout)
+</span></code></pre></div></p>
+<p><strong>Estados do circuit breaker:</strong>
+- <code>0</code> = closed (normal, jobs executam)
+- <code>1</code> = open (jobs rejeitados, aguardando recovery)
+- <code>2</code> = half-open (tentando recovery)</p>
+<p><strong>Métricas:</strong>
+- <code>scheduled_job.runs_total</code> (tag: result = success/timeout/error/circuit-open)
+- <code>scheduled_job.timeouts_total</code>
+- <code>scheduled_job.duration_seconds</code>
+- <code>circuit_breaker.state</code> (observable gauge: 0/1/2)</p>
+<p><strong>Consultar no Grafana:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a># Tempo — todos os jobs
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>{resource.service.name=&quot;sample-process&quot; &amp;&amp; name=&quot;process.scheduled-job&quot;}
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a># Tempo — só timeouts
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>{resource.service.name=&quot;sample-process&quot; &amp;&amp; name=&quot;process.scheduled-job&quot; &amp;&amp; span.timeout=true}
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a># PromQL — timeout rate
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>rate(scheduled_job_timeouts_total[1h]) / rate(scheduled_job_runs_total[1h])
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a># PromQL — circuit breaker state
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>circuit_breaker_state
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a># PromQL — job duration P95
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>histogram_quantile(0.95, rate(scheduled_job_duration_seconds_bucket[5m]))
+</span></code></pre></div></p>
+<hr />
+<h2 id="resumo-de-funcionalidades-demonstradas">Resumo de funcionalidades demonstradas<a class="headerlink" href="#resumo-de-funcionalidades-demonstradas" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Funcionalidade</th>
+<th>Onde</th>
+<th>Span/Métrica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trace distribuída (3 serviços)</td>
+<td>API <code>/order/{id}</code></td>
+<td><code>api.get-order</code></td>
+</tr>
+<tr>
+<td>Baggage propagation</td>
+<td>API <code>/order/{id}/trace</code></td>
+<td><code>api.trace-with-baggage</code></td>
+</tr>
+<tr>
+<td>Span events</td>
+<td>API <code>/order/{id}/events</code></td>
+<td><code>api.order-with-events</code></td>
+</tr>
+<tr>
+<td>Parallel fan-out</td>
+<td>API <code>/parallel/{count}</code></td>
+<td><code>api.parallel-fan-out</code></td>
+</tr>
+<tr>
+<td>Retry com spans</td>
+<td>API <code>/retry/{id}</code></td>
+<td><code>api.retry-operation</code></td>
+</tr>
+<tr>
+<td>Cache hit/miss</td>
+<td>API <code>/cache/{id}</code></td>
+<td><code>api.cache-lookup</code> + <code>cache.hits_total</code></td>
+</tr>
+<tr>
+<td>Error trace (sempre mantido)</td>
+<td>API <code>/error</code></td>
+<td><code>api.error-simulated</code></td>
+</tr>
+<tr>
+<td>High latency (sempre mantido)</td>
+<td>API <code>/slow</code></td>
+<td><code>api.slow-operation</code></td>
+</tr>
+<tr>
+<td>gRPC instrumentation</td>
+<td>API → Backend</td>
+<td>Auto-spans gRPC client/server</td>
+</tr>
+<tr>
+<td>StartRootActivity (workers)</td>
+<td>Process todos</td>
+<td>Traces independentes por iteração</td>
+</tr>
+<tr>
+<td>Observable gauge</td>
+<td>Process queue/circuit</td>
+<td><code>queue.depth</code>, <code>circuit_breaker.state</code></td>
+</tr>
+<tr>
+<td>Consumer pattern</td>
+<td>Process queue</td>
+<td><code>process.queue-consume</code></td>
+</tr>
+<tr>
+<td>Timeout detection</td>
+<td>Process job</td>
+<td><code>process.scheduled-job</code> + <code>timeout=true</code></td>
+</tr>
+<tr>
+<td>Circuit breaker</td>
+<td>Process job</td>
+<td><code>circuit_breaker.state</code> gauge</td>
+</tr>
+<tr>
+<td>CPU/memory stress</td>
+<td>Process heavy</td>
+<td><code>process.heavy-batch</code></td>
+</tr>
+<tr>
+<td>Scoped logging</td>
+<td>API <code>/order/{id}/trace</code></td>
+<td><code>logger.BeginScope(...)</code></td>
+</tr>
+<tr>
+<td>RecordException</td>
+<td>Todos (automático)</td>
+<td>Exception stack trace no span</td>
+</tr>
+<tr>
+<td>Debug tracestate</td>
+<td>Todos (quando debug=true)</td>
+<td><code>tracestate: debug=true</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="dashboards-grafana">Dashboards Grafana<a class="headerlink" href="#dashboards-grafana" title="Permanent link">&para;</a></h2>
+<p>3 dashboards prontos em <code>example/dashboards/</code>. Para importar: <strong>Dashboards → Import → Upload JSON</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Título</th>
+<th>O que mostra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>01-api-business-metrics.json</code></td>
+<td>Sample — API &amp; Business Metrics</td>
+<td>Request rate, error rate, P95 latency, cache hit/miss, revenue, DB/external duration, traces recentes</td>
+</tr>
+<tr>
+<td><code>02-workers-background.json</code></td>
+<td>Sample — Workers &amp; Background Processing</td>
+<td>Health check success rate, heavy work throughput, queue depth, circuit breaker state, scheduled job timeouts</td>
+</tr>
+<tr>
+<td><code>03-traces-reliability.json</code></td>
+<td>Sample — Traces &amp; Reliability Patterns</td>
+<td>Retry attempts, parallel fan-out, baggage propagation, span events, timeout traces, queue consumer, all errors</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Datasources necessários:</strong>
+- <code>victoriametrics</code> (type: prometheus) — métricas
+- <code>tempo</code> (type: tempo) — traces</p>
+<p><strong>Variável de filtro</strong> (dashboard 01): <code>$service</code> — seleciona entre <code>sample-api</code>, <code>sample-backend</code>, <code>sample-process</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; StaffOps Contributors — Apache 2.0
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/StaffOps" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "navigation.top", "search.highlight", "search.suggest", "content.code.copy", "content.code.annotate", "content.action.edit"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>
