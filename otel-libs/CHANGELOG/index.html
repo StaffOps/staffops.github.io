@@ -1083,6 +1083,26 @@ currently aligned at the same version.</p>
 </ul>
 <h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">&para;</a></h3>
 <ul>
+<li><strong>Cross-language <code>deployment.environment.name</code> resource attribute</strong> (P8) —
+  only Go emitted this attribute, and with the legacy semconv key
+  (<code>deployment.environment</code>). All three languages now emit
+  <code>deployment.environment.name</code> (semconv &gt;= v1.27) identically, so the shared
+  dashboards in <code>dashboards/</code> filter/group consistently regardless of which
+  language emitted the telemetry.</li>
+<li>
+<p><strong>.NET: options no longer resolved through two independent code paths</strong>
+  (P9) — <code>AddOtelHelper()</code> used to build a hand-rolled copy of the resolved
+  <code>TelemetryOptions</code> (a duplicate <code>Configure</code> + <code>PostConfigure</code> call) separate
+  from the one DI's <code>IOptions&lt;TelemetryOptions&gt;</code> pipeline would produce, so
+  the two could silently drift apart. <code>ActivitySource</code>/<code>Meter</code> are now
+  registered as DI factories resolved lazily from the real options pipeline;
+  the resource/tracing/metrics/logging setup resolves through that same
+  pipeline via a bootstrap <code>ServiceProvider</code>, removing the duplicate
+  implementation. Side effect: invalid configuration now fails fast inside
+  <code>AddOtelHelper()</code> itself instead of only surfacing later when something
+  resolves <code>IOptions&lt;TelemetryOptions&gt;.Value</code> (e.g. <code>ValidateOnStart</code> at
+  real app startup).</p>
+</li>
 <li>
 <p><strong>Go: <code>/metrics</code> listener robustness</strong> — <code>ListenAndServe</code> errors were
   silently swallowed (a busy port meant no metrics and no warning — the exact
