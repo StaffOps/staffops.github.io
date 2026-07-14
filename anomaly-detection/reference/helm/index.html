@@ -2669,7 +2669,7 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 </table>
 <hr />
 <h2 id="suppression">Suppression<a class="headerlink" href="#suppression" title="Permanent link">&para;</a></h2>
-<p>Suppression rules prevent detection from running in, or alerting on, specific namespaces.</p>
+<p>Suppression rules prevent detection from running in, or alerting on, specific namespaces or workloads.</p>
 <table>
 <thead>
 <tr>
@@ -2692,6 +2692,12 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 <td>list</td>
 <td>Namespaces where static threshold rules are suppressed, but adaptive and ML-based detection still run and alert.</td>
 </tr>
+<tr>
+<td><code>suppression.excludeAdaptiveWorkloads</code></td>
+<td><code>[]</code></td>
+<td>list</td>
+<td>Workloads whose adaptive (Z-Score) detections are suppressed while static/log signals still fire. For inherently bursty infra (brokers, collectors, service mesh). Namespace-independent.</td>
+</tr>
 </tbody>
 </table>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">suppression</span><span class="p">:</span>
@@ -2706,10 +2712,20 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 </span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span><span class="nt">excludeStaticOnly</span><span class="p">:</span>
 </span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staging</span>
 </span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qa</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">  </span><span class="c1"># Silence adaptive noise from bursty infra workloads (static/logs still fire)</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">  </span><span class="nt">excludeAdaptiveWorkloads</span><span class="p">:</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">strimzi-kafka-brokers</span>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel-agent-logs-collector</span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">istiod</span>
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">excludeStaticOnly use case</p>
 <p><code>excludeStaticOnly</code> is designed for staging or QA environments where hard threshold rules produce too many false positives (e.g., intentional load tests breaching CPU thresholds), but unusual behavioral patterns — detected by Z-Score or Isolation Forest — should still be flagged.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">excludeAdaptiveWorkloads use case</p>
+<p>Use this for individual infrastructure workloads (Kafka brokers, OTel collectors, Istio, Pyroscope) that are inherently bursty and dominate false positives, but share a namespace with real application workloads — so namespace-level suppression is too blunt. Only their adaptive signal is silenced; static breaches (OOM, restart loops) and log patterns still alert. The effect is observable via <code>staffops_ad_worker_anomalies_suppressed_total{reason="adaptive_workload"}</code>.</p>
 </div>
 <hr />
 <h2 id="observability">Observability<a class="headerlink" href="#observability" title="Permanent link">&para;</a></h2>

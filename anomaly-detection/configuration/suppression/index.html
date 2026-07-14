@@ -1070,6 +1070,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#why-suppress-adaptive-for-specific-infra-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why suppress adaptive for specific infra workloads?
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1711,6 +1720,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#why-suppress-adaptive-for-specific-infra-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why suppress adaptive for specific infra workloads?
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1745,11 +1763,12 @@
 
 <h1 id="suppression">Suppression<a class="headerlink" href="#suppression" title="Permanent link">&para;</a></h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>Suppression prevents known-noisy workloads from generating false positive alerts. Two levels:</p>
+<p>Suppression prevents known-noisy workloads from generating false positive alerts. Three levels:</p>
 <table>
 <thead>
 <tr>
 <th>Level</th>
+<th>Scope</th>
 <th>Effect</th>
 <th>Use case</th>
 </tr>
@@ -1757,13 +1776,21 @@
 <tbody>
 <tr>
 <td><strong>Full exclusion</strong></td>
+<td>Namespace</td>
 <td>No detection at all</td>
 <td>System namespaces (<code>kube-system</code>)</td>
 </tr>
 <tr>
 <td><strong>Static-only exclusion</strong></td>
+<td>Namespace</td>
 <td>Static rules suppressed, adaptive still fires</td>
 <td>Batch/cron namespaces</td>
+</tr>
+<tr>
+<td><strong>Adaptive-workload exclusion</strong></td>
+<td>Workload</td>
+<td>Adaptive (Z-Score) suppressed, static/logs still fire</td>
+<td>Bursty infra (brokers, collectors, mesh)</td>
 </tr>
 </tbody>
 </table>
@@ -1771,22 +1798,35 @@
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">suppression</span><span class="p">:</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">exclude_namespaces_csv</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${EXCLUDE_NAMESPACES_CSV:kube-system}</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">exclude_static_only_csv</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${EXCLUDE_STATIC_ONLY_CSV:}</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">exclude_adaptive_workloads_csv</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${EXCLUDE_ADAPTIVE_WORKLOADS_CSV:}</span>
 </span></code></pre></div>
-<p>Both are comma-separated lists passed via environment variables. <strong>Never hardcode namespace lists in the repo</strong> — they are org-specific.</p>
+<p>All three are comma-separated lists passed via environment variables. <strong>Never hardcode namespace or workload lists in the repo</strong> — they are org-specific.</p>
+<p>The workload in <code>exclude_adaptive_workloads_csv</code> is matched the same way the
+<code>staffops_ad_detection_anomalies_by_workload_total</code> metric labels it: the pod name
+via <code>ExtractWorkload</code> (e.g. <code>strimzi-kafka-brokers-0</code> → <code>strimzi-kafka-brokers</code>),
+falling back to <code>service_name</code> for span-metric anomalies that carry no pod label.
+Use the values you see in the "top noisy workloads" view directly.</p>
 <h2 id="environment-variables">Environment Variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h2>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># .env example</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">EXCLUDE_NAMESPACES_CSV</span><span class="o">=</span>kube-system,kube-node-lease,kube-public
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nv">EXCLUDE_STATIC_ONLY_CSV</span><span class="o">=</span>batch-processing,data-pipeline,etl-jobs
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nv">EXCLUDE_ADAPTIVE_WORKLOADS_CSV</span><span class="o">=</span>strimzi-kafka-brokers,otel-agent-logs-collector,istiod
 </span></code></pre></div>
 <h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>graph TD
-    A[Anomaly detected] --&gt; B{Namespace in exclude_namespaces?}
-    B --&gt;|Yes| C[Drop completely]
+    A[Anomaly detected] --&gt; W{Adaptive AND workload in exclude_adaptive_workloads?}
+    W --&gt;|Yes| C[Drop]
+    W --&gt;|No| B{Namespace in exclude_namespaces?}
+    B --&gt;|Yes| C
     B --&gt;|No| D{Namespace in exclude_static_only?}
     D --&gt;|Yes| E{Detector type?}
-    E --&gt;|Static| F[Drop]
+    E --&gt;|Static| C
     E --&gt;|Adaptive| G[Keep - fire alert]
     D --&gt;|No| G</code></pre>
+<p>Suppression runs in the worker, before anomalies are returned to the controller.
+Each drop is counted in <code>staffops_ad_worker_anomalies_suppressed_total{detector,reason}</code>
+(reasons: <code>namespace_all</code>, <code>namespace_static</code>, <code>adaptive_workload</code>) so the effect is
+observable — see the <a href="../../reference/metrics/">metrics reference</a>.</p>
 <h2 id="rationale">Rationale<a class="headerlink" href="#rationale" title="Permanent link">&para;</a></h2>
 <h3 id="why-suppress-static-for-batch-namespaces">Why suppress static for batch namespaces?<a class="headerlink" href="#why-suppress-static-for-batch-namespaces" title="Permanent link">&para;</a></h3>
 <p>Batch/cron workloads have unpredictable resource usage:</p>
@@ -1804,26 +1844,36 @@
 <li>Sudden restart loop</li>
 </ul>
 <p>Adaptive detection catches these because it knows what "normal" looks like for that specific workload.</p>
+<h3 id="why-suppress-adaptive-for-specific-infra-workloads">Why suppress adaptive for specific infra workloads?<a class="headerlink" href="#why-suppress-adaptive-for-specific-infra-workloads" title="Permanent link">&para;</a></h3>
+<p>Some infrastructure components are <em>inherently</em> bursty in a way the adaptive detector
+cannot learn away: message brokers (Kafka), telemetry collectors (OTel), and service-mesh
+proxies (Istio) have high-variance resource and error-rate profiles by design. Their
+Z-Score crosses the threshold constantly, producing the dominant share of false positives
+— yet they share a namespace with real application workloads, so namespace-level
+suppression is too blunt.</p>
+<p><strong>Solution</strong>: <code>exclude_adaptive_workloads_csv</code> silences only the <em>adaptive</em> signal for the
+named workloads, workload by workload, while their <em>static</em> breaches (e.g. OOM, restart
+loops) and log patterns still fire. It is namespace-independent for exactly this reason.</p>
 <h2 id="common-patterns">Common Patterns<a class="headerlink" href="#common-patterns" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Namespace type</th>
+<th>Workload / namespace type</th>
 <th>Recommended suppression</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>System (<code>kube-system</code>, <code>monitoring</code>)</td>
-<td>Full exclusion</td>
+<td>Full exclusion (namespace)</td>
 </tr>
 <tr>
-<td>Batch/ETL</td>
-<td>Static-only exclusion</td>
+<td>Batch/ETL namespaces</td>
+<td>Static-only exclusion (namespace)</td>
 </tr>
 <tr>
-<td>Infrastructure (Istio, cert-manager)</td>
-<td>Static-only exclusion</td>
+<td>Bursty infra (Kafka, OTel collectors, Istio, Pyroscope)</td>
+<td>Adaptive-workload exclusion</td>
 </tr>
 <tr>
 <td>Application workloads</td>
