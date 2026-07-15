@@ -844,6 +844,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#17-otlp-protocol-grpc-vs-httpprotobuf" class="md-nav__link">
+    <span class="md-ellipsis">
+      17. OTLP Protocol (gRPC vs HTTP/protobuf)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1339,6 +1348,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#17-otlp-protocol-grpc-vs-httpprotobuf" class="md-nav__link">
+    <span class="md-ellipsis">
+      17. OTLP Protocol (gRPC vs HTTP/protobuf)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1605,6 +1623,11 @@ must be installed. Without the extra, activation is silently skipped.</p>
 <td>Standard OTel sampler config — takes priority over <code>OTEL_HELPER_SAMPLE_RATIO</code> when set</td>
 <td><em>(unset)</em></td>
 </tr>
+<tr>
+<td><code>OTEL_EXPORTER_OTLP_PROTOCOL</code></td>
+<td>OTLP wire protocol: <code>grpc</code> or <code>http/protobuf</code></td>
+<td>port-based inference</td>
+</tr>
 </tbody>
 </table>
 <p><strong>Precedence rule:</strong> explicit code config (<code>TelemetryOptions(...)</code>) &gt; standard OTel env var (<code>OTEL_METRICS_EXPORTER</code>, <code>OTEL_METRIC_EXPORT_INTERVAL</code>, <code>OTEL_TRACES_SAMPLER</code>) &gt; <code>OTEL_HELPER_*</code> env var &gt; library default.</p>
@@ -1804,6 +1827,18 @@ A: Use Python 3.11. 3.12+ has issues with <code>pkg_resources</code> used by OTe
 </span></code></pre></div>
 <p>Priority: code config (<code>TelemetryOptions(insecure=...)</code>) &gt; <code>OTEL_EXPORTER_OTLP_INSECURE</code> env var &gt; scheme-based detection.</p>
 <p>For local development with a plaintext collector, the default <code>http://localhost</code> already resolves to plaintext — no changes needed.</p>
+<hr />
+<h2 id="17-otlp-protocol-grpc-vs-httpprotobuf">17. OTLP Protocol (gRPC vs HTTP/protobuf)<a class="headerlink" href="#17-otlp-protocol-grpc-vs-httpprotobuf" title="Permanent link">&para;</a></h2>
+<p>By default, the SDK exports over <strong>gRPC</strong>. To use OTLP/HTTP instead (e.g. behind an ingress that doesn't proxy gRPC), set the standard env var:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nv">OTEL_EXPORTER_OTLP_PROTOCOL</span><span class="o">=</span>http/protobuf
+</span></code></pre></div>
+<p>Or in code:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">setup_telemetry</span><span class="p">(</span><span class="n">TelemetryOptions</span><span class="p">(</span><span class="n">otlp_protocol</span><span class="o">=</span><span class="s2">&quot;http/protobuf&quot;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>If left unset, the protocol is inferred from the endpoint port: <code>4318</code> resolves to <code>http/protobuf</code>, any other port (including the default <code>4317</code>) resolves to <code>grpc</code>.</p>
+<p>Priority: code config (<code>TelemetryOptions(otlp_protocol=...)</code>) &gt; <code>OTEL_EXPORTER_OTLP_PROTOCOL</code> env var &gt; port-based inference (<code>4318</code> → <code>http/protobuf</code>) &gt; <code>grpc</code> default.</p>
+<p><code>http/json</code> is a valid value per the OTel spec but has no exporter implementation for traces/metrics/logs in this library — it fails validation at startup instead of silently falling back to another protocol.</p>
+<p>The <code>/v1/traces</code>, <code>/v1/metrics</code>, <code>/v1/logs</code> paths are appended to the endpoint automatically when <code>http/protobuf</code> is selected — do not include them in <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>.</p>
 
 
 

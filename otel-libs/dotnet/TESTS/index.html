@@ -833,6 +833,48 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#otlpprotocoltests" class="md-nav__link">
+    <span class="md-ellipsis">
+      OtlpProtocolTests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OtlpProtocolTests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolvedotlpprotocol-precedence" class="md-nav__link">
+    <span class="md-ellipsis">
+      ResolvedOtlpProtocol precedence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-integration-http-protocol-delivers-to-v1signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Live integration — HTTP protocol delivers to /v1/{signal}
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1579,6 +1621,48 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#otlpprotocoltests" class="md-nav__link">
+    <span class="md-ellipsis">
+      OtlpProtocolTests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OtlpProtocolTests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolvedotlpprotocol-precedence" class="md-nav__link">
+    <span class="md-ellipsis">
+      ResolvedOtlpProtocol precedence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-integration-http-protocol-delivers-to-v1signal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Live integration — HTTP protocol delivers to /v1/{signal}
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1603,7 +1687,7 @@
 
 
 <h1 id="tests-otelhelper-net">Tests — OtelHelper (.NET)<a class="headerlink" href="#tests-otelhelper-net" title="Permanent link">&para;</a></h1>
-<p>164 unit tests (xUnit), 0 failed, 0 warnings.</p>
+<p>179 unit tests (xUnit), 0 failed, 0 warnings.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">:/src&quot;</span><span class="w"> </span>-w<span class="w"> </span>/src<span class="w"> </span>mcr.microsoft.com/dotnet/sdk:8.0<span class="w"> </span>dotnet<span class="w"> </span><span class="nb">test</span><span class="w"> </span>OtelHelper.Tests
 </span></code></pre></div>
 <hr />
@@ -2568,6 +2652,97 @@
 <tr>
 <td><code>NoEnvNoOverride_DefaultsToAlwaysOn</code></td>
 <td>Neither set → <code>AlwaysOnSampler</code>, span sampled</td>
+</tr>
+</tbody>
+</table>
+<h2 id="otlpprotocoltests">OtlpProtocolTests<a class="headerlink" href="#otlpprotocoltests" title="Permanent link">&para;</a></h2>
+<p>OTLP wire protocol selection (grpc vs http/protobuf) — tracing and metrics. Cross-language parity with <code>python/tests/test_otlp_protocol.py</code> and <code>go/otlp_protocol_test.go</code>. Uses <code>[Collection("EnvVarTests")]</code>.</p>
+<h3 id="resolvedotlpprotocol-precedence">ResolvedOtlpProtocol precedence<a class="headerlink" href="#resolvedotlpprotocol-precedence" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DefaultIsGrpc</code></td>
+<td>Endpoint on port 4317, no env var → grpc</td>
+</tr>
+<tr>
+<td><code>NoEndpoint_DefaultsToGrpc</code></td>
+<td>No endpoint at all → grpc</td>
+</tr>
+<tr>
+<td><code>Port4318_InfersHttp</code></td>
+<td>Endpoint on port 4318 → http/protobuf</td>
+</tr>
+<tr>
+<td><code>Port4317_InfersGrpc</code></td>
+<td>Endpoint on port 4317 → grpc</td>
+</tr>
+<tr>
+<td><code>OtherPort_InfersGrpc</code></td>
+<td>Endpoint on an unrelated port → grpc</td>
+</tr>
+<tr>
+<td><code>EnvVar_BeatsPortInference</code></td>
+<td><code>OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf</code> wins over a :4317 endpoint that would infer grpc</td>
+</tr>
+<tr>
+<td><code>EnvVarGrpc_BeatsHttpPortInference</code></td>
+<td><code>OTEL_EXPORTER_OTLP_PROTOCOL=grpc</code> wins over a :4318 endpoint that would infer http</td>
+</tr>
+<tr>
+<td><code>ExplicitOption_BeatsEnv</code></td>
+<td><code>TelemetryOptions.OtlpProtocol</code> set in code wins over the env var</td>
+</tr>
+<tr>
+<td><code>EnvVar_CaseAndWhitespaceTolerant</code></td>
+<td><code>"  HTTP/PROTOBUF  "</code> normalizes correctly</td>
+</tr>
+</tbody>
+</table>
+<h3 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UnknownValue_FailsValidation</code></td>
+<td>Unknown protocol value → validation error</td>
+</tr>
+<tr>
+<td><code>HttpJson_RejectedEvenThoughSpecValid</code></td>
+<td><code>http/json</code> is a valid OTel spec value but unsupported here → fails validation</td>
+</tr>
+<tr>
+<td><code>GrpcAndHttpProtobuf_PassValidation</code> × 2</td>
+<td><code>grpc</code> and <code>http/protobuf</code> both pass validation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="live-integration-http-protocol-delivers-to-v1signal">Live integration — HTTP protocol delivers to /v1/{signal}<a class="headerlink" href="#live-integration-http-protocol-delivers-to-v1signal" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Tracing_Http_DeliversToV1Traces</code></td>
+<td><code>ConfigureTracing</code> with http/protobuf sends the request to <code>/v1/traces</code> on a real <code>HttpListener</code></td>
+</tr>
+<tr>
+<td><code>Metrics_Http_DeliversToV1Metrics</code></td>
+<td><code>ConfigureMetrics</code> with http/protobuf sends the request to <code>/v1/metrics</code> on a real <code>HttpListener</code></td>
 </tr>
 </tbody>
 </table>

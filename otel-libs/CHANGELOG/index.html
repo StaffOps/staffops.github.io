@@ -828,6 +828,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="[Unreleased]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      Added
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -841,7 +856,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added" class="md-nav__link">
+  <a href="#added_1" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -874,7 +889,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_1" class="md-nav__link">
+  <a href="#added_2" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -955,6 +970,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="[Unreleased]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      Added
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -968,7 +998,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added" class="md-nav__link">
+  <a href="#added_1" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -1001,7 +1031,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#added_1" class="md-nav__link">
+  <a href="#added_2" class="md-nav__link">
     <span class="md-ellipsis">
       Added
     </span>
@@ -1071,11 +1101,26 @@
 <p>This is a monorepo; each language package is versioned independently but is
 currently aligned at the same version.</p>
 <h2 id="unreleased">[Unreleased]<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
+<h3 id="added">Added<a class="headerlink" href="#added" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>OTLP/HTTP protocol support</strong> (all languages) — the SDK can now export via
+  <code>http/protobuf</code> in addition to the existing <code>grpc</code> transport. Selection
+  follows the standard <code>OTEL_EXPORTER_OTLP_PROTOCOL</code> env var; when unset, the
+  endpoint port infers the protocol (<code>4318</code> → <code>http/protobuf</code>, else <code>grpc</code>),
+  matching <code>bdcotelhelper</code>'s port-based convention. Explicit code config wins
+  over the env var, which wins over port inference. <code>http/json</code> is a valid
+  OTel spec value but has no exporter implementation in any of the three
+  SDKs — it fails validation instead of silently falling back. Programmatic
+  override: <code>TelemetryOptions(otlp_protocol=...)</code> (Python),
+  <code>WithOtlpProtocol(...)</code> (Go), <code>TelemetryOptions.OtlpProtocol</code> (.NET). Python
+  and .NET manually append <code>/v1/{signal}</code> to the endpoint for the HTTP
+  exporters (the Go SDK does this automatically).</li>
+</ul>
 <h2 id="010-2026-07-14">[0.1.0] - 2026-07-14<a class="headerlink" href="#010-2026-07-14" title="Permanent link">&para;</a></h2>
 <p>First stable release. All items tracked in <code>ANALISE-PROBLEMAS.md</code> (P1–P9)
 are resolved; behavior is unchanged from <code>0.1.0-rc.1</code> for anything not
 listed below — this release folds in everything shipped since the rc.</p>
-<h3 id="added">Added<a class="headerlink" href="#added" title="Permanent link">&para;</a></h3>
+<h3 id="added_1">Added<a class="headerlink" href="#added_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong><code>OTEL_METRICS_EXPORTER</code> contract</strong> (all languages) — selects the active
   metric exporter(s): <code>otlp</code>, <code>prometheus</code>, <code>otlp,prometheus</code>, or <code>none</code>.
@@ -1153,7 +1198,7 @@ listed below — this release folds in everything shipped since the rc.</p>
 <h2 id="010-rc1-2026-07-02">[0.1.0-rc.1] - 2026-07-02<a class="headerlink" href="#010-rc1-2026-07-02" title="Permanent link">&para;</a></h2>
 <p>First published pre-release. Consumed and validated end-to-end from the
 registries (see <a href="../CONSUMING/">CONSUMING.md</a>).</p>
-<h3 id="added_1">Added<a class="headerlink" href="#added_1" title="Permanent link">&para;</a></h3>
+<h3 id="added_2">Added<a class="headerlink" href="#added_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Opt-in instrumentation subpackages/extensions</strong> (all languages). The core
   package stays lightweight; add only what you need.</li>

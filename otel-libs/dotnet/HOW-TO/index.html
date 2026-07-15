@@ -932,6 +932,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#18-otlp-protocol-grpc-vs-httpprotobuf" class="md-nav__link">
+    <span class="md-ellipsis">
+      18. OTLP Protocol (gRPC vs HTTP/protobuf)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1819,6 +1828,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#18-otlp-protocol-grpc-vs-httpprotobuf" class="md-nav__link">
+    <span class="md-ellipsis">
+      18. OTLP Protocol (gRPC vs HTTP/protobuf)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2248,6 +2266,12 @@
 <td><em>(unset)</em></td>
 <td>Manual</td>
 </tr>
+<tr>
+<td><code>OTEL_EXPORTER_OTLP_PROTOCOL</code></td>
+<td>OTLP wire protocol: <code>grpc</code> or <code>http/protobuf</code></td>
+<td>port-based inference</td>
+<td>Manual</td>
+</tr>
 </tbody>
 </table>
 <h3 id="configuration-priority">Configuration Priority<a class="headerlink" href="#configuration-priority" title="Permanent link">&para;</a></h3>
@@ -2496,6 +2520,21 @@
 </span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="nv">OTEL_EXPORTER_OTLP_INSECURE</span><span class="o">=</span><span class="nb">true</span><span class="w">                                </span><span class="c1"># forces plaintext regardless of scheme</span>
 </span></code></pre></div>
 <p>Priority: code config (scheme in <code>TelemetryOptions.OtelCollectorEndpoint</code>) &gt; <code>OTEL_EXPORTER_OTLP_INSECURE</code> env var &gt; scheme-based detection.</p>
+<hr />
+<h2 id="18-otlp-protocol-grpc-vs-httpprotobuf">18. OTLP Protocol (gRPC vs HTTP/protobuf)<a class="headerlink" href="#18-otlp-protocol-grpc-vs-httpprotobuf" title="Permanent link">&para;</a></h2>
+<p>By default, the SDK exports over <strong>gRPC</strong>. To use OTLP/HTTP instead (e.g. behind an ingress that doesn't proxy gRPC), set the standard env var:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nv">OTEL_EXPORTER_OTLP_PROTOCOL</span><span class="o">=</span>http/protobuf
+</span></code></pre></div>
+<p>Or in code:</p>
+<div class="language-csharp highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">services</span><span class="p">.</span><span class="n">AddOtelHelper</span><span class="p">(</span><span class="n">opts</span><span class="w"> </span><span class="o">=&gt;</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="p">{</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="w">    </span><span class="n">opts</span><span class="p">.</span><span class="n">OtlpProtocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;http/protobuf&quot;</span><span class="p">;</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="p">});</span>
+</span></code></pre></div>
+<p>If left unset, the protocol is inferred from the endpoint port: <code>4318</code> resolves to <code>http/protobuf</code>, any other port (including the default <code>4317</code>) resolves to <code>grpc</code>.</p>
+<p>Priority: code config (<code>TelemetryOptions.OtlpProtocol</code>) &gt; <code>OTEL_EXPORTER_OTLP_PROTOCOL</code> env var &gt; port-based inference (<code>4318</code> → <code>http/protobuf</code>) &gt; <code>grpc</code> default.</p>
+<p><code>http/json</code> is a valid value per the OTel spec but has no exporter implementation for traces/metrics/logs in this library — it fails validation at startup instead of silently falling back to another protocol.</p>
+<p><code>/v1/traces</code>, <code>/v1/metrics</code>, <code>/v1/logs</code> are appended to the endpoint automatically when <code>http/protobuf</code> is selected — do not include them in <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>.</p>
 <p>For local development with a plaintext collector, the default <code>http://localhost</code> already resolves to plaintext — no changes needed.</p>
 
 

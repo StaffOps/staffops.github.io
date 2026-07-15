@@ -1110,6 +1110,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#16-otlp-protocol-grpc-vs-httpprotobuf" class="md-nav__link">
+    <span class="md-ellipsis">
+      16. OTLP Protocol (gRPC vs HTTP/protobuf)
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1562,6 +1571,15 @@
   <a href="#15-tls-transport" class="md-nav__link">
     <span class="md-ellipsis">
       15. TLS Transport
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-otlp-protocol-grpc-vs-httpprotobuf" class="md-nav__link">
+    <span class="md-ellipsis">
+      16. OTLP Protocol (gRPC vs HTTP/protobuf)
     </span>
   </a>
   
@@ -2026,6 +2044,11 @@
 <td>Standard OTel sampler config — takes priority over <code>OTEL_HELPER_SAMPLE_RATIO</code> when set</td>
 <td><em>(unset)</em></td>
 </tr>
+<tr>
+<td><code>OTEL_EXPORTER_OTLP_PROTOCOL</code></td>
+<td>OTLP wire protocol: <code>grpc</code> or <code>http/protobuf</code></td>
+<td>port-based inference</td>
+</tr>
 </tbody>
 </table>
 <h3 id="configuration-priority">Configuration Priority<a class="headerlink" href="#configuration-priority" title="Permanent link">&para;</a></h3>
@@ -2258,6 +2281,20 @@ A: The lib sets up W3C TraceContext + Baggage propagators globally. For HTTP, us
 </span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="p">)</span>
 </span></code></pre></div>
 <p>Priority: code config (<code>WithInsecure(true)</code>) &gt; <code>OTEL_EXPORTER_OTLP_INSECURE</code> env var &gt; scheme-based detection.</p>
+<hr />
+<h2 id="16-otlp-protocol-grpc-vs-httpprotobuf">16. OTLP Protocol (gRPC vs HTTP/protobuf)<a class="headerlink" href="#16-otlp-protocol-grpc-vs-httpprotobuf" title="Permanent link">&para;</a></h2>
+<p>By default, the SDK exports over <strong>gRPC</strong>. To use OTLP/HTTP instead (e.g. behind an ingress that doesn't proxy gRPC), set the standard env var:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nv">OTEL_EXPORTER_OTLP_PROTOCOL</span><span class="o">=</span>http/protobuf
+</span></code></pre></div>
+<p>Or in code:</p>
+<div class="language-go highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="nx">shutdown</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">otelhelper</span><span class="p">.</span><span class="nx">Setup</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">    </span><span class="nx">otelhelper</span><span class="p">.</span><span class="nx">WithOtlpProtocol</span><span class="p">(</span><span class="s">&quot;http/protobuf&quot;</span><span class="p">),</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>If left unset, the protocol is inferred from the endpoint port: <code>4318</code> resolves to <code>http/protobuf</code>, any other port (including the default <code>4317</code>) resolves to <code>grpc</code>.</p>
+<p>Priority: code config (<code>WithOtlpProtocol(...)</code>) &gt; <code>OTEL_EXPORTER_OTLP_PROTOCOL</code> env var &gt; port-based inference (<code>4318</code> → <code>http/protobuf</code>) &gt; <code>grpc</code> default.</p>
+<p><code>http/json</code> is a valid value per the OTel spec but has no exporter implementation for traces/metrics/logs in this library — it fails validation at startup instead of silently falling back to another protocol.</p>
+<p>The Go OTLP/HTTP exporters append <code>/v1/traces</code>, <code>/v1/metrics</code>, <code>/v1/logs</code> to the endpoint automatically — do not include them in <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>.</p>
 <p>For local development with a plaintext collector, the default <code>http://localhost</code> already resolves to plaintext — no changes needed.</p>
 
 
