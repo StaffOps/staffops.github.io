@@ -971,18 +971,18 @@
 <tbody>
 <tr>
 <td><code>aws</code></td>
-<td>EC2, RDS, S3, IAM, networking</td>
+<td>EC2, RDS, S3, IAM</td>
 <td><code>boto3</code> (describe/list/get)</td>
 </tr>
 <tr>
 <td><code>kubernetes</code></td>
-<td>Pods, deployments, services, events</td>
-<td><code>kubernetes</code> API + MCP</td>
+<td>Pods, namespaces, nodes, Helm, Istio mesh (via Kiali)</td>
+<td><code>mcp</code> (kube-mcp, full read-only tool catalog)</td>
 </tr>
 <tr>
 <td><code>finops</code></td>
-<td>Cost analysis, savings plans, attribution</td>
-<td><code>boto3</code> (Cost Explorer) + <code>athena</code></td>
+<td>Cost analysis (Cost Explorer spend only, no per-namespace/Kubecost breakdown)</td>
+<td><code>boto3</code> (Cost Explorer)</td>
 </tr>
 <tr>
 <td><code>devops</code></td>
@@ -991,11 +991,14 @@
 </tr>
 <tr>
 <td><code>observability</code></td>
-<td>Metrics, logs, traces, alerting</td>
-<td><code>http</code> (VictoriaMetrics, Loki, Grafana)</td>
+<td>Target-up status only today (routing keywords cover more than the datasource does — see <code>evals/golden/observability.yaml</code>)</td>
+<td><code>http</code> (single Prometheus <code>up</code> query)</td>
 </tr>
 </tbody>
 </table>
+<p>Datasources above reflect what each agent can ACTUALLY answer today, not
+the aspirational domain description — see <code>evals/golden/&lt;agent&gt;.yaml</code> for
+the per-agent capability probes this is checked against (spec 35).</p>
 <h2 id="routing">Routing<a class="headerlink" href="#routing" title="Permanent link">&para;</a></h2>
 <p>The supervisor classifier decides which agent to invoke:</p>
 <ol>

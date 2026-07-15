@@ -890,6 +890,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#quality-structural-gate-and-eval-harness-spec-35" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quality — structural gate and eval harness (spec 35)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#health-and-readiness-spec-07" class="md-nav__link">
     <span class="md-ellipsis">
       Health and readiness (spec 07)
@@ -1091,6 +1100,15 @@
   <a href="#knowledge-base-spec-21" class="md-nav__link">
     <span class="md-ellipsis">
       Knowledge Base (spec 21)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quality-structural-gate-and-eval-harness-spec-35" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quality — structural gate and eval harness (spec 35)
     </span>
   </a>
   
@@ -1652,6 +1670,42 @@ reusable KB entries, and the RAG injection path that retrieves them at query tim
 </tbody>
 </table>
 <hr />
+<h2 id="quality-structural-gate-and-eval-harness-spec-35">Quality — structural gate and eval harness (spec 35)<a class="headerlink" href="#quality-structural-gate-and-eval-harness-spec-35" title="Permanent link">&para;</a></h2>
+<p><code>aigent.quality.violations</code> is emitted from production traffic (any request,
+any time <code>ResponseQualityGuard</code> fires). <code>aigent.eval.score</code> is emitted only
+by <code>make eval</code> / <code>make eval-rca</code> (spec 35 T2/T9, on-demand, real Bedrock
+cost) — it will read as sparse/absent unless someone has run an eval
+recently.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Labels</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aigent.quality.violations</code></td>
+<td>Counter</td>
+<td><code>agent_id</code>, <code>category</code></td>
+<td>Structural quality defects blocked in a response — tool-scaffolding leaks (<code>tool_scaffolding</code>), raw adapter/infra error text (<code>raw_adapter_error</code>, <code>raw_traceback</code>, <code>raw_botocore_exception</code>, <code>raw_boto3_error_string</code>, <code>raw_taskgroup_exception</code>), or an ungrounded resource ID (<code>ungrounded_resource_id</code> — groundedness dimension, PR-05, 2026-07-15). The F-001/F-002/F-003 defect classes as a metric.</td>
+</tr>
+<tr>
+<td><code>aigent.quality.ungrounded_numeric_claims</code></td>
+<td>Counter</td>
+<td><code>agent_id</code></td>
+<td>A dollar-amount claim with no match in <code>infra_data</code> — signal only, never blocking (a derived sum/average legitimately won't always appear verbatim). Groundedness dimension, PR-05.</td>
+</tr>
+<tr>
+<td><code>aigent.eval.score</code></td>
+<td>Histogram</td>
+<td><code>suite</code>, <code>agent_id</code></td>
+<td>Per-question/scenario score (0-1). <code>suite="golden"</code> from <code>make eval</code>'s golden-set + LLM-judge run (mechanical checks are the floor — a failure zeroes the score regardless of judge opinion). <code>suite="rca"</code> from <code>make eval-rca</code>'s fixture-fed scenarios (spec 35 Phase 3, mechanical-only, no judge); <code>agent_id</code> holds the scenario id for this suite, not an agent name.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="health-and-readiness-spec-07">Health and readiness (spec 07)<a class="headerlink" href="#health-and-readiness-spec-07" title="Permanent link">&para;</a></h2>
 <p>Emitted by the dependency health checker on every <code>/healthz</code> and <code>/ready</code> request.</p>
 <table>

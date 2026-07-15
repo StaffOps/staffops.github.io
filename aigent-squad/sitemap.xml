@@ -2,54 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://staffops.github.io/aigent-squad/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/CI-CD/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/architecture/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/agents/how-to-new-agent/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/agents/overview/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/agents/read-only-policy/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/getting-started/installation/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/getting-started/prerequisites/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/getting-started/quickstart/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/integrations/alerting/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/integrations/mcp/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/reference/helm/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/aigent-squad/reference/metrics/</loc>
-         <lastmod>2026-06-23</lastmod>
+         <lastmod>2026-07-15</lastmod>
     </url>
 </urlset>
