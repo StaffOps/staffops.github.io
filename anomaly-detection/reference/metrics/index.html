@@ -2038,72 +2038,52 @@
 
 
 <h1 id="metrics-reference">Metrics Reference<a class="headerlink" href="#metrics-reference" title="Permanent link">&para;</a></h1>
-<p>All three components — Controller, Workers, and the ML Service — expose Prometheus-compatible metrics on their HTTP <code>/metrics</code> endpoints (port <code>8080</code> for Go components, port <code>8000</code> for the ML service). Every metric carries at minimum a <code>cluster</code> label whose value is the <code>clusterName</code> Helm value.</p>
+<p>All three components — Controller, Workers, and the ML Service — expose Prometheus-compatible metrics on their HTTP <code>/metrics</code> endpoints (port <code>8080</code> for Go components, port <code>8082</code> for the ML service). All three route through the org's OTel Metrics API helper library (<code>staffops-otel-libs</code>: <code>otelhelper.MetricsHandler()</code> in Go, <code>otel_helper</code>'s Prometheus reader in Python) — no direct <code>client_golang</code>/<code>prometheus_client</code> usage. The <code>cluster</code> (and any other org-specific) label is <strong>not</strong> emitted by the app; it's added at the scrape layer via the ServiceMonitor's <code>externalLabels</code> (vmagent) or your Prometheus <code>external_labels</code>/relabel config. Queries below assume that label is present from the scrape layer.</p>
 <hr />
 <h2 id="scraping-configuration">Scraping configuration<a class="headerlink" href="#scraping-configuration" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">VMServiceScrape (vm-operator)</label><label for="__tabbed_1_2">ServiceMonitor (Prometheus Operator)</label><label for="__tabbed_1_3">Manual port-forward (debug)</label></div>
+<p>The chart exposes a single, vendor-neutral scrape mechanism — <code>ServiceMonitor</code>. vm-operator
+honors the <code>ServiceMonitor</code> CRD natively on VictoriaMetrics clusters, so there is no separate
+<code>VMServiceScrape</code> resource to configure.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">ServiceMonitor (Prometheus Operator / vm-operator)</label><label for="__tabbed_1_2">Manual port-forward (debug)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">vmServiceScrape</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">serviceMonitor</span><span class="p">:</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15s</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">scrapeTimeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-prometheus-stack</span><span class="w">   </span><span class="c1"># must match your Prometheus selector</span>
 </span></code></pre></div>
-<p>When enabled, the chart creates a <code>VMServiceScrape</code> resource targeting all component services:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operator.victoriametrics.com/v1beta1</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VMServiceScrape</span>
+<p>The chart creates a <code>ServiceMonitor</code> resource:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring.coreos.com/v1</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceMonitor</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">metadata</span><span class="p">:</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staffops-anomaly-detection</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staffops-anomaly-detection</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15s</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="nt">scrapeTimeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/metrics</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-prometheus-stack</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staffops-anomaly-detection</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">      </span><span class="nt">scrapeTimeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">serviceMonitor</span><span class="p">:</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">scrapeTimeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-prometheus-stack</span><span class="w">   </span><span class="c1"># must match your Prometheus selector</span>
-</span></code></pre></div>
-<p>The chart creates a <code>ServiceMonitor</code> resource:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring.coreos.com/v1</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceMonitor</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staffops-anomaly-detection</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="nt">release</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-prometheus-stack</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">selector</span><span class="p">:</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">      </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staffops-anomaly-detection</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="nt">endpoints</span><span class="p">:</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metrics</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="nt">scrapeTimeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Controller metrics</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>kubectl<span class="w"> </span>port-forward<span class="w"> </span>-n<span class="w"> </span>monitoring<span class="w"> </span>deploy/&lt;release&gt;-controller<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="p">&amp;</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8080/metrics
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># Worker metrics (target a specific pod)</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>kubectl<span class="w"> </span>port-forward<span class="w"> </span>-n<span class="w"> </span>monitoring<span class="w"> </span>pod/&lt;release&gt;-worker-xyz-abc<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="p">&amp;</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8080/metrics
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1"># ML service metrics</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>kubectl<span class="w"> </span>port-forward<span class="w"> </span>-n<span class="w"> </span>monitoring<span class="w"> </span>deploy/&lt;release&gt;-ml<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span><span class="p">&amp;</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8000/metrics
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Controller metrics</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>kubectl<span class="w"> </span>port-forward<span class="w"> </span>-n<span class="w"> </span>monitoring<span class="w"> </span>deploy/&lt;release&gt;-controller<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="p">&amp;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8080/metrics
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Worker metrics (target a specific pod)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>kubectl<span class="w"> </span>port-forward<span class="w"> </span>-n<span class="w"> </span>monitoring<span class="w"> </span>pod/&lt;release&gt;-worker-xyz-abc<span class="w"> </span><span class="m">8080</span>:8080<span class="w"> </span><span class="p">&amp;</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8080/metrics
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># ML service metrics</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>kubectl<span class="w"> </span>port-forward<span class="w"> </span>-n<span class="w"> </span>monitoring<span class="w"> </span>deploy/&lt;release&gt;-ml<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span><span class="p">&amp;</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8000/metrics
 </span></code></pre></div>
 </div>
 </div>
@@ -2126,7 +2106,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>result</code></td>
+<td><code>result</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2135,14 +2115,14 @@
 </tbody>
 </table>
 <p><strong>PromQL examples:</strong></p>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Cycle success rate over the last 5 minutes</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycles_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">success</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Error ratio (alert when above 5%)</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycles_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">error</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="o">/</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycles_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.05</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Cycle success rate over the last 5 minutes</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycles_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">success</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Error ratio (alert when above 5%)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycles_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">error</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="o">/</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycles_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.05</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_controller_cycle_duration_seconds"><code>staffops_ad_controller_cycle_duration_seconds</code><a class="headerlink" href="#staffops_ad_controller_cycle_duration_seconds" title="Permanent link">&para;</a></h3>
@@ -2160,7 +2140,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code></td>
+<td>(none)</td>
 </tr>
 <tr>
 <td>Buckets</td>
@@ -2172,11 +2152,11 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># p99 cycle duration</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.99</span><span class="p">,</span><span class="w"> </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycle_duration_seconds_bucket</span><span class="p">[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Cycles taking more than 25 seconds (approaching the 30s tick interval)</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycle_duration_seconds_bucket</span><span class="p">[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">25</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># p99 cycle duration</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.99</span><span class="p">,</span><span class="w"> </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycle_duration_seconds_bucket</span><span class="p">[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Cycles taking more than 25 seconds (approaching the 30s tick interval)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_cycle_duration_seconds_bucket</span><span class="p">[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">25</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_controller_is_leader"><code>staffops_ad_controller_is_leader</code><a class="headerlink" href="#staffops_ad_controller_is_leader" title="Permanent link">&para;</a></h3>
@@ -2194,7 +2174,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>pod</code></td>
+<td><code>pod</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2202,11 +2182,11 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Detect no-leader condition</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">sum</span><span class="o">(</span><span class="nv">staffops_ad_controller_is_leader</span><span class="o">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Which pod is the leader?</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nv">staffops_ad_controller_is_leader</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Detect no-leader condition</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">sum</span><span class="o">(</span><span class="nv">staffops_ad_controller_is_leader</span><span class="o">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Which pod is the leader?</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nv">staffops_ad_controller_is_leader</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_controller_anomalies_detected_total"><code>staffops_ad_controller_anomalies_detected_total</code><a class="headerlink" href="#staffops_ad_controller_anomalies_detected_total" title="Permanent link">&para;</a></h3>
@@ -2224,7 +2204,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>source</code>, <code>algorithm</code>, <code>severity</code></td>
+<td><code>source</code>, <code>algorithm</code>, <code>severity</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2232,15 +2212,15 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Anomalies per algorithm over the last hour</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">algorithm</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="kr">increase</span><span class="o">(</span><span class="nv">staffops_ad_controller_anomalies_detected_total</span><span class="p">[</span><span class="s">1h</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="o">)</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># Ratio of ML-detected anomalies vs rule-based</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="k">sum</span><span class="o">(</span><span class="kr">increase</span><span class="o">(</span><span class="nv">staffops_ad_controller_anomalies_detected_total</span><span class="p">{</span><span class="nl">algorithm</span><span class="o">=~</span><span class="p">&quot;</span><span class="s">isolation_forest|prophet</span><span class="p">&quot;}[</span><span class="s">1h</span><span class="p">]</span><span class="o">))</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="o">/</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="k">sum</span><span class="o">(</span><span class="kr">increase</span><span class="o">(</span><span class="nv">staffops_ad_controller_anomalies_detected_total</span><span class="p">[</span><span class="s">1h</span><span class="p">]</span><span class="o">))</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Anomalies per algorithm over the last hour</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">algorithm</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="kr">increase</span><span class="o">(</span><span class="nv">staffops_ad_controller_anomalies_detected_total</span><span class="p">[</span><span class="s">1h</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="o">)</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1"># Ratio of ML-detected anomalies vs rule-based</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">sum</span><span class="o">(</span><span class="kr">increase</span><span class="o">(</span><span class="nv">staffops_ad_controller_anomalies_detected_total</span><span class="p">{</span><span class="nl">algorithm</span><span class="o">=~</span><span class="p">&quot;</span><span class="s">isolation_forest|prophet</span><span class="p">&quot;}[</span><span class="s">1h</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="o">/</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="k">sum</span><span class="o">(</span><span class="kr">increase</span><span class="o">(</span><span class="nv">staffops_ad_controller_anomalies_detected_total</span><span class="p">[</span><span class="s">1h</span><span class="p">]</span><span class="o">))</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_controller_alerts_fired_total"><code>staffops_ad_controller_alerts_fired_total</code><a class="headerlink" href="#staffops_ad_controller_alerts_fired_total" title="Permanent link">&para;</a></h3>
@@ -2258,7 +2238,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>severity</code>, <code>dry_run</code></td>
+<td><code>severity</code>, <code>dry_run</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2266,11 +2246,11 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Alert firing rate (last 15 minutes)</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_alerts_fired_total</span><span class="p">{</span><span class="nl">dry_run</span><span class="o">=</span><span class="p">&quot;</span><span class="s">false</span><span class="p">&quot;}[</span><span class="s">15m</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Compare dry-run vs live rate after enabling alerting</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_alerts_fired_total</span><span class="p">[</span><span class="s">15m</span><span class="p">]</span><span class="o">)</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Alert firing rate (last 15 minutes)</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_alerts_fired_total</span><span class="p">{</span><span class="nl">dry_run</span><span class="o">=</span><span class="p">&quot;</span><span class="s">false</span><span class="p">&quot;}[</span><span class="s">15m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Compare dry-run vs live rate after enabling alerting</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_alerts_fired_total</span><span class="p">[</span><span class="s">15m</span><span class="p">]</span><span class="o">)</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_controller_suppressed_total"><code>staffops_ad_controller_suppressed_total</code><a class="headerlink" href="#staffops_ad_controller_suppressed_total" title="Permanent link">&para;</a></h3>
@@ -2288,7 +2268,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>reason</code></td>
+<td><code>reason</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2296,8 +2276,8 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Suppression breakdown</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_suppressed_total</span><span class="p">[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Suppression breakdown</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_controller_suppressed_total</span><span class="p">[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
 </span></code></pre></div>
 <hr />
 <h2 id="worker-metrics">Worker metrics<a class="headerlink" href="#worker-metrics" title="Permanent link">&para;</a></h2>
@@ -2317,7 +2297,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>pod</code>, <code>result</code></td>
+<td><code>pod</code>, <code>result</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2325,11 +2305,11 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Total job throughput across all workers</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_jobs_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">success</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Per-worker error rate</span>
-</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_jobs_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">error</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Total job throughput across all workers</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_jobs_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">success</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Per-worker error rate</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_jobs_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">error</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_worker_anomalies_suppressed_total"><code>staffops_ad_worker_anomalies_suppressed_total</code><a class="headerlink" href="#staffops_ad_worker_anomalies_suppressed_total" title="Permanent link">&para;</a></h3>
@@ -2347,7 +2327,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>pod</code>, <code>detector</code>, <code>reason</code></td>
+<td><code>pod</code>, <code>detector</code>, <code>reason</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2355,12 +2335,12 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Suppression rate by reason</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_anomalies_suppressed_total</span><span class="p">[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Fraction of adaptive detections silenced by the workload exclude list</span>
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_anomalies_suppressed_total</span><span class="p">{</span><span class="nl">reason</span><span class="o">=</span><span class="p">&quot;</span><span class="s">adaptive_workload</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
-</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="o">/</span><span class="w"> </span><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_detections_total</span><span class="p">{</span><span class="nl">detector</span><span class="o">=</span><span class="p">&quot;</span><span class="s">adaptive</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Suppression rate by reason</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_anomalies_suppressed_total</span><span class="p">[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Fraction of adaptive detections silenced by the workload exclude list</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_anomalies_suppressed_total</span><span class="p">{</span><span class="nl">reason</span><span class="o">=</span><span class="p">&quot;</span><span class="s">adaptive_workload</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="o">/</span><span class="w"> </span><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_detections_total</span><span class="p">{</span><span class="nl">detector</span><span class="o">=</span><span class="p">&quot;</span><span class="s">adaptive</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_worker_query_duration_seconds"><code>staffops_ad_worker_query_duration_seconds</code><a class="headerlink" href="#staffops_ad_worker_query_duration_seconds" title="Permanent link">&para;</a></h3>
@@ -2378,7 +2358,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>pod</code>, <code>datasource</code></td>
+<td><code>pod</code>, <code>datasource</code></td>
 </tr>
 <tr>
 <td>Buckets</td>
@@ -2390,19 +2370,19 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># p99 query latency per datasource</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.99</span><span class="p">,</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">datasource</span><span class="p">,</span><span class="w"> </span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_query_duration_seconds_bucket</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="o">)</span>
-</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="o">)</span>
-</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
-</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="c1"># Slow query alert: p95 VictoriaMetrics latency above 3 seconds</span>
-</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
-</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_query_duration_seconds_bucket</span><span class="p">{</span><span class="nl">datasource</span><span class="o">=</span><span class="p">&quot;</span><span class="s">victoriametrics</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">  </span><span class="o">)</span>
-</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="o">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">3</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># p99 query latency per datasource</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.99</span><span class="p">,</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">datasource</span><span class="p">,</span><span class="w"> </span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_query_duration_seconds_bucket</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="o">)</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="o">)</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="c1"># Slow query alert: p95 VictoriaMetrics latency above 3 seconds</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_query_duration_seconds_bucket</span><span class="p">{</span><span class="nl">datasource</span><span class="o">=</span><span class="p">&quot;</span><span class="s">victoriametrics</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">  </span><span class="o">)</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="o">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">3</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_worker_redis_cache_hits_total"><code>staffops_ad_worker_redis_cache_hits_total</code><a class="headerlink" href="#staffops_ad_worker_redis_cache_hits_total" title="Permanent link">&para;</a></h3>
@@ -2420,7 +2400,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>pod</code>, <code>operation</code></td>
+<td><code>pod</code>, <code>operation</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2428,10 +2408,10 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Cache hit ratio for baseline reads (last 10 minutes)</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_redis_cache_hits_total</span><span class="p">{</span><span class="nl">operation</span><span class="o">=</span><span class="p">&quot;</span><span class="s">baseline_read</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="o">/</span>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_redis_operations_total</span><span class="p">{</span><span class="nl">operation</span><span class="o">=</span><span class="p">&quot;</span><span class="s">baseline_read</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Cache hit ratio for baseline reads (last 10 minutes)</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_redis_cache_hits_total</span><span class="p">{</span><span class="nl">operation</span><span class="o">=</span><span class="p">&quot;</span><span class="s">baseline_read</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="o">/</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_redis_operations_total</span><span class="p">{</span><span class="nl">operation</span><span class="o">=</span><span class="p">&quot;</span><span class="s">baseline_read</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">))</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_worker_redis_operations_total"><code>staffops_ad_worker_redis_operations_total</code><a class="headerlink" href="#staffops_ad_worker_redis_operations_total" title="Permanent link">&para;</a></h3>
@@ -2449,7 +2429,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>pod</code>, <code>operation</code>, <code>result</code></td>
+<td><code>pod</code>, <code>operation</code>, <code>result</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2457,8 +2437,8 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Redis error rate — may indicate connectivity or auth problems</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_redis_operations_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">error</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Redis error rate — may indicate connectivity or auth problems</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_worker_redis_operations_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">error</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_worker_baseline_warmup_remaining"><code>staffops_ad_worker_baseline_warmup_remaining</code><a class="headerlink" href="#staffops_ad_worker_baseline_warmup_remaining" title="Permanent link">&para;</a></h3>
@@ -2476,7 +2456,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>pod</code>, <code>rule</code></td>
+<td><code>pod</code>, <code>rule</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2484,11 +2464,11 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Count of rules still in warm-up across all workers</span>
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="k">count</span><span class="o">(</span><span class="nv">staffops_ad_worker_baseline_warmup_remaining</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="o">)</span>
-</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Which specific rules are still warming up?</span>
-</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="nv">staffops_ad_worker_baseline_warmup_remaining</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Count of rules still in warm-up across all workers</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">count</span><span class="o">(</span><span class="nv">staffops_ad_worker_baseline_warmup_remaining</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="o">)</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Which specific rules are still warming up?</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="nv">staffops_ad_worker_baseline_warmup_remaining</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_worker_zscore_current"><code>staffops_ad_worker_zscore_current</code><a class="headerlink" href="#staffops_ad_worker_zscore_current" title="Permanent link">&para;</a></h3>
@@ -2506,7 +2486,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>pod</code>, <code>rule</code>, <code>series_hash</code></td>
+<td><code>pod</code>, <code>rule</code>, <code>series_hash</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2514,8 +2494,8 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Top 10 highest Z-Scores right now (potential anomalies)</span>
-</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="k">topk</span><span class="o">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="kr">abs</span><span class="o">(</span><span class="nv">staffops_ad_worker_zscore_current</span><span class="o">))</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Top 10 highest Z-Scores right now (potential anomalies)</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">topk</span><span class="o">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="kr">abs</span><span class="o">(</span><span class="nv">staffops_ad_worker_zscore_current</span><span class="o">))</span>
 </span></code></pre></div>
 <hr />
 <h2 id="ml-service-metrics">ML Service metrics<a class="headerlink" href="#ml-service-metrics" title="Permanent link">&para;</a></h2>
@@ -2535,7 +2515,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>model</code>, <code>result</code></td>
+<td><code>model</code>, <code>result</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2543,13 +2523,13 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Anomaly detection rate by model</span>
-</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">model</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_predictions_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">anomaly</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="o">)</span>
-</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
-</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="c1"># ML inference error rate</span>
-</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_predictions_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">error</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Anomaly detection rate by model</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">model</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_predictions_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">anomaly</span><span class="p">&quot;}[</span><span class="s">10m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="o">)</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1"># ML inference error rate</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_predictions_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">error</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_ml_inference_duration_seconds"><code>staffops_ad_ml_inference_duration_seconds</code><a class="headerlink" href="#staffops_ad_ml_inference_duration_seconds" title="Permanent link">&para;</a></h3>
@@ -2567,7 +2547,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>model</code></td>
+<td><code>model</code></td>
 </tr>
 <tr>
 <td>Buckets</td>
@@ -2579,19 +2559,19 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># p99 inference latency per model</span>
-</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.99</span><span class="p">,</span>
-</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">model</span><span class="p">,</span><span class="w"> </span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_inference_duration_seconds_bucket</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">  </span><span class="o">)</span>
-</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="o">)</span>
-</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>
-</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="c1"># Alert if Isolation Forest p95 exceeds 200ms</span>
-</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
-</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_inference_duration_seconds_bucket</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">isolation_forest</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">  </span><span class="o">)</span>
-</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="o">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.2</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># p99 inference latency per model</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.99</span><span class="p">,</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">model</span><span class="p">,</span><span class="w"> </span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_inference_duration_seconds_bucket</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">  </span><span class="o">)</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="o">)</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="c1"># Alert if Isolation Forest p95 exceeds 200ms</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_inference_duration_seconds_bucket</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">isolation_forest</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">  </span><span class="o">)</span>
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="o">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.2</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_ml_retraining_total"><code>staffops_ad_ml_retraining_total</code><a class="headerlink" href="#staffops_ad_ml_retraining_total" title="Permanent link">&para;</a></h3>
@@ -2609,7 +2589,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>model</code>, <code>result</code></td>
+<td><code>model</code>, <code>result</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2617,11 +2597,11 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Retraining success rate</span>
-</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_retraining_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">success</span><span class="p">&quot;}[</span><span class="s">1h</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
-</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># Detect consecutive retraining failures (alert if no success in 3× retrain interval)</span>
-</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="kr">increase</span><span class="o">(</span><span class="nv">staffops_ad_ml_retraining_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">success</span><span class="p">&quot;}[</span><span class="s">3h</span><span class="p">]</span><span class="o">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Retraining success rate</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_retraining_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">success</span><span class="p">&quot;}[</span><span class="s">1h</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1"># Detect consecutive retraining failures (alert if no success in 3× retrain interval)</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="kr">increase</span><span class="o">(</span><span class="nv">staffops_ad_ml_retraining_total</span><span class="p">{</span><span class="nl">result</span><span class="o">=</span><span class="p">&quot;</span><span class="s">success</span><span class="p">&quot;}[</span><span class="s">3h</span><span class="p">]</span><span class="o">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_ml_retraining_duration_seconds"><code>staffops_ad_ml_retraining_duration_seconds</code><a class="headerlink" href="#staffops_ad_ml_retraining_duration_seconds" title="Permanent link">&para;</a></h3>
@@ -2639,7 +2619,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>model</code></td>
+<td><code>model</code></td>
 </tr>
 <tr>
 <td>Buckets</td>
@@ -2651,12 +2631,12 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Latest retraining duration per model</span>
-</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.5</span><span class="p">,</span>
-</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">model</span><span class="p">,</span><span class="w"> </span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_retraining_duration_seconds_bucket</span><span class="p">[</span><span class="s">2h</span><span class="p">]</span><span class="o">)</span>
-</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">  </span><span class="o">)</span>
-</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="o">)</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Latest retraining duration per model</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.5</span><span class="p">,</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">model</span><span class="p">,</span><span class="w"> </span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">staffops_ad_ml_retraining_duration_seconds_bucket</span><span class="p">[</span><span class="s">2h</span><span class="p">]</span><span class="o">)</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">  </span><span class="o">)</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="o">)</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_ml_model_training_samples"><code>staffops_ad_ml_model_training_samples</code><a class="headerlink" href="#staffops_ad_ml_model_training_samples" title="Permanent link">&para;</a></h3>
@@ -2674,7 +2654,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>model</code></td>
+<td><code>model</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2682,11 +2662,11 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Check if Prophet has enough training data</span>
-</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nv">staffops_ad_ml_model_training_samples</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">prophet</span><span class="p">&quot;}</span>
-</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>
-</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="c1"># Alert if Prophet training data is below 2-week minimum</span>
-</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="nv">staffops_ad_ml_model_training_samples</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">prophet</span><span class="p">&quot;}</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">336</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># Check if Prophet has enough training data</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nv">staffops_ad_ml_model_training_samples</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">prophet</span><span class="p">&quot;}</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># Alert if Prophet training data is below 2-week minimum</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="nv">staffops_ad_ml_model_training_samples</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">prophet</span><span class="p">&quot;}</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">336</span>
 </span></code></pre></div>
 <hr />
 <h3 id="staffops_ad_ml_anomaly_score"><code>staffops_ad_ml_anomaly_score</code><a class="headerlink" href="#staffops_ad_ml_anomaly_score" title="Permanent link">&para;</a></h3>
@@ -2704,7 +2684,7 @@
 </tr>
 <tr>
 <td>Labels</td>
-<td><code>cluster</code>, <code>model</code>, <code>rule</code></td>
+<td><code>model</code>, <code>rule</code></td>
 </tr>
 <tr>
 <td>Description</td>
@@ -2712,11 +2692,11 @@
 </tr>
 </tbody>
 </table>
-<div class="language-promql highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="c1"># Rules with the most anomalous Isolation Forest scores right now</span>
-</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="kr">sort_desc</span><span class="o">(</span><span class="nv">staffops_ad_ml_anomaly_score</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">isolation_forest</span><span class="p">&quot;}</span><span class="o">)</span>
-</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
-</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="c1"># Prophet deviations above 2× the uncertainty interval</span>
-</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="nv">staffops_ad_ml_anomaly_score</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">prophet</span><span class="p">&quot;}</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span>
+<div class="language-promql highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Rules with the most anomalous Isolation Forest scores right now</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="kr">sort_desc</span><span class="o">(</span><span class="nv">staffops_ad_ml_anomaly_score</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">isolation_forest</span><span class="p">&quot;}</span><span class="o">)</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="c1"># Prophet deviations above 2× the uncertainty interval</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="nv">staffops_ad_ml_anomaly_score</span><span class="p">{</span><span class="nl">model</span><span class="o">=</span><span class="p">&quot;</span><span class="s">prophet</span><span class="p">&quot;}</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span>
 </span></code></pre></div>
 
 

@@ -1783,7 +1783,7 @@
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>P4.A.1</strong> — Fix instrumentation bugs — done in 0.7.0 (counter before dry-run, gauge on tick, custom histogram buckets)</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>P4.A.2</strong> — Cardinality cleanup — done in 0.7.0 (no <code>identity</code> label on any metric; bounded <code>workload</code> in AM labels)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>P4.A.3</strong> — Multi-cluster constant labels — done in 0.7.0 (<code>WrapRegistererWith{cluster}</code>, eks_cluster at scrape layer)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>P4.A.3</strong> — Multi-cluster constant labels — done in 0.7.0 (<code>WrapRegistererWith{cluster}</code>, <code>eks_cluster</code> at scrape layer); superseded in 0.9.0 — <code>cluster</code> moved to the scrape layer too (ServiceMonitor <code>externalLabels</code>), app emits no cluster identity at all now</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>P4.A.4</strong> — Dashboard refresh</li>
 </ul>
 <h2 id="phase-5-cluster-readiness">🔜 Phase 5 — Cluster Readiness<a class="headerlink" href="#phase-5-cluster-readiness" title="Permanent link">&para;</a></h2>
