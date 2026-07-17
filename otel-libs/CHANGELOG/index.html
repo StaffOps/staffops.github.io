@@ -828,6 +828,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="[Unreleased]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fixed
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -874,7 +889,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed" class="md-nav__link">
+  <a href="#fixed_1" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -907,7 +922,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed_1" class="md-nav__link">
+  <a href="#fixed_2" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -979,6 +994,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="[Unreleased]">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fixed
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1025,7 +1055,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed" class="md-nav__link">
+  <a href="#fixed_1" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -1058,7 +1088,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed_1" class="md-nav__link">
+  <a href="#fixed_2" class="md-nav__link">
     <span class="md-ellipsis">
       Fixed
     </span>
@@ -1119,6 +1149,22 @@
 <p>This is a monorepo; each language package is versioned independently but is
 currently aligned at the same version.</p>
 <h2 id="unreleased">[Unreleased]<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
+<h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Go: <code>NewLogger</code> silently discarded every log record when no OTLP endpoint
+  was configured.</strong> <code>NewLogger</code> always bridged <code>slog</code> through the OTel Logs
+  API (<code>otelslog.NewHandler</code>) into the process's <code>LoggerProvider</code>. When
+  <code>Setup()</code> runs without an OTLP endpoint, <code>configureLogging</code> builds that
+  <code>LoggerProvider</code> with <strong>no processor attached</strong> (there is nothing to
+  export to) — routing records through it in that case dropped every one of
+  them, with no error and no output anywhere. Discovered on
+  <code>staffops-anomaly-detection</code>: a full day of <code>alert_fired</code>/<code>anomaly_detected</code>
+  structured logs never reached stdout or Loki, breaking dry-run alert
+  auditing. <code>NewLogger</code> now checks whether <code>configureLogging</code> actually
+  attached a processor; without one, it falls back to a plain
+  <code>slog.NewJSONHandler</code> on stdout (same flat <code>msg</code>/<code>level</code>/<code>time</code> shape
+  consuming apps already parse) instead of the OTel bridge.</li>
+</ul>
 <h2 id="020-2026-07-15">[0.2.0] - 2026-07-15<a class="headerlink" href="#020-2026-07-15" title="Permanent link">&para;</a></h2>
 <h3 id="added">Added<a class="headerlink" href="#added" title="Permanent link">&para;</a></h3>
 <ul>
@@ -1167,7 +1213,7 @@ listed below — this release folds in everything shipped since the rc.</p>
 </blockquote>
 </li>
 </ul>
-<h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">&para;</a></h3>
+<h3 id="fixed_1">Fixed<a class="headerlink" href="#fixed_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Cross-language <code>deployment.environment.name</code> resource attribute</strong> (P8) —
   only Go emitted this attribute, and with the legacy semconv key
@@ -1244,7 +1290,7 @@ registries (see <a href="../CONSUMING/">CONSUMING.md</a>).</p>
 <li><code>CONSUMING.md</code> — validated per-language install guide (auth, registry
   sources, CI variants, gotchas) plus a <code>read:packages</code> token guide.</li>
 </ul>
-<h3 id="fixed_1">Fixed<a class="headerlink" href="#fixed_1" title="Permanent link">&para;</a></h3>
+<h3 id="fixed_2">Fixed<a class="headerlink" href="#fixed_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Python/Go — schemeless <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> silently dropped
   telemetry.</strong> An endpoint like <code>collector.svc:4317</code> (no scheme) resolved to an

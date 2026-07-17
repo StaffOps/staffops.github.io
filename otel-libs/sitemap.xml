@@ -2,66 +2,66 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://staffops.github.io/otel-libs/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/CHANGELOG/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/CONSUMING/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/dotnet/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/dotnet/HOW-TO/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/dotnet/TESTS/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/dotnet/example/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/dotnet/example/EXAMPLES/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/go/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/go/HOW-TO/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/go/example/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/python/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/python/HOW-TO/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/python/TESTS/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/python/example/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
     <url>
          <loc>https://staffops.github.io/otel-libs/python/example/EXAMPLES/</loc>
-         <lastmod>2026-07-15</lastmod>
+         <lastmod>2026-07-17</lastmod>
     </url>
 </urlset>
