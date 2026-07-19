@@ -1699,7 +1699,7 @@
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Docker and Docker Compose</li>
-<li>Access to VictoriaMetrics, Loki, and Alertmanager endpoints</li>
+<li>Access to Prometheus, Loki, and Alertmanager endpoints</li>
 <li>Environment variables configured (see below)</li>
 </ul>
 <h2 id="1-configure-environment">1. Configure Environment<a class="headerlink" href="#1-configure-environment" title="Permanent link">&para;</a></h2>
@@ -1708,7 +1708,7 @@
 </span></code></pre></div>
 <p>Edit <code>scripts/.env</code>:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Required</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">VM_URL</span><span class="o">=</span>https://victoria-metrics-read.example.com/select/0/prometheus
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">PROMETHEUS_URL</span><span class="o">=</span>https://prometheus-read.example.com/select/0/prometheus
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nv">LOKI_URL</span><span class="o">=</span>https://loki.example.com
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nv">ALERTMANAGER_URL</span><span class="o">=</span>https://alertmanager.example.com
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
@@ -1776,7 +1776,7 @@ Shows: queries executed, baseline series tracked, errors.</p>
 <div class="admonition warning">
 <p class="admonition-title">Common issues</p>
 <ul>
-<li><strong>503 on /readyz</strong>: Check that VM_URL, LOKI_URL, ALERTMANAGER_URL are reachable from inside Docker</li>
+<li><strong>503 on /readyz</strong>: Check that PROMETHEUS_URL, LOKI_URL, ALERTMANAGER_URL are reachable from inside Docker</li>
 <li><strong>No anomalies</strong>: Wait 30+ minutes for baselines to warm up (60 samples × 30s)</li>
 <li><strong>ML errors</strong>: Check ML service logs: <code>docker compose -f scripts/docker-compose.yaml logs ml</code></li>
 </ul>

@@ -1984,7 +1984,7 @@ deviate from a learned per-series baseline:</p>
 <tbody>
 <tr>
 <td><code>metrics</code></td>
-<td>VictoriaMetrics (PromQL)</td>
+<td>Prometheus (PromQL)</td>
 <td>static thresholds + adaptive EWMA/Z-score</td>
 </tr>
 <tr>
@@ -2128,7 +2128,7 @@ rejection before the update, no frozen baseline, no suspect-sample quarantine.</
 <strong>Impact (adversarial)</strong>: an attacker who ramps activity slowly drags the baseline
 until malicious load reads as normal. Fatal in a security context.</p>
 <h3 id="3-no-absence-of-signal-dead-mans-switch-detection">3. No absence-of-signal ("dead man's switch") detection<a class="headerlink" href="#3-no-absence-of-signal-dead-mans-switch-detection" title="Permanent link">&para;</a></h3>
-<p><code>/readyz</code> probes check the <strong>detector's own dependencies</strong> (VM, Loki, Alertmanager,
+<p><code>/readyz</code> probes check the <strong>detector's own dependencies</strong> (Prometheus, Loki, Alertmanager,
 ML). There is <strong>no</strong> detection of an <em>expected</em> signal going silent — "this workload
 always emits N logs/min and stopped" raises nothing. Blinding the pipeline (killing
 the collector, filling the disk) is silent.</p>

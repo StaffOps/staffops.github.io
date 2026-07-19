@@ -1681,7 +1681,7 @@
 <h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <p>Compares a metric value against a fixed threshold. Simplest detection method — fires when <code>value &gt; threshold</code> (or <code>&lt;</code>, depending on operator).</p>
 <pre class="mermaid"><code>graph LR
-    Q[Query VM] --&gt; V[Get value]
+    Q[Query Prometheus] --&gt; V[Get value]
     V --&gt; C{value &gt; threshold?}
     C --&gt;|Yes| A[Anomaly]
     C --&gt;|No| N[Normal]</code></pre>

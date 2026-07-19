@@ -2089,7 +2089,7 @@
 <td>3s</td>
 </tr>
 <tr>
-<td>VictoriaMetrics</td>
+<td>Prometheus</td>
 <td><code>query=up</code></td>
 <td>3s</td>
 </tr>
@@ -2178,7 +2178,7 @@
 </tbody>
 </table>
 <h2 id="recording-rules">Recording Rules<a class="headerlink" href="#recording-rules" title="Permanent link">&para;</a></h2>
-<p>VMRule <code>staffops-ad-recording</code> in <code>controller/deploy/vmrules.yaml</code> pre-aggregates expensive queries:</p>
+<p>PrometheusRule <code>staffops-ad-recording</code> in <code>controller/deploy/vmrules.yaml</code> pre-aggregates expensive queries:</p>
 <table>
 <thead>
 <tr>
@@ -2207,7 +2207,7 @@
 </table>
 <p>These are evaluated every 1 minute. Dashboards query the recording rules instead of computing <code>increase(...[24h])</code> on every render.</p>
 <h2 id="health-alerts">Health Alerts<a class="headerlink" href="#health-alerts" title="Permanent link">&para;</a></h2>
-<p>VMRule <code>staffops-ad-health</code> in <code>controller/deploy/vmrules.yaml</code>:</p>
+<p>PrometheusRule <code>staffops-ad-health</code> in <code>controller/deploy/vmrules.yaml</code>:</p>
 <table>
 <thead>
 <tr>

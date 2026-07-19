@@ -1971,7 +1971,7 @@
 <h3 id="3-tick-simulation">3. Tick Simulation<a class="headerlink" href="#3-tick-simulation" title="Permanent link">&para;</a></h3>
 <p>After warm-up, the engine simulates detection cycles:</p>
 <ul>
-<li>Fetches data in 1-hour chunks via VM/Loki range queries</li>
+<li>Fetches data in 1-hour chunks via Prometheus/Loki range queries</li>
 <li>Iterates ticks at <code>job_interval</code> (30s) steps</li>
 <li>Runs the same detection engine as production</li>
 <li>Accumulates anomalies in memory</li>
@@ -2064,7 +2064,7 @@
 <ul>
 <li><strong>Query failure on a tick</strong>: logged as warning, tick skipped, replay continues</li>
 <li><strong>SIGTERM/SIGINT</strong>: flushes partial report (marked <code>partial</code>), exits cleanly</li>
-<li><strong>Pre-flight failure</strong> (VM/Loki unreachable): fails fast before processing</li>
+<li><strong>Pre-flight failure</strong> (Prometheus/Loki unreachable): fails fast before processing</li>
 </ul>
 <div class="admonition info">
 <p class="admonition-title">Status</p>

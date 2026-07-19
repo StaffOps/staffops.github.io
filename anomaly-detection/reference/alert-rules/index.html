@@ -1595,9 +1595,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#custom-vmrule-example" class="md-nav__link">
+  <a href="#custom-prometheusrule-example" class="md-nav__link">
     <span class="md-ellipsis">
-      Custom VMRule example
+      Custom PrometheusRule example
     </span>
   </a>
   
@@ -1613,9 +1613,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#vmrule-full-resource-reference" class="md-nav__link">
+  <a href="#prometheusrule-full-resource-reference" class="md-nav__link">
     <span class="md-ellipsis">
-      VMRule full resource reference
+      PrometheusRule full resource reference
     </span>
   </a>
   
@@ -1733,9 +1733,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#custom-vmrule-example" class="md-nav__link">
+  <a href="#custom-prometheusrule-example" class="md-nav__link">
     <span class="md-ellipsis">
-      Custom VMRule example
+      Custom PrometheusRule example
     </span>
   </a>
   
@@ -1751,9 +1751,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#vmrule-full-resource-reference" class="md-nav__link">
+  <a href="#prometheusrule-full-resource-reference" class="md-nav__link">
     <span class="md-ellipsis">
-      VMRule full resource reference
+      PrometheusRule full resource reference
     </span>
   </a>
   
@@ -1778,10 +1778,10 @@
 
 
 <h1 id="alert-rules-reference">Alert Rules Reference<a class="headerlink" href="#alert-rules-reference" title="Permanent link">&para;</a></h1>
-<p>When <code>vmRule.enabled=true</code>, the chart creates a <code>VMRule</code> resource containing health alerts for the anomaly detection service itself. These rules monitor the controller, workers, and ML service — they are distinct from the detection rules you configure to find anomalies in your own workloads.</p>
+<p>When <code>vmRule.enabled=true</code>, the chart creates a <code>PrometheusRule</code> resource containing health alerts for the anomaly detection service itself. These rules monitor the controller, workers, and ML service — they are distinct from the detection rules you configure to find anomalies in your own workloads.</p>
 <div class="admonition note">
 <p class="admonition-title">Prerequisite</p>
-<p>The <code>VMRule</code> resource requires the <a href="https://github.com/VictoriaMetrics/operator">VictoriaMetrics Operator</a> to be installed. If you are using the Prometheus Operator instead, the chart does not yet render a <code>PrometheusRule</code> automatically — use the custom alert example below to add rules manually.</p>
+<p>The <code>PrometheusRule</code> resource requires the <a href="https://github.com/Prometheus/operator">Prometheus Operator</a> to be installed. If you are using the Prometheus Operator instead, the chart does not yet render a <code>PrometheusRule</code> automatically — use the custom alert example below to add rules manually.</p>
 </div>
 <p>Enable with:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">vmRule</span><span class="p">:</span>
@@ -1791,7 +1791,7 @@
 </span></code></pre></div>
 <hr />
 <h2 id="included-alerts">Included alerts<a class="headerlink" href="#included-alerts" title="Permanent link">&para;</a></h2>
-<p>The table below lists all alerts shipped in the default <code>VMRule</code>. The <code>for</code> duration is the minimum time the condition must be continuously true before the alert fires.</p>
+<p>The table below lists all alerts shipped in the default <code>PrometheusRule</code>. The <code>for</code> duration is the minimum time the condition must be continuously true before the alert fires.</p>
 <table>
 <thead>
 <tr>
@@ -1902,7 +1902,7 @@
 - Adding new <code>adaptiveMetrics</code> rules</p>
 <hr />
 <h2 id="disabling-individual-alerts">Disabling individual alerts<a class="headerlink" href="#disabling-individual-alerts" title="Permanent link">&para;</a></h2>
-<p>To suppress a specific alert from the rendered VMRule, list its name in <code>vmRule.disabledAlerts</code>:</p>
+<p>To suppress a specific alert from the rendered PrometheusRule, list its name in <code>vmRule.disabledAlerts</code>:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">vmRule</span><span class="p">:</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">disabledAlerts</span><span class="p">:</span>
@@ -1911,13 +1911,13 @@
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">disabledAlerts vs Alertmanager inhibition</p>
-<p><code>disabledAlerts</code> removes the rule from the VMRule resource entirely — the alert is never evaluated. This is different from Alertmanager inhibition or silences, which evaluate the rule but suppress the notification. Use <code>disabledAlerts</code> when you permanently don't want a rule; use Alertmanager silences for temporary suppression.</p>
+<p><code>disabledAlerts</code> removes the rule from the PrometheusRule resource entirely — the alert is never evaluated. This is different from Alertmanager inhibition or silences, which evaluate the rule but suppress the notification. Use <code>disabledAlerts</code> when you permanently don't want a rule; use Alertmanager silences for temporary suppression.</p>
 </div>
 <hr />
-<h2 id="custom-vmrule-example">Custom VMRule example<a class="headerlink" href="#custom-vmrule-example" title="Permanent link">&para;</a></h2>
-<p>To add your own rules that reference <code>staffops_ad_*</code> metrics, create a separate <code>VMRule</code> resource rather than patching the chart's managed resource (which would be overwritten on upgrade).</p>
-<div class="language-yaml highlight"><span class="filename">custom-vmrule.yaml</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operator.victoriametrics.com/v1beta1</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VMRule</span>
+<h2 id="custom-prometheusrule-example">Custom PrometheusRule example<a class="headerlink" href="#custom-prometheusrule-example" title="Permanent link">&para;</a></h2>
+<p>To add your own rules that reference <code>staffops_ad_*</code> metrics, create a separate <code>PrometheusRule</code> resource rather than patching the chart's managed resource (which would be overwritten on upgrade).</p>
+<div class="language-yaml highlight"><span class="filename">custom-vmrule.yaml</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring.coreos.com/v1</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PrometheusRule</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">metadata</span><span class="p">:</span>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">staffops-anomaly-detection-custom</span>
 </span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span>
@@ -1996,13 +1996,13 @@
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">extraRules placement</p>
-<p>Rules added via <code>vmRule.extraRules</code> are placed in the same <code>VMRule</code> resource as the built-in alerts, under a separate group named <code>staffops-ad-custom</code>. They are subject to the same <code>vmRule.additionalLabels</code> and will be deleted if <code>vmRule.enabled</code> is set to <code>false</code>.</p>
+<p>Rules added via <code>vmRule.extraRules</code> are placed in the same <code>PrometheusRule</code> resource as the built-in alerts, under a separate group named <code>staffops-ad-custom</code>. They are subject to the same <code>vmRule.additionalLabels</code> and will be deleted if <code>vmRule.enabled</code> is set to <code>false</code>.</p>
 </div>
 <hr />
-<h2 id="vmrule-full-resource-reference">VMRule full resource reference<a class="headerlink" href="#vmrule-full-resource-reference" title="Permanent link">&para;</a></h2>
-<p>When <code>vmRule.enabled=true</code>, the chart renders a resource equivalent to the following. This is useful as a reference when creating a standalone <code>VMRule</code> without the Helm chart, or when migrating to a <code>PrometheusRule</code> manually.</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operator.victoriametrics.com/v1beta1</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VMRule</span>
+<h2 id="prometheusrule-full-resource-reference">PrometheusRule full resource reference<a class="headerlink" href="#prometheusrule-full-resource-reference" title="Permanent link">&para;</a></h2>
+<p>When <code>vmRule.enabled=true</code>, the chart renders a resource equivalent to the following. This is useful as a reference when creating a standalone <code>PrometheusRule</code> without the Helm chart, or when migrating to a <code>PrometheusRule</code> manually.</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring.coreos.com/v1</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PrometheusRule</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">metadata</span><span class="p">:</span>
 </span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;release&gt;-staffops-anomaly-detection</span>
 </span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span>

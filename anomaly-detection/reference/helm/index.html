@@ -1959,7 +1959,7 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 <tr>
 <td><code>datasources.victoriametrics.url</code></td>
 <td>string</td>
-<td>VictoriaMetrics PromQL-compatible read endpoint, e.g. <code>http://vmselect:8481/select/0/prometheus</code>.</td>
+<td>Prometheus PromQL-compatible read endpoint, e.g. <code>http://vmselect:8481/select/0/prometheus</code>.</td>
 </tr>
 <tr>
 <td><code>datasources.loki.url</code></td>
@@ -1981,7 +1981,7 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 <div class="language-yaml highlight"><span class="filename">values-minimal.yaml</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-cluster</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">datasources</span><span class="p">:</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">victoriametrics</span><span class="p">:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://vmselect.monitoring.svc:8481/select/0/prometheus</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">loki</span><span class="p">:</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://loki-gateway.monitoring.svc:3100</span>
@@ -2132,7 +2132,7 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 <td><code>worker.queryTimeout</code></td>
 <td><code>20s</code></td>
 <td>duration</td>
-<td>Per-query timeout for VictoriaMetrics and Loki requests.</td>
+<td>Per-query timeout for Prometheus and Loki requests.</td>
 </tr>
 <tr>
 <td><code>worker.grpc.port</code></td>
@@ -2768,7 +2768,7 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 </tbody>
 </table>
 <h3 id="vmservicescrape">vmServiceScrape<a class="headerlink" href="#vmservicescrape" title="Permanent link">&para;</a></h3>
-<p>VictoriaMetrics Operator VMServiceScrape (preferred when using the VictoriaMetrics stack).</p>
+<p>Prometheus Operator ServiceMonitor (preferred when using the Prometheus stack).</p>
 <table>
 <thead>
 <tr>
@@ -2781,7 +2781,7 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 <tr>
 <td><code>vmServiceScrape.enabled</code></td>
 <td><code>false</code></td>
-<td>Create a VMServiceScrape resource.</td>
+<td>Create a ServiceMonitor resource.</td>
 </tr>
 <tr>
 <td><code>vmServiceScrape.interval</code></td>
@@ -2801,7 +2801,7 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 </tbody>
 </table>
 <h3 id="vmrule">vmRule<a class="headerlink" href="#vmrule" title="Permanent link">&para;</a></h3>
-<p>VictoriaMetrics Operator VMRule containing health alerts and recording rules for the anomaly detection service itself.</p>
+<p>Prometheus Operator PrometheusRule containing health alerts and recording rules for the anomaly detection service itself.</p>
 <table>
 <thead>
 <tr>
@@ -2814,12 +2814,12 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 <tr>
 <td><code>vmRule.enabled</code></td>
 <td><code>false</code></td>
-<td>Create the VMRule resource.</td>
+<td>Create the PrometheusRule resource.</td>
 </tr>
 <tr>
 <td><code>vmRule.namespace</code></td>
 <td><code>""</code></td>
-<td>Namespace for the VMRule. Defaults to the release namespace.</td>
+<td>Namespace for the PrometheusRule. Defaults to the release namespace.</td>
 </tr>
 <tr>
 <td><code>vmRule.additionalLabels</code></td>
@@ -2829,7 +2829,7 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 <tr>
 <td><code>vmRule.disabledAlerts</code></td>
 <td><code>[]</code></td>
-<td>List of alert names to exclude from the rendered VMRule.</td>
+<td>List of alert names to exclude from the rendered PrometheusRule.</td>
 </tr>
 </tbody>
 </table>
@@ -3041,7 +3041,7 @@ Repository: <code>https://staffops.github.io/helm-charts/</code></p>
 </tr>
 <tr>
 <td>High query latency warnings in worker logs</td>
-<td>Slow VictoriaMetrics or Loki responses</td>
+<td>Slow Prometheus or Loki responses</td>
 <td>Tune <code>worker.queryTimeout</code>, reduce <code>worker.concurrency</code>, or check datasource health. The histogram <code>staffops_ad_worker_query_duration_seconds</code> shows per-datasource p99 latency.</td>
 </tr>
 </tbody>

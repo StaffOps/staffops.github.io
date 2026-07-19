@@ -1752,7 +1752,7 @@
 </tr>
 <tr>
 <td>6 — Self-monitoring</td>
-<td>VMRules, dashboards, OTel SDK</td>
+<td>PrometheusRules, dashboards, OTel SDK</td>
 <td>🔜 Planned</td>
 </tr>
 </tbody>
@@ -1762,7 +1762,7 @@
 <ul>
 <li><strong>P1.1</strong> — Label-based pivot (anomaly enrichment) with identity extraction, template substitution, bounded concurrency, Redis-backed cache</li>
 <li><strong>P1.2</strong> — Alert payload with Grafana/Tempo/Loki/Runbook deep links anchored at anomaly timestamp</li>
-<li><strong>P1.3</strong> — Complete readiness checks (<code>/readyz</code> probes VM, Loki, Alertmanager, ML)</li>
+<li><strong>P1.3</strong> — Complete readiness checks (<code>/readyz</code> probes Prometheus, Loki, Alertmanager, ML)</li>
 </ul>
 <h2 id="phase-2-ml-maturity">🟡 Phase 2 — ML Maturity<a class="headerlink" href="#phase-2-ml-maturity" title="Permanent link">&para;</a></h2>
 <ul class="task-list">
@@ -1775,7 +1775,7 @@
 <h2 id="phase-3-operational-maturity">🚧 Phase 3 — Operational Maturity<a class="headerlink" href="#phase-3-operational-maturity" title="Permanent link">&para;</a></h2>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>P3.1</strong> — Replay mode (16/16 tasks done) — see <a href="../operations/replay/">Replay Mode</a></li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>P3.2</strong> — Top noisy workloads dashboard / VMRule — see <a href="../operations/monitoring/">Monitoring</a></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <strong>P3.2</strong> — Top noisy workloads dashboard / PrometheusRule — see <a href="../operations/monitoring/">Monitoring</a></li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>P3.3</strong> — Feedback loop (Slack reactions → precision/recall tracking)</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>P3.4</strong> — SLO-aware severity adjustment</li>
 </ul>
@@ -1796,7 +1796,7 @@
 </ul>
 <h2 id="phase-6-self-monitoring">🔜 Phase 6 — Self-Monitoring<a class="headerlink" href="#phase-6-self-monitoring" title="Permanent link">&para;</a></h2>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>P6.1</strong> — VMRules for <code>staffops_ad_*</code> metrics</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>P6.1</strong> — PrometheusRules for <code>staffops_ad_*</code> metrics</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>P6.2</strong> — Grafana dashboard refresh</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <strong>P6.3</strong> — OTel SDK adoption (traceID-correlated logs)</li>
 </ul>

@@ -917,6 +917,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#false-discovery-rate-control-multiple-comparisons" class="md-nav__link">
+    <span class="md-ellipsis">
+      False Discovery Rate control (multiple comparisons)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#direction-of-badness" class="md-nav__link">
+    <span class="md-ellipsis">
+      Direction-of-badness
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#seasonal-awareness" class="md-nav__link">
     <span class="md-ellipsis">
       Seasonal Awareness
@@ -1756,6 +1774,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#false-discovery-rate-control-multiple-comparisons" class="md-nav__link">
+    <span class="md-ellipsis">
+      False Discovery Rate control (multiple comparisons)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#direction-of-badness" class="md-nav__link">
+    <span class="md-ellipsis">
+      Direction-of-badness
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#seasonal-awareness" class="md-nav__link">
     <span class="md-ellipsis">
       Seasonal Awareness
@@ -1848,6 +1884,27 @@
 <p class="admonition-title">Warm-up</p>
 <p>The detector requires <code>warm_up_samples</code> (default 60) data points before it starts detecting. During warm-up, it only learns — no anomalies are emitted.</p>
 <p>At 30s intervals, warm-up takes <strong>30 minutes</strong> (60 × 30s).</p>
+</div>
+<h2 id="false-discovery-rate-control-multiple-comparisons">False Discovery Rate control (multiple comparisons)<a class="headerlink" href="#false-discovery-rate-control-multiple-comparisons" title="Permanent link">&para;</a></h2>
+<p>Running a z-score test on ~400 adaptive series every cycle is a multiple-comparison problem: at a fixed <code>z &gt; 3</code> threshold, a fraction of series cross it by chance alone, producing a steady stream of statistical false positives (~1000/day from this effect alone).</p>
+<p>The controller applies a <a href="https://en.wikipedia.org/wiki/False_discovery_rate#Benjamini%E2%80%93Hochberg_procedure">Benjamini-Hochberg</a> FDR filter once per cycle, <strong>after</strong> worker detection and <strong>before</strong> correlation. It converts each adaptive anomaly's z-score to a two-tailed p-value and keeps only those that survive the BH step-up at <code>controller.fdr_target</code> (default <code>0.05</code> = 5% expected false discoveries). Static and pattern anomalies are not part of the family — they always pass through.</p>
+<div class="admonition warning">
+<p class="admonition-title">The family size must be the number of tests, not the number of anomalies</p>
+<p>BH needs the <strong>full</strong> family size <code>m</code> — every adaptive evaluation performed this cycle, whether or not it fired. Workers only ship anomalies (series past the z threshold), so the filter cannot infer <code>m</code> from what it receives: that censored family is a handful of uniformly tiny p-values, and BH over it accepts nearly everything.</p>
+<p>Workers therefore report <code>adaptive_series_tested</code> (evaluations past warm-up) on each <code>JobResults</code>, and the controller passes it as <code>m</code>. A marginal anomaly (z≈3.0) that would pass against <code>m=1</code> is correctly rejected once the cycle's ~400 tests are counted, while genuinely strong signals survive. The gauge <code>staffops_ad_detection_fdr_family_size</code> exposes <code>m</code> — a value near 0 while anomalies fire means the family has collapsed to the censored case. See <a href="../../reference/metrics/#staffops_ad_detection_fdr_family_size">metrics reference</a>.</p>
+</div>
+<h2 id="direction-of-badness">Direction-of-badness<a class="headerlink" href="#direction-of-badness" title="Permanent link">&para;</a></h2>
+<p>The z-score is symmetric — <code>|z| &gt; 3</code> fires whether a metric spikes <strong>up</strong> or <strong>down</strong>. But most metrics are only anomalous one way: latency, error rate, queue depth, and GC heap matter when they <strong>rise</strong>; ready replicas and (arguably) throughput when they <strong>fall</strong>. Without a direction, the detector alerts even when a metric <em>improves</em> (latency dropped, errors fell) — a pure false positive.</p>
+<p>Declare <code>direction</code> on an adaptive rule to fire only the bad way:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latency_p99_by_service</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">histogram_quantile(0.99, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le, cluster, service_name))</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">service_name</span><span class="p p-Indicator">]</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">direction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">up_bad</span><span class="w">     </span><span class="c1"># up_bad | down_bad | both_bad (default when empty)</span>
+</span></code></pre></div>
+<p>The controller derives the deviation direction from <code>Value</code> vs <code>Mean</code> (both carried on the anomaly) and drops wrong-direction firings <strong>before</strong> FDR — so they don't consume FDR acceptance either. <code>both_bad</code> (or an empty field) keeps the original symmetric behavior, so the field is backward-compatible. Drops are counted by <code>staffops_ad_detection_direction_filtered_total</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">When to keep <code>both_bad</code></p>
+<p>Traffic/throughput rules (<code>request_rate</code>) stay <code>both_bad</code> — a sudden <strong>drop</strong> can signal an upstream outage just as a spike signals a storm.</p>
 </div>
 <h2 id="seasonal-awareness">Seasonal Awareness<a class="headerlink" href="#seasonal-awareness" title="Permanent link">&para;</a></h2>
 <p>After <code>seasonal_min_days</code> (7 days) of history, the detector also compares against the same hour and day-of-week. This prevents false positives on:</p>

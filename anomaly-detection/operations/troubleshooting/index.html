@@ -1769,7 +1769,7 @@
 <ol>
 <li><strong>Baselines still warming up</strong> — wait 30+ minutes (60 samples × 30s)</li>
 <li><strong>All namespaces suppressed</strong> — check <code>EXCLUDE_NAMESPACES_CSV</code></li>
-<li><strong>Queries returning empty</strong> — verify VM_URL/LOKI_URL are correct and have data</li>
+<li><strong>Queries returning empty</strong> — verify PROMETHEUS_URL/LOKI_URL are correct and have data</li>
 </ol>
 <p><strong>Diagnosis:</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Check if queries are executing</span>
@@ -1803,8 +1803,8 @@
 <td>Check <code>REDIS_ADDR</code>, verify Redis is running</td>
 </tr>
 <tr>
-<td>VictoriaMetrics</td>
-<td>Check <code>VM_URL</code>, verify network access from container</td>
+<td>Prometheus</td>
+<td>Check <code>PROMETHEUS_URL</code>, verify network access from container</td>
 </tr>
 <tr>
 <td>Loki</td>
@@ -1833,7 +1833,7 @@
 <p><strong>Causes:</strong></p>
 <ol>
 <li>Too many queries per cycle (many rules × many workloads)</li>
-<li>Slow VM/Loki responses</li>
+<li>Slow Prometheus/Loki responses</li>
 <li>Enrichment queries adding latency (5-7 queries per alert)</li>
 </ol>
 <p><strong>Mitigation:</strong></p>
@@ -1841,7 +1841,7 @@
 <li>Increase <code>controller.job_interval</code> (e.g., 60s instead of 30s)</li>
 <li>Reduce number of adaptive metrics</li>
 <li>Add more workers (scale query throughput)</li>
-<li>Check VM/Loki latency independently</li>
+<li>Check Prometheus/Loki latency independently</li>
 </ul>
 <hr />
 <h3 id="alerts-firing-for-infrastructure-workloads">Alerts firing for infrastructure workloads<a class="headerlink" href="#alerts-firing-for-infrastructure-workloads" title="Permanent link">&para;</a></h3>

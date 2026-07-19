@@ -1799,7 +1799,7 @@ sinal + disciplina de custo. A integração com agentes (aigent-squad, P5.5) fic
    "taxa de request caiu" igual a "taxa de erro subiu". A semântica (direção,
    classe, teto) tem que ser metadado da regra, não conhecimento na cabeça de alguém.</li>
 <li><strong>Cada série adaptativa tem custo triplo</strong>: memória Redis (baseline), carga de
-   query no VM, e orçamento de falso positivo. Série que não justifica os três, sai.</li>
+   query no Prometheus, e orçamento de falso positivo. Série que não justifica os três, sai.</li>
 <li><strong>Nenhuma mudança de detector sem número.</strong> O harness de medição (P0.1) é o
    pré-requisito: toda técnica desta página é avaliada por recall/FP sobre falhas
    injetadas, não por argumento.</li>
@@ -1846,12 +1846,12 @@ estiver ativo, por injeção sintética antes do primeiro deploy da regra.</p>
 </tr>
 <tr>
 <td>Cresce previsivelmente rumo a um teto (fila, disco, pool)</td>
-<td><strong><code>predict_linear</code> em VMRule</strong> — fora deste produto</td>
+<td><strong><code>predict_linear</code> em PrometheusRule</strong> — fora deste produto</td>
 <td>Saturação rumo a teto conhecido é <em>previsível</em>, não anômala (Decision 8)</td>
 </tr>
 <tr>
 <td>Tem SLO definido</td>
-<td><strong>burn-rate multi-window em VMRule</strong> — fora deste produto</td>
+<td><strong>burn-rate multi-window em PrometheusRule</strong> — fora deste produto</td>
 <td>Padrão da indústria, assertivo por construção; consumir, não reconstruir</td>
 </tr>
 <tr>
@@ -1996,7 +1996,7 @@ algoritmo melhor" sem número do P0.1 antes e depois.</p>
 </tr>
 <tr>
 <td>Queries/ciclo e duração p99 do ciclo</td>
-<td>Custo VM; rate limits 20/s VM já existem</td>
+<td>Custo Prometheus; rate limits 20/s Prometheus já existem</td>
 </tr>
 <tr>
 <td>% anomalias suprimidas por janela pós-deploy</td>
@@ -2011,14 +2011,14 @@ algoritmo melhor" sem número do P0.1 antes e depois.</p>
 </span></code></pre></div>
 <h2 id="modelo-de-custo-para-nao-estourar">Modelo de custo (para não estourar)<a class="headerlink" href="#modelo-de-custo-para-nao-estourar" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Tier 0 — de graça</strong>: static rules e VMRules (<code>predict_linear</code>, burn-rate) rodam
-  no VM que já existe. Use amplamente.</li>
+<li><strong>Tier 0 — de graça</strong>: static rules e PrometheusRules (<code>predict_linear</code>, burn-rate) rodam
+  no Prometheus que já existe. Use amplamente.</li>
 <li><strong>Tier 1 — barato</strong>: pattern (LogQL) — custo por query; agrupe por namespace.</li>
 <li><strong>Tier 2 — caro</strong>: adaptive — Redis + queries por ciclo + FP budget. <strong>Curado</strong>:
   só sinais do catálogo com justificativa; alvo &lt; 500 séries adaptativas.</li>
 <li><strong>Empurre agregação para recording rules</strong>: se a query do sinal agrega muito,
-  crie recording rule no VM (<code>vmrules.yaml</code>) e consulte a série pré-agregada — a
-  conta roda 1× no VM, não a cada worker/ciclo.</li>
+  crie recording rule no Prometheus (<code>vmrules.yaml</code>) e consulte a série pré-agregada — a
+  conta roda 1× no Prometheus, não a cada worker/ciclo.</li>
 <li><strong>Sem custo de LLM</strong>: nada nesta página chama IA. A integração aigent-squad
   (P5.5) permanece <strong>opcional e atrás de flag</strong>, consumindo alertas já assertivos.</li>
 </ul>

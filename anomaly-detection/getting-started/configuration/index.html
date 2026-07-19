@@ -1815,7 +1815,7 @@
 </tr>
 <tr>
 <td><code>datasources.victoriametrics.url</code></td>
-<td>VictoriaMetrics read endpoint (PromQL-compatible)</td>
+<td>Prometheus read endpoint (PromQL-compatible)</td>
 </tr>
 <tr>
 <td><code>datasources.loki.url</code></td>
@@ -1994,12 +1994,12 @@
 <tr>
 <td><code>vmServiceScrape.enabled</code></td>
 <td><code>false</code></td>
-<td>vm-operator VMServiceScrape</td>
+<td>vm-operator ServiceMonitor</td>
 </tr>
 <tr>
 <td><code>vmRule.enabled</code></td>
 <td><code>false</code></td>
-<td>vm-operator VMRule (health alerts + recording rules)</td>
+<td>vm-operator PrometheusRule (health alerts + recording rules)</td>
 </tr>
 <tr>
 <td><code>grafanaDashboard.enabled</code></td>
