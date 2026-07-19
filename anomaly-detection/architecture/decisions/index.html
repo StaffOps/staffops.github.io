@@ -661,6 +661,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#decision-9-local-homolog-build-deployed-ci-publishes-the-versioned-image-as-the-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decision 9: Local homolog build deployed; CI publishes the versioned image as the record
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-10-controllerconfigyaml-repo-and-the-gotmpl-detection-deploy-are-allowed-to-diverge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decision 10: controller/config.yaml (repo) and the gotmpl detection: (deploy) are allowed to diverge
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1713,6 +1731,24 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#decision-9-local-homolog-build-deployed-ci-publishes-the-versioned-image-as-the-record" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decision 9: Local homolog build deployed; CI publishes the versioned image as the record
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-10-controllerconfigyaml-repo-and-the-gotmpl-detection-deploy-are-allowed-to-diverge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decision 10: controller/config.yaml (repo) and the gotmpl detection: (deploy) are allowed to diverge
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1953,6 +1989,81 @@ building on it):</p>
 univariate detector achieving competitive precision/recall on the curated golden
 signals — then "commodity" would be too harsh. Considered unlikely given the
 multiple-comparisons math, but it is the falsifier.</p>
+<hr />
+<h2 id="decision-9-local-homolog-build-deployed-ci-publishes-the-versioned-image-as-the-record">Decision 9: Local homolog build deployed; CI publishes the versioned image as the record<a class="headerlink" href="#decision-9-local-homolog-build-deployed-ci-publishes-the-versioned-image-as-the-record" title="Permanent link">&para;</a></h2>
+<p><strong>Choice</strong>: The deployed image is the <strong>locally-built</strong> multi-arch image in Harbor
+(<code>labs/staffops-anomaly-detection-*:&lt;version&gt;</code>). The CI <code>release.yml</code> (on a <code>v*</code> git
+tag) builds and publishes the <strong>same source</strong> to Docker Hub as the immutable versioned
+image + GitHub Release. The cluster keeps running the Harbor build; Docker Hub is the
+provenance/record, not the deploy source.</p>
+<p><strong>Justification:</strong></p>
+<ol>
+<li>We homologate the local build <em>first</em>, then push the code that was validated. The
+   pushed commit (and the <code>v*</code> tag CI builds from) is exactly the homologated source —
+   the compiled binary is identical (post-homolog diffs are comments/tests only, which
+   don't compile into the runtime image).</li>
+<li>Repointing the deploy at Docker Hub adds a pull-path/registry-auth change with <strong>no
+   behavioural difference</strong> — the running code is already the released code.</li>
+<li>"Local is always ahead of what's pushed; we push <em>because</em> we homologated locally"
+   (2026-07-19). The official path receives already-validated code.</li>
+</ol>
+<p><strong>Trade-offs:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cost</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Two registries (Harbor deploy, Docker Hub record)</td>
+<td>Intentional. Harbor = what runs (homologated), Docker Hub = versioned provenance</td>
+</tr>
+<tr>
+<td>Not GitOps-pure (deploy image ≠ CI artifact)</td>
+<td>Acceptable for homolog; revisit when exiting dry-run / going to a fresh cluster that has no local Harbor build</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Do not "fix" this by repointing the gotmpl at Docker Hub</strong> unless the goal is
+specifically registry consolidation — it changes provenance, not behaviour.</p>
+<hr />
+<h2 id="decision-10-controllerconfigyaml-repo-and-the-gotmpl-detection-deploy-are-allowed-to-diverge">Decision 10: <code>controller/config.yaml</code> (repo) and the gotmpl <code>detection:</code> (deploy) are allowed to diverge<a class="headerlink" href="#decision-10-controllerconfigyaml-repo-and-the-gotmpl-detection-deploy-are-allowed-to-diverge" title="Permanent link">&para;</a></h2>
+<p><strong>Choice</strong>: The <strong>deployed</strong> detection rule set lives in the per-cluster Helm values
+override (<code>k8s-setup/.../anomaly-detection/values.yaml.gotmpl</code>, <code>detection:</code>). The repo's
+<code>controller/config.yaml</code> is the <strong>local-dev / replay reference</strong> set. They are NOT kept
+in lockstep, and that is by design.</p>
+<p><strong>Justification:</strong></p>
+<ol>
+<li>The deployed set is tuned per cluster (18+ rules, Group A, per-workload suppression,
+   direction-of-badness) and is GitOps-managed where the cluster config lives.</li>
+<li>The repo <code>config.yaml</code> runs the local docker-compose stack and <code>--replay</code>; a smaller
+   representative set is fine there.</li>
+<li>Same philosophy as Decision 9: the deployed artifact is the source of truth for what
+   runs; the repo file is a reference, not a mirror.</li>
+</ol>
+<p><strong>Trade-offs:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cost</th>
+<th>Reality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rule tuning in <code>config.yaml</code> does NOT reach the cluster</td>
+<td>Correct — cluster tuning goes in the gotmpl. Editing <code>config.yaml</code> only affects local/replay</td>
+</tr>
+<tr>
+<td>Reader might expect them to match</td>
+<td>Mitigated by this decision + the header note in both files</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The gotmpl <code>detection:</code> block is the deploy source of truth.</strong> Do not treat the
+repo↔deploy difference as drift to reconcile.</p>
 
 
 

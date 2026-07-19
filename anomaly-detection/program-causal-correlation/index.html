@@ -2870,7 +2870,7 @@ edge signal itself (both metrics verified present):</p>
 <tr>
 <td><strong>Rule-set drift repo ↔ chart</strong> ✅ resolved for deploy 2026-07-18</td>
 <td>Deployed rules came from the chart's small default <code>detection:</code> (incl. <code>high_cpu_ratio</code>/<code>high_memory_ratio</code>, retired in the repo for duplicating VMAlert)</td>
-<td>Ported the repo's tuned 18-rule set into the gotmpl <code>detection:</code> override on devops-core (6→18 rules, dropped the noisy cpu/mem statics). Homologated: 0 cycle errors, FDR family 277 (service-level, down from ~2500 pod-level), rejection ~18%. <strong>Still open</strong>: whether the chart <em>default</em> should also carry the tuned set (SSOT), so a fresh install isn't stuck on placeholders</td>
+<td>Ported the repo's tuned 18-rule set into the gotmpl <code>detection:</code> override on devops-core (6→18 rules, dropped the noisy cpu/mem statics). Homologated: 0 cycle errors, FDR family 277 (service-level, down from ~2500 pod-level), rejection ~18%. <strong>SSOT decided 2026-07-19 (Decision 10)</strong>: the gotmpl override is the deploy source of truth; <code>config.yaml</code> is the local/replay reference — they diverge by design, not drift. The chart <em>default</em> stays a minimal placeholder</td>
 </tr>
 <tr>
 <td><strong>Cycle duration vs interval</strong> ✅ found+fixed 2026-07-18</td>
