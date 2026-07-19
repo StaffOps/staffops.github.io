@@ -1165,6 +1165,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="CLI Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synthetic-fault-injection-inject" class="md-nav__link">
+    <span class="md-ellipsis">
+      Synthetic fault injection (--inject)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1741,6 +1756,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="CLI Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synthetic-fault-injection-inject" class="md-nav__link">
+    <span class="md-ellipsis">
+      Synthetic fault injection (--inject)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1954,8 +1984,27 @@
 <td><code>1000</code></td>
 <td>Cap anomalies in report</td>
 </tr>
+<tr>
+<td><code>--inject</code></td>
+<td>``</td>
+<td>Path to a synthetic-fault injection profile (empty/<code>none</code> = off)</td>
+</tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Detection parity with production</p>
+<p>The in-memory baseline mirrors the production baseline <strong>exactly</strong>, including
+detecting the z-score against the <em>pre-update</em> stats and the stddev floor. (It
+did not before 2026-07-19 — it detected on post-update stats and under-fired;
+replay reports from before that fix under-count anomalies.)</p>
+</div>
+<h3 id="synthetic-fault-injection-inject">Synthetic fault injection (<code>--inject</code>)<a class="headerlink" href="#synthetic-fault-injection-inject" title="Permanent link">&para;</a></h3>
+<p>Pass an injection profile to perturb series in-memory (spike/ramp/step/silence) over
+a window and score detection against the injected ground truth. The report then carries
+an <strong>Injection Scoring</strong> block (precision/recall/F1, TP/FP/FN, recall-by-type) in both
+the JSON and the markdown. This is the basis of the P0.1 recall/FP measurement — see
+<code>specs/synthetic-injection/</code>. Faults scale by the series' own stddev, so target
+series that actually vary (a flat series can't be perturbed meaningfully).</p>
 <h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <h3 id="1-window-parsing">1. Window Parsing<a class="headerlink" href="#1-window-parsing" title="Permanent link">&para;</a></h3>
 <p>Accepts relative durations or absolute timestamps:</p>
