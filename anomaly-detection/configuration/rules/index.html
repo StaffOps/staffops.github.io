@@ -1029,6 +1029,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#min_value-absolute-floor" class="md-nav__link">
+    <span class="md-ellipsis">
+      min_value — absolute floor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#default-adaptive-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       Default Adaptive Metrics
@@ -1763,6 +1772,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#min_value-absolute-floor" class="md-nav__link">
+    <span class="md-ellipsis">
+      min_value — absolute floor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#default-adaptive-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       Default Adaptive Metrics
@@ -1942,6 +1960,7 @@ Kubernetes clusters (<code>cluster</code> label). Every rule's <code>by()</code>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="no">max(rate(container_cpu_usage_seconds_total{...}[2m])) by (cluster, namespace, pod)</span>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">namespace</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pod</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># Labels that identify a unique series</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">direction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">up_bad</span><span class="w">             </span><span class="c1"># optional: up_bad | down_bad | both_bad (default)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">min_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w">                 </span><span class="c1"># optional: absolute floor the reading must cross</span>
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title"><code>rate()</code> windows</p>
@@ -1980,6 +1999,33 @@ metric moves the <strong>bad</strong> way, dropping the false positives from the
 </table>
 <p>Filtering runs in the controller before FDR; drops are counted by
 <code>staffops_ad_detection_direction_filtered_total</code>.</p>
+<h3 id="min_value-absolute-floor"><code>min_value</code> — absolute floor<a class="headerlink" href="#min_value-absolute-floor" title="Permanent link">&para;</a></h3>
+<p>The Z-Score is <strong>scale-free</strong>: it answers "is this reading unusual for this series?", never
+"is this reading large enough to matter?". A gauge that idles near zero therefore has a tiny
+stddev, so any reading of a few units is a large <code>z</code> — statistically anomalous, operationally
+noise.</p>
+<p>This was the dominant false-positive source in homolog: <code>http_client_active_requests</code>
+alone produced <strong>62% of all fired alerts</strong>, with baselines around <code>0.08</code>–<code>0.30</code> and firings
+like <code>0.0846 → 2</code> (6.1σ) or <code>0.2973 → 46</code> (13.9σ). Note these are <em>high</em>-z firings — raising
+the z-threshold does not help; the readings are genuinely unusual, just irrelevant.</p>
+<p><code>min_value</code> adds an operational-magnitude gate on top of the statistical one. The rule fires
+only when the deviation is <strong>both</strong> significant (<code>|z| &gt; threshold</code>) <strong>and</strong> the reading crosses
+the floor:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http_client_active_requests</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max(http_client_active_requests) by (cluster, namespace, pod)</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">direction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">up_bad</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">min_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w">        </span><span class="c1"># ignore a quiet pod going from 0.08 to 2 in-flight requests</span>
+</span></code></pre></div>
+<ul>
+<li>Compared against the <strong>absolute</strong> reading (<code>|value|</code>), so it is meaningful in either direction.</li>
+<li>Omitted or <code>0</code> = no floor (the default; fully backward-compatible).</li>
+<li>Applies to adaptive rules only — static and log-pattern detections are unaffected.</li>
+<li>Runs in the controller <strong>before</strong> FDR, so floored firings do not consume BH acceptance.
+  Drops are counted by <code>staffops_ad_detection_floor_filtered_total</code>.</li>
+</ul>
+<p>Prefer <code>min_value</code> over converting the rule to a static threshold: the floor keeps the
+per-series adaptivity (each service still learns its own normal) while suppressing the
+firings that are too small to act on.</p>
 <h3 id="default-adaptive-metrics">Default Adaptive Metrics<a class="headerlink" href="#default-adaptive-metrics" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2041,16 +2087,16 @@ chart values and the program map for the full list.</p>
 <h2 id="log-patterns">Log Patterns<a class="headerlink" href="#log-patterns" title="Permanent link">&para;</a></h2>
 <p>Loki-based detection rules. Two types:</p>
 <h3 id="rate-based-adaptive">Rate-based (adaptive)<a class="headerlink" href="#rate-based-adaptive" title="Permanent link">&para;</a></h3>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">detection</span><span class="p">:</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">log_patterns</span><span class="p">:</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error_rate_by_namespace</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(rate({service_namespace=~&quot;.+&quot;} |= &quot;error&quot; [1m])) by (cluster, service_namespace)</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">service_namespace</span><span class="p p-Indicator">]</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">detection</span><span class="p">:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">log_patterns</span><span class="p">:</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error_rate_by_namespace</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(rate({service_namespace=~&quot;.+&quot;} |= &quot;error&quot; [1m])) by (cluster, service_namespace)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">service_namespace</span><span class="p p-Indicator">]</span>
 </span></code></pre></div>
 <h3 id="pattern-matching-immediate">Pattern matching (immediate)<a class="headerlink" href="#pattern-matching-immediate" title="Permanent link">&para;</a></h3>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">panic_oom</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{service_namespace=~&quot;.+&quot;}</span><span class="nv"> </span><span class="s">|~</span><span class="nv"> </span><span class="s">&quot;(?i)(panic|oom|out</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">memory|fatal)&quot;&#39;</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pattern_match</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">panic_oom</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{service_namespace=~&quot;.+&quot;}</span><span class="nv"> </span><span class="s">|~</span><span class="nv"> </span><span class="s">&quot;(?i)(panic|oom|out</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">memory|fatal)&quot;&#39;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pattern_match</span>
 </span></code></pre></div>
 <h3 id="default-log-patterns">Default Log Patterns<a class="headerlink" href="#default-log-patterns" title="Permanent link">&para;</a></h3>
 <table>
@@ -2082,13 +2128,13 @@ chart values and the program map for the full list.</p>
 <hr />
 <h2 id="event-patterns">Event Patterns<a class="headerlink" href="#event-patterns" title="Permanent link">&para;</a></h2>
 <p>K8s event reasons that trigger detection:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">detection</span><span class="p">:</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">event_patterns</span><span class="p">:</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CrashLoopBackOff</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OOMKilled</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Evicted</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FailedScheduling</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BackOff</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">detection</span><span class="p">:</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">event_patterns</span><span class="p">:</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CrashLoopBackOff</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OOMKilled</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Evicted</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FailedScheduling</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BackOff</span>
 </span></code></pre></div>
 <hr />
 <h2 id="writing-custom-rules">Writing Custom Rules<a class="headerlink" href="#writing-custom-rules" title="Permanent link">&para;</a></h2>
@@ -2105,16 +2151,16 @@ chart values and the program map for the full list.</p>
 <li><strong>Test with replay</strong> before deploying: <code>controller --replay --from=24h --config=new.yaml</code></li>
 </ol>
 <h3 id="example-custom-adaptive-rule">Example: Custom Adaptive Rule<a class="headerlink" href="#example-custom-adaptive-rule" title="Permanent link">&para;</a></h3>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disk_io_by_node</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rate(node_disk_io_time_seconds_total[5m])</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">instance</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">device</span><span class="p p-Indicator">]</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disk_io_by_node</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rate(node_disk_io_time_seconds_total[5m])</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">instance</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">device</span><span class="p p-Indicator">]</span>
 </span></code></pre></div>
 <h3 id="example-custom-static-rule">Example: Custom Static Rule<a class="headerlink" href="#example-custom-static-rule" title="Permanent link">&para;</a></h3>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pending_pods</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count(kube_pod_status_phase{phase=&quot;Pending&quot;}) by (cluster, namespace)</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;&quot;</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pending_pods</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count(kube_pod_status_phase{phase=&quot;Pending&quot;}) by (cluster, namespace)</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;&quot;</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
 </span></code></pre></div>
 
 

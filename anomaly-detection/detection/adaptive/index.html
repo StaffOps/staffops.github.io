@@ -935,6 +935,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#absolute-floor-min_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      Absolute floor (min_value)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#label-alignment-group_by-must-match-the-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      Label alignment (group_by must match the metric)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#seasonal-awareness" class="md-nav__link">
     <span class="md-ellipsis">
       Seasonal Awareness
@@ -1792,6 +1810,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#absolute-floor-min_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      Absolute floor (min_value)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#label-alignment-group_by-must-match-the-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      Label alignment (group_by must match the metric)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#seasonal-awareness" class="md-nav__link">
     <span class="md-ellipsis">
       Seasonal Awareness
@@ -1893,9 +1929,22 @@
 <p>BH needs the <strong>full</strong> family size <code>m</code> — every adaptive evaluation performed this cycle, whether or not it fired. Workers only ship anomalies (series past the z threshold), so the filter cannot infer <code>m</code> from what it receives: that censored family is a handful of uniformly tiny p-values, and BH over it accepts nearly everything.</p>
 <p>Workers therefore report <code>adaptive_series_tested</code> (evaluations past warm-up) on each <code>JobResults</code>, and the controller passes it as <code>m</code>. A marginal anomaly (z≈3.0) that would pass against <code>m=1</code> is correctly rejected once the cycle's ~400 tests are counted, while genuinely strong signals survive. The gauge <code>staffops_ad_detection_fdr_family_size</code> exposes <code>m</code> — a value near 0 while anomalies fire means the family has collapsed to the censored case. See <a href="../../reference/metrics/#staffops_ad_detection_fdr_family_size">metrics reference</a>.</p>
 </div>
-<div class="admonition info">
-<p class="admonition-title">How much FDR cuts depends on the rule set (measured 2026-07-19)</p>
-<p>FDR only removes the <strong>marginal</strong> firings (z just above the threshold). A synthetic-injection replay confirmed it <strong>preserves recall</strong> (injected faults survive), but the FP reduction is not a constant — it scales with how much <em>marginal</em> noise a rule set produces. On per-pod CPU (genuine, high-z variance) FDR cut only ~3%; on the tuned service-level rule set deployed in homolog it rejects ~18–30%. Rules that fire on strong, real deviations barely feed the FDR; rules that graze the threshold across many series feed it a lot. See <code>specs/synthetic-injection/</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">On the deployed rule set, FDR rejects ≈0% (measured 2026-07-20)</p>
+<p>BH accepts <strong>every</strong> fired anomaly whenever the per-evaluation firing count
+<code>k</code> exceeds <code>m·target</code> (family size × target) — the step-up finds a high <code>k</code>
+that satisfies <code>p(k) ≤ (k/m)·target</code> and accepts all ranks below it. On the
+deployed service-level rule set this is the normal regime: ~50–90 series fire
+per evaluation against a family of ~1000–1500, so <code>k &gt; m·0.05</code> and BH rejects
+nothing. Two independent sources confirm it: the <strong>live cluster</strong> reports
+~82.3k accepted / <strong>0 rejected over 24h</strong>, and a synthetic-injection replay
+(both <code>target=1.0</code> and <code>target=0.05</code>) rejected <strong>0</strong> on the same rule set.</p>
+<p>FDR does cut in the opposite regime — one high-cardinality rule with few
+firings relative to its family (per-pod CPU: ~3% cut) — but that is not how the
+deployed set behaves. <strong>Recall is preserved</strong> either way (injected faults that
+match survive). Net: on the deployed rules the FDR is effectively a no-op; the
+real FP levers are direction-of-badness, rule hygiene, and the z-threshold —
+not the FDR. See <code>specs/synthetic-injection/</code>.</p>
 </div>
 <h2 id="direction-of-badness">Direction-of-badness<a class="headerlink" href="#direction-of-badness" title="Permanent link">&para;</a></h2>
 <p>The z-score is symmetric — <code>|z| &gt; 3</code> fires whether a metric spikes <strong>up</strong> or <strong>down</strong>. But most metrics are only anomalous one way: latency, error rate, queue depth, and GC heap matter when they <strong>rise</strong>; ready replicas and (arguably) throughput when they <strong>fall</strong>. Without a direction, the detector alerts even when a metric <em>improves</em> (latency dropped, errors fell) — a pure false positive.</p>
@@ -1910,6 +1959,139 @@
 <p class="admonition-title">When to keep <code>both_bad</code></p>
 <p>Traffic/throughput rules (<code>request_rate</code>) stay <code>both_bad</code> — a sudden <strong>drop</strong> can signal an upstream outage just as a spike signals a storm.</p>
 </div>
+<h2 id="absolute-floor-min_value">Absolute floor (<code>min_value</code>)<a class="headerlink" href="#absolute-floor-min_value" title="Permanent link">&para;</a></h2>
+<p>The z-score is <strong>scale-free</strong> by construction: it measures how unusual a reading is <em>for that
+series</em>, never whether the reading is large enough to act on. On a gauge that idles near zero
+the stddev collapses, so a handful of units becomes a 6–14σ event.</p>
+<p>Measured on the live cluster (2026-07-21, 6h = 1109 fired alerts), this — not the
+multiple-comparisons problem — was the dominant false-positive source:</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Share of fired alerts</th>
+<th>Median z</th>
+<th>Median reading</th>
+<th>Median baseline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>http_client_active_requests</code></td>
+<td><strong>30.7%</strong></td>
+<td>6.0</td>
+<td><strong>2 requests</strong></td>
+<td>0.09</td>
+</tr>
+<tr>
+<td><code>dotnet_heap_growth</code> (deleted, see below)</td>
+<td>23.2%</td>
+<td>4.7</td>
+<td>312 MB</td>
+<td>76 MB</td>
+</tr>
+</tbody>
+</table>
+<p>The minimum <code>|z|</code> observed among these firings was 3.27 and the median 6.0, so <strong>raising
+<code>zscore_threshold</code> would not have removed them</strong> — the readings really are statistical
+outliers. They are simply not operationally interesting: a pod going from 0.09 to 2
+in-flight outbound requests is a quiet service waking up, not an incident.</p>
+<p>Measured floor sensitivity for <code>http_client_active_requests</code>:</p>
+<table>
+<thead>
+<tr>
+<th><code>min_value</code></th>
+<th>Dropped from this rule</th>
+<th>Cut in total alert volume</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>65.7%</td>
+<td>20.2%</td>
+</tr>
+<tr>
+<td>10</td>
+<td>71.0%</td>
+<td>21.8%</td>
+</tr>
+<tr>
+<td><strong>20</strong> (chosen)</td>
+<td><strong>85.6%</strong></td>
+<td><strong>26.3%</strong></td>
+</tr>
+<tr>
+<td>50</td>
+<td>90.6%</td>
+<td>27.9%</td>
+</tr>
+</tbody>
+</table>
+<p>Returns saturate past 20, so 20 is the knee.</p>
+<p><code>min_value</code> adds the missing magnitude test. A rule fires only when the deviation is <strong>both</strong>
+statistically significant <strong>and</strong> large enough to matter:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http_client_active_requests</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max(http_client_active_requests) by (cluster, namespace, pod)</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">namespace</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pod</span><span class="p p-Indicator">]</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">direction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">up_bad</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">min_value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w">     </span><span class="c1"># a quiet pod at 0.08 → 2 in-flight requests is not an incident</span>
+</span></code></pre></div>
+<p>The floor is compared against <code>|Value|</code> and applied in the controller <strong>before</strong> FDR, so
+floored firings don't consume BH acceptance. Omitted or <code>0</code> disables it (backward-compatible),
+and static/log-pattern detections are never floored. Drops are counted by
+<code>staffops_ad_detection_floor_filtered_total</code>. Replay mirrors the same filter and reports the
+count as <code>floor_filtered</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Floor, don't staticize</p>
+<p>The alternative — replacing the rule with a static threshold — throws away the per-series
+adaptivity that makes the rule useful (one service idles at <code>0.1</code>, another legitimately
+runs at <code>80</code>). The floor keeps the learned baseline and only mutes what is too small to
+act on. Pick the floor from the <em>distribution of real incidents</em>, not from the baseline:
+the goal is to sit above operational noise, not just above the mean.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">A floor cannot rescue a rule measured on the wrong axis</p>
+<p><code>min_value</code> gates <em>magnitude</em>; it cannot fix a metric that is not comparable across
+services in the first place. <code>dotnet_heap_growth</code> alerted on <strong>absolute heap bytes</strong>, so
+any floor either cut a real leak on a small container or waved through a large service
+idling above it. The heap/limit ratio measured across every .NET pod was <code>q50=0.042</code>,
+<code>q99=0.205</code>, <code>max=0.524</code> — <strong>not one pod near memory pressure</strong>, yet the rule produced
+23% of all alerts. The right move was to change the measurement, not to floor it:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max(process_runtime_dotnet_gc_heap_size_bytes) by (pod)</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">/ on(pod) group_left(cluster, namespace)</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">max(container_spec_memory_limit_bytes{container!=&quot;&quot;}) by (cluster, namespace, pod)</span>
+</span></code></pre></div>
+<p>Ask "is this reading comparable across the series the rule covers?" before reaching for
+a floor. If the answer is no, normalize first — then the floor becomes meaningful.</p>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">Don't ship a rule that can never fire</p>
+<p>The ratio above still needed a floor, and every candidate sat at or above the observed
+fleet maximum (<code>0.524</code>) — the rule would have shipped permanently silent. It was
+<strong>deleted instead of shipped disabled</strong>.</p>
+<p>A rule that never fires is worse than no rule: it puts the signal on the coverage list
+without covering anything, and nobody discovers the gap until the incident it was
+supposed to catch. If tuning a rule lands you at "it will basically never fire", that is
+not a tuned rule — either derive the threshold from real failures (here: the heap/limit
+ratio observed <em>before actual OOMKills</em>, not the distribution of healthy pods) or remove
+the rule and say so.</p>
+</div>
+<h2 id="label-alignment-group_by-must-match-the-metric">Label alignment (<code>group_by</code> must match the metric)<a class="headerlink" href="#label-alignment-group_by-must-match-the-metric" title="Permanent link">&para;</a></h2>
+<p>A rule's <code>group_by</code> names the labels that identify a series. If the metric does not carry
+those labels, they resolve to <strong>empty</strong> — the anomaly still fires, but with no namespace and
+no cluster, so it cannot be routed, correlated, or drilled into.</p>
+<p>This bit both offending rules above: OTel SDK metrics carry <code>service_namespace</code> and
+<code>eks_cluster</code>, <strong>not</strong> <code>namespace</code> and <code>cluster</code>, so 100% of their alerts came out with an
+empty namespace. Map them explicitly:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;label_replace(label_replace(</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">          </span><span class="s">max(http_client_active_requests)</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">(eks_cluster,</span><span class="nv"> </span><span class="s">service_namespace,</span><span class="nv"> </span><span class="s">pod),</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">          </span><span class="s">&quot;namespace&quot;,</span><span class="nv"> </span><span class="s">&quot;$1&quot;,</span><span class="nv"> </span><span class="s">&quot;service_namespace&quot;,</span><span class="nv"> </span><span class="s">&quot;(.*)&quot;),</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">          </span><span class="s">&quot;cluster&quot;,</span><span class="nv"> </span><span class="s">&quot;$1&quot;,</span><span class="nv"> </span><span class="s">&quot;eks_cluster&quot;,</span><span class="nv"> </span><span class="s">&quot;(.*)&quot;)&#39;</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">namespace</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pod</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
+<p>Verify before shipping a rule: run the query and confirm every label in <code>group_by</code> comes back
+populated. An empty grouping label also silently merges series that should be distinct.</p>
 <h2 id="seasonal-awareness">Seasonal Awareness<a class="headerlink" href="#seasonal-awareness" title="Permanent link">&para;</a></h2>
 <p>After <code>seasonal_min_days</code> (7 days) of history, the detector also compares against the same hour and day-of-week. This prevents false positives on:</p>
 <ul>

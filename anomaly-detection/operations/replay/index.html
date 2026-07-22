@@ -1217,6 +1217,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="3. Tick Simulation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-failures-degrade-per-rule-not-per-tick" class="md-nav__link">
+    <span class="md-ellipsis">
+      Query failures degrade per rule, not per tick
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1808,6 +1823,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="3. Tick Simulation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-failures-degrade-per-rule-not-per-tick" class="md-nav__link">
+    <span class="md-ellipsis">
+      Query failures degrade per rule, not per tick
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -2025,6 +2055,32 @@ series that actually vary (a flat series can't be perturbed meaningfully).</p>
 <li>Runs the same detection engine as production</li>
 <li>Accumulates anomalies in memory</li>
 </ul>
+<h4 id="query-failures-degrade-per-rule-not-per-tick">Query failures degrade per rule, not per tick<a class="headerlink" href="#query-failures-degrade-per-rule-not-per-tick" title="Permanent link">&para;</a></h4>
+<p>If one rule's query fails, only that rule is skipped for that tick — the others still
+evaluate, and the failure is counted in <code>totals.query_errors</code>. A tick counts as
+<code>ticks_skipped_query_error</code> only when <strong>every</strong> adaptive query failed, since nothing
+could be evaluated.</p>
+<p>This mirrors production: one rule's query failing does not blind the rest, and the BH
+family is whatever actually got evaluated.</p>
+<div class="admonition warning">
+<p class="admonition-title">Read <code>query_errors</code> before trusting a low anomaly count</p>
+<p>A run can complete successfully and still report near-zero anomalies simply because
+an expensive rule failed on every tick. The two look identical in the totals. Always
+check <code>query_errors</code> and <code>ticks_skipped_query_error</code> before concluding that a rule
+set is quiet.</p>
+<p>Common cause: a histogram rule over a very large series family exceeding the
+backend's limits — on VictoriaMetrics, <code>cannot select more than
+-search.maxSamplesPerQuery</code>. Narrow the rule's label filters, or raise the limit on
+the query tier used for replay.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Run replay close to the data</p>
+<p>Replay issues one range query per rule per tick, so a 6h window at a 60s interval
+with ~24 rules is ~8600 range queries. Measured over a <code>kubectl port-forward</code> from a
+laptop this ran at ~100s per tick (≈10h for the window); the same work in-cluster
+runs in tens of minutes. For anything beyond a smoke test, run replay as a Job in
+the cluster.</p>
+</div>
 <h3 id="4-report-generation">4. Report Generation<a class="headerlink" href="#4-report-generation" title="Permanent link">&para;</a></h3>
 <p>Outputs both JSON and Markdown:</p>
 <ul>
