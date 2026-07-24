@@ -46,6 +46,7 @@ nav:
       - Overview: products/index.md
       - Aigent Squad: products/aigent-squad.md
       - Anomaly Detection: products/anomaly-detection.md
+      - Grafana Plugins: products/grafana-plugins.md
       - Helm Charts: products/helm-charts.md
       - Maturity Score Card: products/maturity-score-card.md
       - OTel Libs: products/otel-libs.md

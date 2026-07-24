@@ -24,6 +24,16 @@ Distributed anomaly detection service for Kubernetes. A Go controller orchestrat
 
 ---
 
+## Grafana Plugins
+
+Monorepo of Grafana plugins (panels and apps) for observability and AI-assisted operations. Includes a DAG service map panel (Tempo service-graph) and a conversational AI chat app (AIgent Squad via Grafana LLM).
+
+**Frontend-only. Docker-only builds. Spec-driven.**
+
+[Documentation →](grafana-plugins.md){ .md-button }
+
+---
+
 ## Helm Charts
 
 Kubernetes-ready Helm charts for the full StaffOps suite. Charts available: `aigent-squad`, `anomaly-detection`.
