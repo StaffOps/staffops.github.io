@@ -935,13 +935,13 @@ package; shared tooling (build config, linting, TypeScript) is consistent across
 but each plugin ships and versions on its own.</p>
 <pre class="mermaid"><code>graph TD
     subgraph Monorepo
-        WS[pnpm-workspace.yaml] --&gt; P1[packages/staffops-servicemap-panel]
-        WS --&gt; P2[packages/staffops-aigent-squad-chat-app]
-        SPECS[specs/*] -.spec-driven.-&gt; P1
-        SPECS -.spec-driven.-&gt; P2
+        WS["pnpm-workspace.yaml"] --&gt; P1["staffops-servicemap-panel"]
+        WS --&gt; P2["staffops-aigent-squad-chat-app"]
+        SPECS["specs"] -. spec-driven .-&gt; P1
+        SPECS -. spec-driven .-&gt; P2
     end
-    P1 --&gt;|DataFrames| DS[(Prometheus / Tempo)]
-    P2 --&gt;|@grafana/llm| LLM[Grafana LLM app] --&gt; SQUAD[AIgent Squad]</code></pre>
+    P1 --&gt;|DataFrames| DS[("Prometheus / Tempo")]
+    P2 --&gt;|"grafana/llm"| LLM["Grafana LLM app"] --&gt; SQUAD["AIgent Squad"]</code></pre>
 <h2 id="pages">Pages<a class="headerlink" href="#pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="monorepo/">Monorepo Layout</a> — directory structure, workspace, specs</li>

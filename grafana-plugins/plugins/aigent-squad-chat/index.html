@@ -942,10 +942,10 @@ SRE-agentic system (OpenAI-compatible API, specialist subagents). The plugin is 
 chat client</strong>: it streams the conversation and renders it; AIgent Squad owns all
 orchestration and tool execution (Grafana / Loki / Tempo / PromQL / Kubernetes) server-side.</p>
 <pre class="mermaid"><code>graph LR
-    U[User] --&gt; UI[Chat page - React]
-    UI --&gt;|@grafana/llm streamChatCompletions| LLM[Grafana LLM app]
-    LLM --&gt;|OpenAI /v1/chat/completions| SQUAD[AIgent Squad]
-    SQUAD --&gt; TOOLS[(Loki / Tempo / PromQL / K8s)]</code></pre>
+    U[User] --&gt; UI["Chat page (React)"]
+    UI --&gt;|"grafana/llm"| LLM["Grafana LLM app"]
+    LLM --&gt;|"OpenAI chat/completions"| SQUAD["AIgent Squad"]
+    SQUAD --&gt; TOOLS[("Loki / Tempo / PromQL / K8s")]</code></pre>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
