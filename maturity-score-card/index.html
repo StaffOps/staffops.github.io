@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Stateless scoring service for CI/CD maturity metrics">
+        <meta name="description" content="Engineering maturity scoring across build, ship and run — security, application and reliability scorecards">
       
       
       
@@ -250,6 +250,15 @@
       
         <li class="md-tabs__item">
           
+            <a href="roadmap/"
+               class="md-tabs__link">
+              Roadmap
+            </a>
+          
+        </li>
+      
+        <li class="md-tabs__item">
+          
             <a href="reference/api/"
                class="md-tabs__link">
               Reference
@@ -359,9 +368,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#stack" class="md-nav__link">
+  <a href="#what-it-measures-today" class="md-nav__link">
     <span class="md-ellipsis">
-      Stack
+      What it measures today
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tracking-problems-not-just-scoring-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tracking problems, not just scoring them
     </span>
   </a>
   
@@ -371,6 +389,15 @@
   <a href="#key-properties" class="md-nav__link">
     <span class="md-ellipsis">
       Key properties
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-numbers-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where the numbers go
     </span>
   </a>
   
@@ -478,6 +505,26 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="roadmap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -491,10 +538,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -505,8 +552,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Reference
           </label>
@@ -618,9 +665,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#stack" class="md-nav__link">
+  <a href="#what-it-measures-today" class="md-nav__link">
     <span class="md-ellipsis">
-      Stack
+      What it measures today
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tracking-problems-not-just-scoring-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tracking problems, not just scoring them
     </span>
   </a>
   
@@ -630,6 +686,15 @@
   <a href="#key-properties" class="md-nav__link">
     <span class="md-ellipsis">
       Key properties
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-numbers-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      Where the numbers go
     </span>
   </a>
   
@@ -659,11 +724,211 @@
 
 
 <h1 id="maturity-score-card">Maturity Score Card<a class="headerlink" href="#maturity-score-card" title="Permanent link">&para;</a></h1>
-<p><strong>Stateless scoring service for CI/CD maturity metrics.</strong></p>
-<p>Receives CI/CD tool results, computes a 0–100 maturity score per metric, and persists state in PostgreSQL. Metrics are scraped by VictoriaMetrics and visualized in Grafana.</p>
+<p><strong>A single 0–100 number for how well an application is built, shipped, and run.</strong></p>
 <hr />
 <h2 id="what-it-does">What it does<a class="headerlink" href="#what-it-does" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>CI/CD step
+<p>Engineering maturity is usually invisible. Test coverage lives in one tool, vulnerabilities in
+another, availability in a dashboard, incident response in a spreadsheet. Nobody can answer
+"is this service in good shape?" without opening six tabs, and nobody can answer "is the
+organisation improving?" at all.</p>
+<p>Maturity Score Card collects those signals from wherever they already exist, scores each one
+on the same 0–100 scale, and rolls them up per app, per team, and per area.</p>
+<p>It is <strong>not</strong> a CI/CD scorecard. Pipelines are one source of signal among several — and the
+heaviest scorecard is the one measuring what happens <em>after</em> deploy:</p>
+<pre class="mermaid"><code>flowchart LR
+    B["&lt;b&gt;Build&lt;/b&gt;&lt;br/&gt;how the app is made"] --&gt; S["&lt;b&gt;Ship&lt;/b&gt;&lt;br/&gt;what we catch before prod"] --&gt; R["&lt;b&gt;Run&lt;/b&gt;&lt;br/&gt;how it behaves in prod"]
+    B -.-&gt;|application · 25%| SC["&lt;b&gt;Maturity Score&lt;/b&gt;"]
+    S -.-&gt;|security · 35%| SC
+    R -.-&gt;|reliability · 40%| SC</code></pre>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Scorecard</th>
+<th>Weight</th>
+<th>Answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Build</strong></td>
+<td><code>application</code></td>
+<td>25%</td>
+<td>Is it tested? Instrumented? Does it hold up under load?</td>
+</tr>
+<tr>
+<td><strong>Ship</strong></td>
+<td><code>security</code></td>
+<td>35%</td>
+<td>What did we catch before it reached production?</td>
+</tr>
+<tr>
+<td><strong>Run</strong></td>
+<td><code>reliability</code></td>
+<td>40%</td>
+<td>Does it stay up? How fast do we notice and recover?</td>
+</tr>
+</tbody>
+</table>
+<p>Anything that can be expressed as a number at the end of a job, a query, or a report can feed
+it — a pipeline step, a nightly cron against Prometheus, a scheduled scan, a manual audit.
+The service does not care where a value came from.</p>
+<h2 id="what-it-measures-today">What it measures today<a class="headerlink" href="#what-it-measures-today" title="Permanent link">&para;</a></h2>
+<p>Fifteen metrics ship in the box. Each has a scoring function that turns a raw payload into
+0–100, so a coverage percentage and a vulnerability count end up comparable.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Run — reliability (40%)</label><label for="__tabbed_1_2">Ship — security (35%)</label><label for="__tabbed_1_3">Build — application (25%)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Measures</th>
+<th>Raw input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sla</code></td>
+<td>Availability against your SLO</td>
+<td><code>availability_pct</code></td>
+</tr>
+<tr>
+<td><code>change_failure_rate</code></td>
+<td>Share of deploys causing a failure</td>
+<td><code>rate_pct</code></td>
+</tr>
+<tr>
+<td><code>mttd</code></td>
+<td>How fast you detect an incident</td>
+<td><code>minutes</code></td>
+</tr>
+<tr>
+<td><code>mttr</code></td>
+<td>How fast you recover from one</td>
+<td><code>minutes</code></td>
+</tr>
+</tbody>
+</table>
+<p>This is where SLIs and SLOs land. <code>sla</code> takes whatever availability figure your SLI
+already produces — error-budget-based, uptime-based, or synthetic-probe-based — and
+downtime is expressed through it rather than as a separate metric. <code>mttd</code> and <code>mttr</code> cover
+detection and recovery separately, because a team that recovers fast but detects slowly
+has a very different problem from the reverse.</p>
+</div>
+<div class="tabbed-block">
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Measures</th>
+<th>Raw input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image_scan</code></td>
+<td>Vulnerabilities in the container image</td>
+<td><code>critical</code>, <code>high</code>, <code>medium</code></td>
+</tr>
+<tr>
+<td><code>sast</code></td>
+<td>Vulnerabilities in the source</td>
+<td><code>critical</code>, <code>high</code>, <code>medium</code></td>
+</tr>
+<tr>
+<td><code>dast</code></td>
+<td>Vulnerabilities found against a running instance</td>
+<td><code>high</code>, <code>medium</code></td>
+</tr>
+<tr>
+<td><code>secret_scan</code></td>
+<td>Hardcoded credentials — pass/fail</td>
+<td><code>found</code></td>
+</tr>
+</tbody>
+</table>
+<p>Counts are weighted by severity, so one critical costs far more than one medium.
+<code>secret_scan</code> is deliberately binary: a leaked credential is not a matter of degree.</p>
+</div>
+<div class="tabbed-block">
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Measures</th>
+<th>Raw input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unit_coverage</code></td>
+<td>Unit test coverage</td>
+<td><code>percentage</code></td>
+</tr>
+<tr>
+<td><code>integration_coverage</code></td>
+<td>Integration test coverage</td>
+<td><code>percentage</code></td>
+</tr>
+<tr>
+<td><code>stress_test</code></td>
+<td>Error rate, p95 latency and check pass rate under load</td>
+<td><code>error_rate</code>, <code>p95_ms</code>, <code>checks_pct</code></td>
+</tr>
+<tr>
+<td><code>libs_observability</code></td>
+<td>Standard telemetry library in use</td>
+<td><code>enabled</code></td>
+</tr>
+<tr>
+<td><code>libs_secrets</code></td>
+<td>Standard secrets library in use</td>
+<td><code>enabled</code></td>
+</tr>
+<tr>
+<td><code>health_check</code></td>
+<td>Health endpoint exposed</td>
+<td><code>enabled</code></td>
+</tr>
+<tr>
+<td><code>unique_db_user</code></td>
+<td>Dedicated database user</td>
+<td><code>enabled</code></td>
+</tr>
+</tbody>
+</table>
+<p>The two coverage metrics are scored on different curves — 80% unit coverage and 60%
+integration coverage both earn full marks, because they are not equally cheap to reach.</p>
+</div>
+</div>
+</div>
+<p>See <strong><a href="scorecards/">Scorecards</a></strong> for the exact thresholds behind every metric, and the
+<a href="roadmap/">roadmap</a> for what is specified, what is deliberately a dashboard panel instead,
+and what is not planned.</p>
+<h2 id="tracking-problems-not-just-scoring-them">Tracking problems, not just scoring them<a class="headerlink" href="#tracking-problems-not-just-scoring-them" title="Permanent link">&para;</a></h2>
+<p>A score tells you where you stand. It does not tell you what to fix, and it does not survive
+being fixed — once a scan is clean, the finding is gone from the score.</p>
+<p><code>POST /problem/scan-result</code> is the other half. It records concrete findings (a secret in
+<code>main.tf</code> at line 42) with severity and file-level detail, and <strong>keeps them until a later scan
+reports zero</strong>. That gives you a live worklist and a history of how long things stayed broken,
+and it fires a Slack alert the moment something new appears.</p>
+<h2 id="key-properties">Key properties<a class="headerlink" href="#key-properties" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Partial evaluation.</strong> Weights redistribute automatically among the metrics that actually
+  reported. A service with no integration tests is not silently scored as if it had 0% — the
+  metric is simply excluded. Send what you have.</li>
+<li><strong>Stateless service, persistent state.</strong> All state lives in PostgreSQL; the API can be
+  restarted, scaled, or replaced freely.</li>
+<li><strong>Last value wins.</strong> Each <code>(area, team, app, env, scorecard, metric)</code> holds exactly one
+  score, upserted on every submission. No double counting from pipeline retries.</li>
+<li><strong>Aggregation is unweighted by size.</strong> Team scores average their apps, area scores average
+  their teams — so a team with 40 services does not drown out one with 3.</li>
+</ul>
+<h2 id="where-the-numbers-go">Where the numbers go<a class="headerlink" href="#where-the-numbers-go" title="Permanent link">&para;</a></h2>
+<p>Scores are exposed at <code>/metrics</code> in Prometheus format, scraped every 15s, and pre-aggregated
+into recording rules that Grafana reads.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>CI/CD step · cron · scanner · manual audit
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    │
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    ▼
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>POST /score              POST /problem/scan-result
@@ -676,16 +941,14 @@
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>          PostgreSQL  ◄──── upsert (state persists until next scan)
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>               │
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>               ▼
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>          GET /metrics  ◄──── VictoriaMetrics scrapes every 15s
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>          GET /metrics  ◄──── Prometheus scrapes every 15s
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>               │
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>               ▼
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>          vmalert  ──── evaluates recording rules ──► VictoriaMetrics
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>          Prometheus  ──── evaluates PromQL recording rules
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>               │
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>               ▼
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>            Grafana
 </code></pre></div>
-<hr />
-<h2 id="stack">Stack<a class="headerlink" href="#stack" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -703,29 +966,17 @@
 <td>State store — latest score and problem count per app</td>
 </tr>
 <tr>
-<td>VictoriaMetrics</td>
-<td>Time series database — scrapes <code>/metrics</code></td>
-</tr>
-<tr>
-<td>vmalert</td>
-<td>Evaluates PromQL recording rules</td>
+<td>Prometheus</td>
+<td>Scrapes <code>/metrics</code>, evaluates the recording rules</td>
 </tr>
 <tr>
 <td>Grafana</td>
-<td>Dashboards</td>
+<td>Dashboards — per app, per team, per area</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="key-properties">Key properties<a class="headerlink" href="#key-properties" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Stateless API — all state lives in PostgreSQL</li>
-<li>Weights redistribute automatically among metrics that actually ran</li>
-<li>Slack alerts on new infrastructure problems</li>
-<li>Ships with a full local stack (<code>example/</code>) for evaluation</li>
-</ul>
 <p><a class="md-button md-button--primary" href="getting-started/quickstart/">Get started →</a>
-<a class="md-button" href="https://github.com/StaffOps/maturity-score-card">Source on GitHub →</a></p>
+<a class="md-button" href="scorecards/">See the scorecards →</a></p>
 
 
 

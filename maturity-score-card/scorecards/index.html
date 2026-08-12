@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Stateless scoring service for CI/CD maturity metrics">
+        <meta name="description" content="Engineering maturity scoring across build, ship and run — security, application and reliability scorecards">
       
       
       
@@ -16,7 +16,7 @@
         <link rel="prev" href="../getting-started/quickstart/">
       
       
-        <link rel="next" href="../reference/api/">
+        <link rel="next" href="../roadmap/">
       
       
       <link rel="icon" href="../assets/logo.png">
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#scorecards-and-weights" class="md-skip">
+        <a href="#scorecards-and-metrics" class="md-skip">
           Skip to content
         </a>
       
@@ -246,6 +246,15 @@
             <a href="./"
                class="md-tabs__link md-tabs__link--active">
               Scorecards
+            </a>
+          
+        </li>
+      
+        <li class="md-tabs__item">
+          
+            <a href="../roadmap/"
+               class="md-tabs__link">
+              Roadmap
             </a>
           
         </li>
@@ -440,9 +449,195 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#adding-a-new-metric" class="md-nav__link">
+  <a href="#reliability-40" class="md-nav__link">
     <span class="md-ellipsis">
-      Adding a new metric
+      reliability (40%)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="reliability (40%)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sla-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      sla — 20%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#change_failure_rate-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      change_failure_rate — 30%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mttd-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      mttd — 25%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mttr-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      mttr — 25%
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-35" class="md-nav__link">
+    <span class="md-ellipsis">
+      security (35%)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="security (35%)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#image_scan-25-sast-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      image_scan — 25% · sast — 25%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dast-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      dast — 25%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#secret_scan-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      secret_scan — 25%
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      application (25%)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="application (25%)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unit_coverage-20-integration_coverage-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      unit_coverage — 20% · integration_coverage — 20%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stress_test-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      stress_test — 10%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean-practices-libs_secrets-15-libs_observability-15-unique_db_user-10-health_check-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Boolean practices — libs_secrets 15% · libs_observability 15% · unique_db_user 10% · health_check 10%
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scoring-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scoring model
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scoring model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-scorecard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per scorecard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per app
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-team-and-per-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per team and per area
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-yet-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      Not yet covered
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a metric
     </span>
   </a>
   
@@ -452,6 +647,26 @@
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -475,10 +690,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -489,8 +704,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Reference
           </label>
@@ -593,9 +808,195 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#adding-a-new-metric" class="md-nav__link">
+  <a href="#reliability-40" class="md-nav__link">
     <span class="md-ellipsis">
-      Adding a new metric
+      reliability (40%)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="reliability (40%)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sla-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      sla — 20%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#change_failure_rate-30" class="md-nav__link">
+    <span class="md-ellipsis">
+      change_failure_rate — 30%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mttd-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      mttd — 25%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mttr-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      mttr — 25%
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-35" class="md-nav__link">
+    <span class="md-ellipsis">
+      security (35%)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="security (35%)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#image_scan-25-sast-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      image_scan — 25% · sast — 25%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dast-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      dast — 25%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#secret_scan-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      secret_scan — 25%
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      application (25%)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="application (25%)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unit_coverage-20-integration_coverage-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      unit_coverage — 20% · integration_coverage — 20%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stress_test-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      stress_test — 10%
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean-practices-libs_secrets-15-libs_observability-15-unique_db_user-10-health_check-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Boolean practices — libs_secrets 15% · libs_observability 15% · unique_db_user 10% · health_check 10%
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scoring-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scoring model
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scoring model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#per-scorecard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per scorecard
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per app
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-team-and-per-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per team and per area
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-yet-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      Not yet covered
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-a-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding a metric
     </span>
   </a>
   
@@ -624,7 +1025,9 @@
   
 
 
-<h1 id="scorecards-and-weights">Scorecards and Weights<a class="headerlink" href="#scorecards-and-weights" title="Permanent link">&para;</a></h1>
+<h1 id="scorecards-and-metrics">Scorecards and Metrics<a class="headerlink" href="#scorecards-and-metrics" title="Permanent link">&para;</a></h1>
+<p>Every metric is scored 0–100 by a pure function in <code>app/scoring/</code>. This page documents what
+each one measures, the payload it expects, and the exact thresholds it applies.</p>
 <table>
 <thead>
 <tr>
@@ -635,30 +1038,368 @@
 </thead>
 <tbody>
 <tr>
-<td><code>security</code></td>
+<td><a href="#reliability-40"><code>reliability</code></a></td>
+<td>40%</td>
+<td><code>sla</code> (20%), <code>change_failure_rate</code> (30%), <code>mttr</code> (25%), <code>mttd</code> (25%)</td>
+</tr>
+<tr>
+<td><a href="#security-35"><code>security</code></a></td>
 <td>35%</td>
 <td><code>image_scan</code> (25%), <code>secret_scan</code> (25%), <code>sast</code> (25%), <code>dast</code> (25%)</td>
 </tr>
 <tr>
-<td><code>application</code></td>
+<td><a href="#application-25"><code>application</code></a></td>
 <td>25%</td>
 <td><code>libs_secrets</code> (15%), <code>libs_observability</code> (15%), <code>unique_db_user</code> (10%), <code>health_check</code> (10%), <code>unit_coverage</code> (20%), <code>integration_coverage</code> (20%), <code>stress_test</code> (10%)</td>
 </tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Weights redistribute automatically</p>
+<p>Metrics you never submit are excluded from the calculation instead of counting as zero.
+A scorecard's score is the weighted average of the metrics that actually reported, so a
+service with no DAST is judged on what it does run. See <a href="#scoring-model">Scoring model</a>.</p>
+</div>
+<hr />
+<h2 id="reliability-40">reliability (40%)<a class="headerlink" href="#reliability-40" title="Permanent link">&para;</a></h2>
+<p>The heaviest scorecard, and the only one measuring production behaviour. Values here usually
+come from a scheduled query against your monitoring stack rather than from a pipeline.</p>
+<h3 id="sla-20"><code>sla</code> — 20%<a class="headerlink" href="#sla-20" title="Permanent link">&para;</a></h3>
+<p>Availability against your SLO. Feed it whatever figure your SLI already produces; downtime is
+expressed through this metric rather than reported separately.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="nt">&quot;availability_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">99.82</span><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
 <tr>
-<td><code>reliability</code></td>
-<td>40%</td>
-<td><code>sla</code> (20%), <code>change_failure_rate</code> (30%), <code>mttr</code> (25%), <code>mttd</code> (25%)</td>
+<th>Availability</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>≥ 99.5%</td>
+<td>100</td>
+</tr>
+<tr>
+<td>≥ 99.0%</td>
+<td>75</td>
+</tr>
+<tr>
+<td>≥ 98.0%</td>
+<td>50</td>
+</tr>
+<tr>
+<td>95–98%</td>
+<td>Linear 0 → 50</td>
+</tr>
+<tr>
+<td>&lt; 95%</td>
+<td>0</td>
 </tr>
 </tbody>
 </table>
-<p>Weights redistribute automatically among metrics that actually ran — just omit a metric to exclude it from the calculation.</p>
-<h2 id="adding-a-new-metric">Adding a new metric<a class="headerlink" href="#adding-a-new-metric" title="Permanent link">&para;</a></h2>
+<h3 id="change_failure_rate-30"><code>change_failure_rate</code> — 30%<a class="headerlink" href="#change_failure_rate-30" title="Permanent link">&para;</a></h3>
+<p>The DORA metric: share of deploys that caused a degradation requiring a fix or rollback.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span><span class="nt">&quot;rate_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">4.2</span><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Failure rate</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 5%</td>
+<td>100</td>
+</tr>
+<tr>
+<td>&lt; 10%</td>
+<td>75</td>
+</tr>
+<tr>
+<td>&lt; 15%</td>
+<td>50</td>
+</tr>
+<tr>
+<td>≥ 15%</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mttd-25"><code>mttd</code> — 25%<a class="headerlink" href="#mttd-25" title="Permanent link">&para;</a></h3>
+<p>Mean time to <strong>detect</strong>: incident start to the moment someone or something noticed. Scored
+much more aggressively than recovery — detection is where most of the avoidable delay lives.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span><span class="nt">&quot;minutes&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Detection time</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 5 min</td>
+<td>100</td>
+</tr>
+<tr>
+<td>&lt; 30 min</td>
+<td>75</td>
+</tr>
+<tr>
+<td>&lt; 2 h</td>
+<td>50</td>
+</tr>
+<tr>
+<td>≥ 2 h</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mttr-25"><code>mttr</code> — 25%<a class="headerlink" href="#mttr-25" title="Permanent link">&para;</a></h3>
+<p>Mean time to <strong>recover</strong>: detection to service restored.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span><span class="nt">&quot;minutes&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Recovery time</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 1 h</td>
+<td>100</td>
+</tr>
+<tr>
+<td>&lt; 4 h</td>
+<td>75</td>
+</tr>
+<tr>
+<td>&lt; 24 h</td>
+<td>50</td>
+</tr>
+<tr>
+<td>≥ 24 h</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="security-35">security (35%)<a class="headerlink" href="#security-35" title="Permanent link">&para;</a></h2>
+<p>What was caught before reaching production. All four metrics carry equal weight.</p>
+<h3 id="image_scan-25-sast-25"><code>image_scan</code> — 25% · <code>sast</code> — 25%<a class="headerlink" href="#image_scan-25-sast-25" title="Permanent link">&para;</a></h3>
+<p>Container image and source-code vulnerability counts. Both use the same severity-weighted
+deduction, floored at zero.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span><span class="nt">&quot;critical&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;high&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;medium&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>score = max(0, 100 − 25×critical − 10×high − 3×medium)
+</code></pre></div>
+<p>The example above scores <strong>81</strong>. A single critical costs 25 points; it takes eight mediums to
+do the same damage.</p>
+<h3 id="dast-25"><code>dast</code> — 25%<a class="headerlink" href="#dast-25" title="Permanent link">&para;</a></h3>
+<p>Findings against a running instance. No critical tier — DAST criticals are rare enough in
+practice that the scale starts at high.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="nt">&quot;high&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;medium&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>score = max(0, 100 − 20×high − 5×medium)
+</code></pre></div>
+<h3 id="secret_scan-25"><code>secret_scan</code> — 25%<a class="headerlink" href="#secret_scan-25" title="Permanent link">&para;</a></h3>
+<p>Hardcoded credentials in the repository. Binary by design: a leaked credential is not a matter
+of degree.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span><span class="nt">&quot;found&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Found</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>false</code></td>
+<td>100</td>
+</tr>
+<tr>
+<td><code>true</code></td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Secrets in infrastructure code go somewhere else</p>
+<p><code>secret_scan</code> scores the application repository. Findings in Terraform or Helm belong in
+<a href="../reference/api/"><code>POST /problem/scan-result</code></a>, which keeps them as a tracked worklist
+with file and line detail until they are resolved.</p>
+</div>
+<hr />
+<h2 id="application-25">application (25%)<a class="headerlink" href="#application-25" title="Permanent link">&para;</a></h2>
+<p>How the service is built. Mostly pipeline-sourced.</p>
+<h3 id="unit_coverage-20-integration_coverage-20"><code>unit_coverage</code> — 20% · <code>integration_coverage</code> — 20%<a class="headerlink" href="#unit_coverage-20-integration_coverage-20" title="Permanent link">&para;</a></h3>
+<p>Both take a percentage, but on deliberately different curves — integration tests are more
+expensive per point of coverage, so full marks arrive earlier.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span><span class="nt">&quot;percentage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">84.5</span><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th><code>unit_coverage</code></th>
+<th><code>integration_coverage</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>≥ 80%</td>
+<td>≥ 60%</td>
+</tr>
+<tr>
+<td>50 → 100</td>
+<td>60–80%</td>
+<td>40–60%</td>
+</tr>
+<tr>
+<td>10 → 50</td>
+<td>40–60%</td>
+<td>20–40%</td>
+</tr>
+<tr>
+<td>0</td>
+<td>&lt; 40%</td>
+<td>&lt; 20%</td>
+</tr>
+</tbody>
+</table>
+<p>Between thresholds the score interpolates linearly, so improvements show up immediately
+instead of waiting for the next band.</p>
+<h3 id="stress_test-10"><code>stress_test</code> — 10%<a class="headerlink" href="#stress_test-10" title="Permanent link">&para;</a></h3>
+<p>A composite of three load-test outputs, scored independently and summed. Partial credit is the
+point: fast but flaky scores differently from slow but solid.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span><span class="nt">&quot;error_rate&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0004</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;p95_ms&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">320</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;checks_pct&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">98.5</span><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Max</th>
+<th>Thresholds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Error rate</td>
+<td>40</td>
+<td>&lt; 0.1% → 40 · &lt; 1% → 20 · else 0</td>
+</tr>
+<tr>
+<td>p95 latency</td>
+<td>35</td>
+<td>&lt; 500 ms → 35 · &lt; 1 s → 20 · &lt; 2 s → 10 · else 0</td>
+</tr>
+<tr>
+<td>Check pass rate</td>
+<td>25</td>
+<td>≥ 95% → 25 · ≥ 80% → 15 · ≥ 60% → 5 · else 0</td>
+</tr>
+</tbody>
+</table>
+<p><code>error_rate</code> is a fraction from 0.0 to 1.0, not a percentage.</p>
+<h3 id="boolean-practices-libs_secrets-15-libs_observability-15-unique_db_user-10-health_check-10">Boolean practices — <code>libs_secrets</code> 15% · <code>libs_observability</code> 15% · <code>unique_db_user</code> 10% · <code>health_check</code> 10%<a class="headerlink" href="#boolean-practices-libs_secrets-15-libs_observability-15-unique_db_user-10-health_check-10" title="Permanent link">&para;</a></h3>
+<p>Four all-or-nothing checks for organisational standards: the shared secrets library, the shared
+telemetry library, a dedicated database user rather than a shared one, and an exposed health
+endpoint.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th><code>enabled</code></th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>true</code></td>
+<td>100</td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="scoring-model">Scoring model<a class="headerlink" href="#scoring-model" title="Permanent link">&para;</a></h2>
+<h3 id="per-scorecard">Per scorecard<a class="headerlink" href="#per-scorecard" title="Permanent link">&para;</a></h3>
+<p>Each scorecard is the weighted average of the metrics that reported, which is what makes
+partial submission safe:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>scorecard_score = Σ(score × weight) / Σ(weight)
+</code></pre></div>
+<p>An app reporting only <code>image_scan</code> (81) and <code>sast</code> (95) scores
+<code>(81×0.25 + 95×0.25) / (0.25 + 0.25)</code> = <strong>88</strong> for security — the absent DAST and secret scan
+do not drag it down.</p>
+<h3 id="per-app">Per app<a class="headerlink" href="#per-app" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>total = security × 0.35 + application × 0.25 + reliability × 0.40
+</code></pre></div>
+<h3 id="per-team-and-per-area">Per team and per area<a class="headerlink" href="#per-team-and-per-area" title="Permanent link">&para;</a></h3>
+<p>Team and area scores are plain averages, one level at a time — apps average into teams, teams
+average into areas. Every team counts equally regardless of how many services it owns, so a
+40-service team does not swamp a 3-service one.</p>
+<hr />
+<h2 id="not-yet-covered">Not yet covered<a class="headerlink" href="#not-yet-covered" title="Permanent link">&para;</a></h2>
+<p>These are recognised gaps rather than deliberate omissions. Submitting them today returns
+<code>400 unknown metric</code> — <code>calculate_score()</code> only accepts metrics registered in <code>SCORERS</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Deployment success rate / frequency</td>
+<td>Not implemented</td>
+<td><code>change_failure_rate</code> captures the inverse for failures, but neither deploy volume nor success count is scored</td>
+</tr>
+<tr>
+<td>Rollback success rate</td>
+<td>Not implemented</td>
+<td>Whether rollbacks actually work is untracked</td>
+</tr>
+<tr>
+<td>Vulnerability remediation time</td>
+<td>Not computable today</td>
+<td>The <code>problems</code> table keeps a mutable <code>count</code> and an <code>updated_at</code> that is overwritten on every scan — there is no <code>first_seen</code> and no <code>resolved_at</code>, so how long a finding stayed open is not recoverable from the database. The <code>maturity_problem_count</code> series in Prometheus shows the count falling to zero, but only within its retention window</td>
+</tr>
+<tr>
+<td>Production 5xx error rate</td>
+<td>Partially covered</td>
+<td><code>stress_test.error_rate</code> measures errors under synthetic load, not real traffic. A production error-rate SLI currently has to be folded into <code>sla</code></td>
+</tr>
+</tbody>
+</table>
+<p>Deploy success, rollback success and production 5xx rate are being surfaced as Grafana panels
+rather than scored — see <a href="../roadmap/#scored-vs-shown">scored vs shown</a> for the reasoning.
+Vulnerability remediation time is specified and will be scored, because it is the one signal a
+dashboard cannot solve. The full picture is on the <a href="../roadmap/">roadmap</a>.</p>
+<h2 id="adding-a-metric">Adding a metric<a class="headerlink" href="#adding-a-metric" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Create the scoring function in <code>app/scoring/&lt;scorecard&gt;.py</code></li>
+<li>Write the scoring function in <code>app/scoring/&lt;scorecard&gt;.py</code> — a pure <code>dict → float</code></li>
 <li>Register it in <code>SCORERS</code> in <code>app/scoring/__init__.py</code></li>
-<li>Add the weight in <code>app/weights.py</code></li>
+<li>Add its weight in <code>app/weights.py</code></li>
 </ol>
-<p>See <a href="../reference/pipeline-integration/">Pipeline Integration</a> for curl examples covering every metric.</p>
+<p>Weights within a scorecard should sum to 1.0. Nothing enforces this, but the redistribution
+maths assumes it.</p>
+<p>See <a href="../reference/pipeline-integration/">Pipeline Integration</a> for a curl example per metric.</p>
 
 
 

@@ -6,14 +6,14 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Stateless scoring service for CI/CD maturity metrics">
+        <meta name="description" content="Engineering maturity scoring across build, ship and run — security, application and reliability scorecards">
       
       
       
         <link rel="canonical" href="https://staffops.github.io/maturity-score-card/reference/api/">
       
       
-        <link rel="prev" href="../../scorecards/">
+        <link rel="prev" href="../../roadmap/">
       
       
         <link rel="next" href="../metrics/">
@@ -252,6 +252,15 @@
       
         <li class="md-tabs__item">
           
+            <a href="../../roadmap/"
+               class="md-tabs__link">
+              Roadmap
+            </a>
+          
+        </li>
+      
+        <li class="md-tabs__item">
+          
             <a href="./"
                class="md-tabs__link md-tabs__link--active">
               Reference
@@ -411,6 +420,26 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../roadmap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -428,10 +457,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -442,8 +471,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Reference
           </label>
@@ -731,7 +760,7 @@
 </code></pre></div>
 <p>Sends a Slack alert when <code>count &gt; 0</code> if <code>SLACK_BOT_TOKEN</code> is set.</p>
 <h2 id="get-metrics"><code>GET /metrics</code><a class="headerlink" href="#get-metrics" title="Permanent link">&para;</a></h2>
-<p>Prometheus-format metrics endpoint scraped by VictoriaMetrics.</p>
+<p>Prometheus-format metrics endpoint scraped by Prometheus.</p>
 <h2 id="get-healthz"><code>GET /healthz</code><a class="headerlink" href="#get-healthz" title="Permanent link">&para;</a></h2>
 <p>Health check.</p>
 <h2 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h2>
