@@ -22,7 +22,7 @@
     
     
       
-        <title>Pipeline Integration - StaffOps — Maturity Score Card</title>
+        <title>Submitting Metrics - StaffOps — Maturity Score Card</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pipeline-curl-examples" class="md-skip">
+        <a href="#submitting-metrics" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Pipeline Integration
+              Submitting Metrics
             
           </span>
         </div>
@@ -538,7 +538,7 @@
           
   
   <span class="md-ellipsis">
-    Pipeline Integration
+    Submitting Metrics
   </span>
   
 
@@ -549,7 +549,7 @@
         
   
   <span class="md-ellipsis">
-    Pipeline Integration
+    Submitting Metrics
   </span>
   
 
@@ -1133,8 +1133,47 @@
   
 
 
-<h1 id="pipeline-curl-examples">Pipeline curl examples<a class="headerlink" href="#pipeline-curl-examples" title="Permanent link">&para;</a></h1>
-<p>All examples use environment variables for context. Set them at the pipeline level:</p>
+<h1 id="submitting-metrics">Submitting metrics<a class="headerlink" href="#submitting-metrics" title="Permanent link">&para;</a></h1>
+<p>One curl example per metric. <code>POST /score</code> does not care what produced a value, so each
+section notes where the number usually comes from — that varies more than the examples do.</p>
+<table>
+<thead>
+<tr>
+<th>Scorecard</th>
+<th>Usual source</th>
+<th>Cadence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#scorecard-security"><code>security</code></a></td>
+<td>Pipeline step, or a scheduled scan</td>
+<td>Per build, or nightly</td>
+</tr>
+<tr>
+<td><a href="#scorecard-application"><code>application</code></a></td>
+<td>Pipeline step</td>
+<td>Per build</td>
+</tr>
+<tr>
+<td><a href="#scorecard-reliability"><code>reliability</code></a></td>
+<td><strong>Scheduled query against your monitoring stack</strong></td>
+<td>Hourly or daily</td>
+</tr>
+</tbody>
+</table>
+<p>Reliability is the one to get right. Availability, MTTR and MTTD describe how the service
+behaved over days or weeks, so submitting them from a build job means a service that stops
+deploying stops reporting — and its reliability score freezes at whatever it was on the last
+deploy. Run those from a cron or scheduler instead, on a cadence that matches the window they
+measure.</p>
+<div class="admonition note">
+<p class="admonition-title">This may become automatic</p>
+<p>Pulling <code>sla</code>, <code>mttr</code> and <code>mttd</code> straight from Prometheus rather than having every adopter
+write the same scheduled job is <a href="../../roadmap/#direct-prometheus-ingestion">specified on the roadmap</a>.
+Until then, they are pushed like everything else.</p>
+</div>
+<p>All examples use environment variables for context:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">MATURITY_API</span><span class="o">=</span><span class="s2">&quot;https://maturity-api.internal&quot;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">AREA</span><span class="o">=</span><span class="s2">&quot;financial&quot;</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nv">TEAM</span><span class="o">=</span><span class="s2">&quot;payments&quot;</span>
@@ -1365,6 +1404,12 @@ Skip for processes that are not request-serving.</p>
 <p>Scoring: up to 40 pts for error rate, 35 pts for p95 latency, 25 pts for checks passing.</p>
 <hr />
 <h2 id="scorecard-reliability">Scorecard: reliability<a class="headerlink" href="#scorecard-reliability" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Submit these from a scheduler, not a build job</p>
+<p>All four describe production behaviour over a window measured in days. A service that
+stops deploying must not stop reporting them — run these from a cron, a scheduled CI job,
+or your monitoring stack's own automation.</p>
+</div>
 <h3 id="sla">sla<a class="headerlink" href="#sla" title="Permanent link">&para;</a></h3>
 <p>Observed availability over the period (from your monitoring tool).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>curl<span class="w"> </span>-sf<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$MATURITY_API</span><span class="s2">/score&quot;</span><span class="w"> </span><span class="se">\</span>

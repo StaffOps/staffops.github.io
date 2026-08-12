@@ -612,7 +612,7 @@
         
   
   <span class="md-ellipsis">
-    Pipeline Integration
+    Submitting Metrics
   </span>
   
 
@@ -928,7 +928,7 @@ and it fires a Slack alert the moment something new appears.</p>
 <h2 id="where-the-numbers-go">Where the numbers go<a class="headerlink" href="#where-the-numbers-go" title="Permanent link">&para;</a></h2>
 <p>Scores are exposed at <code>/metrics</code> in Prometheus format, scraped every 15s, and pre-aggregated
 into recording rules that Grafana reads.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>CI/CD step · cron · scanner · manual audit
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>CI/CD step · scheduled query · scanner · manual audit
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    │
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    ▼
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>POST /score              POST /problem/scan-result
