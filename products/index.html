@@ -966,7 +966,7 @@
 <p><a class="md-button" href="aigent-squad/">Documentation →</a></p>
 <hr />
 <h2 id="anomaly-detection">Anomaly Detection<a class="headerlink" href="#anomaly-detection" title="Permanent link">&para;</a></h2>
-<p>Distributed anomaly detection service for Kubernetes. A Go controller orchestrates parallel workers that query VictoriaMetrics (PromQL) and Loki (LogQL), then correlate signals to fire meaningful alerts through Alertmanager. A Python ML service provides adaptive detection via Isolation Forest and Prophet.</p>
+<p>Distributed anomaly detection service for Kubernetes. A Go controller orchestrates parallel workers that query Prometheus (PromQL) and Loki (LogQL), then correlate signals to fire meaningful alerts through Alertmanager. A Python ML service provides adaptive detection via Isolation Forest and Prophet.</p>
 <p><a class="md-button" href="anomaly-detection/">Documentation →</a></p>
 <hr />
 <h2 id="grafana-plugins">Grafana Plugins<a class="headerlink" href="#grafana-plugins" title="Permanent link">&para;</a></h2>
@@ -982,7 +982,7 @@
 <p><a class="md-button" href="helm-charts/">Documentation →</a></p>
 <hr />
 <h2 id="maturity-score-card">Maturity Score Card<a class="headerlink" href="#maturity-score-card" title="Permanent link">&para;</a></h2>
-<p>Stateless FastAPI service that receives CI/CD tool results and computes maturity scores (0–100) per metric — security, application, and reliability scorecards. State persists in PostgreSQL, metrics are scraped by VictoriaMetrics, and results are visualized in Grafana.</p>
+<p>Stateless FastAPI service that receives CI/CD tool results and computes maturity scores (0–100) per metric — security, application, and reliability scorecards. State persists in PostgreSQL, metrics are scraped by Prometheus, and results are visualized in Grafana.</p>
 <p><a class="md-button" href="maturity-score-card/">Documentation →</a></p>
 <hr />
 <h2 id="otel-libs">OTel Libs<a class="headerlink" href="#otel-libs" title="Permanent link">&para;</a></h2>
