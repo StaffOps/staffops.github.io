@@ -10,7 +10,7 @@ Distributed anomaly detection service for Kubernetes clusters.
 
 ## What it does
 
-Queries VictoriaMetrics and Loki continuously, detects statistical and ML-based anomalies, correlates signals across sources, and fires actionable alerts through Alertmanager.
+Queries Prometheus and Loki continuously, detects statistical and ML-based anomalies, correlates signals across sources, and fires actionable alerts through Alertmanager.
 
 ---
 
@@ -19,7 +19,7 @@ Queries VictoriaMetrics and Loki continuously, detects statistical and ML-based 
 ```
 Controller (Go, HA)
      ↓ gRPC
-Workers (Go, stateless) ──→ VictoriaMetrics (PromQL)
+Workers (Go, stateless) ──→ Prometheus (PromQL)
      ↓                   ──→ Loki (LogQL)
 ML Service (Python)
      ↓

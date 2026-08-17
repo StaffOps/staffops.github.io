@@ -18,7 +18,7 @@ Multi-agent platform for AWS and Kubernetes operations. A supervisor agent route
 
 ## Anomaly Detection
 
-Distributed anomaly detection service for Kubernetes. A Go controller orchestrates parallel workers that query VictoriaMetrics (PromQL) and Loki (LogQL), then correlate signals to fire meaningful alerts through Alertmanager. A Python ML service provides adaptive detection via Isolation Forest and Prophet.
+Distributed anomaly detection service for Kubernetes. A Go controller orchestrates parallel workers that query Prometheus (PromQL) and Loki (LogQL), then correlate signals to fire meaningful alerts through Alertmanager. A Python ML service provides adaptive detection via Isolation Forest and Prophet.
 
 [Documentation →](anomaly-detection.md){ .md-button }
 
@@ -49,7 +49,7 @@ helm repo update
 
 ## Maturity Score Card
 
-Stateless FastAPI service that receives CI/CD tool results and computes maturity scores (0–100) per metric — security, application, and reliability scorecards. State persists in PostgreSQL, metrics are scraped by VictoriaMetrics, and results are visualized in Grafana.
+Stateless FastAPI service that receives CI/CD tool results and computes maturity scores (0–100) per metric — security, application, and reliability scorecards. State persists in PostgreSQL, metrics are scraped by Prometheus, and results are visualized in Grafana.
 
 [Documentation →](maturity-score-card.md){ .md-button }
 

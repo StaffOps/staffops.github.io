@@ -10,7 +10,7 @@ Stateless scoring service for CI/CD maturity metrics.
 
 ## What it does
 
-Receives CI/CD tool results (scans, coverage, SLA, incident metrics), computes a 0–100 maturity score per metric, and persists state in PostgreSQL. Scores are exposed on `/metrics`, scraped by VictoriaMetrics, aggregated by `vmalert` recording rules, and visualized in Grafana.
+Receives CI/CD tool results (scans, coverage, SLA, incident metrics), computes a 0–100 maturity score per metric, and persists state in PostgreSQL. Scores are exposed on `/metrics`, scraped by Prometheus, aggregated by `vmalert` recording rules, and visualized in Grafana.
 
 ---
 
@@ -30,10 +30,10 @@ calculate_score()        save problem state
           PostgreSQL  ◄──── upsert (state persists until next scan)
                │
                ▼
-          GET /metrics  ◄──── VictoriaMetrics scrapes every 15s
+          GET /metrics  ◄──── Prometheus scrapes every 15s
                │
                ▼
-          vmalert  ──── evaluates recording rules ──► VictoriaMetrics
+          prometheus rules  ──── evaluates recording rules ──► Prometheus
                │
                ▼
             Grafana
@@ -58,7 +58,7 @@ Weights redistribute automatically among metrics that actually ran — omit a me
 - Stateless API — all state lives in PostgreSQL
 - Weights redistribute automatically for partial pipeline runs
 - Slack alerts on new infrastructure problems (`SLACK_BOT_TOKEN`)
-- Ships with a full local stack (API, PostgreSQL, VictoriaMetrics, vmalert, Grafana) in `example/`
+- Ships with a full local stack (API, PostgreSQL, Prometheus, Grafana) in `example/`
 
 ---
 
