@@ -8,6 +8,7 @@ metadata:
   description: "StartPage"
   annotations:
     github.com/project-slug: StaffOps/staffops.github.io
+  tags: [mkdocs, mkdocs-material, github-pages]
   links:
     - url: https://github.com/StaffOps/staffops.github.io
       title: Repository
@@ -24,6 +25,7 @@ metadata:
   description: "StartPage"
   annotations:
     github.com/project-slug: StaffOps/staffops.github.io
+  tags: [mkdocs, github-pages]
 spec:
   type: website
   lifecycle: production
