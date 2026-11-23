@@ -53,6 +53,7 @@ nav:
   - Community:
       - Principles: community/principles.md
       - Contributing: community/contributing.md
+  - Handoff: handoff.md
 
 extra_css:
   - stylesheets/extra.css
