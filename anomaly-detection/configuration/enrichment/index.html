@@ -450,6 +450,8 @@
       
         
       
+        
+      
     
     
       
@@ -631,6 +633,27 @@
   
   <span class="md-ellipsis">
     Product Hypothesis (gated)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../program-causal-correlation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Program: Causal Correlation
   </span>
   
 
@@ -1781,22 +1804,22 @@
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="nt">pod_bundle</span><span class="p">:</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpu_ratio</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;max(rate(container_cpu_usage_seconds_total{namespace=&quot;$namespace&quot;,pod=&quot;$pod&quot;,container!=&quot;&quot;}[1m]))</span><span class="nv"> </span><span class="s">/</span><span class="nv"> </span><span class="s">max(kube_pod_container_resource_limits{resource=&quot;cpu&quot;,namespace=&quot;$namespace&quot;,pod=&quot;$pod&quot;})&#39;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'max(rate(container_cpu_usage_seconds_total{namespace="$namespace",pod="$pod",container!=""}[1m]))</span><span class="nv"> </span><span class="s">/</span><span class="nv"> </span><span class="s">max(kube_pod_container_resource_limits{resource="cpu",namespace="$namespace",pod="$pod"})'</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memory_ratio</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;max(container_memory_working_set_bytes{namespace=&quot;$namespace&quot;,pod=&quot;$pod&quot;,container!=&quot;&quot;})</span><span class="nv"> </span><span class="s">/</span><span class="nv"> </span><span class="s">max(kube_pod_container_resource_limits{resource=&quot;memory&quot;,namespace=&quot;$namespace&quot;,pod=&quot;$pod&quot;})&#39;</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'max(container_memory_working_set_bytes{namespace="$namespace",pod="$pod",container!=""})</span><span class="nv"> </span><span class="s">/</span><span class="nv"> </span><span class="s">max(kube_pod_container_resource_limits{resource="memory",namespace="$namespace",pod="$pod"})'</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restarts_5m</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;max(increase(kube_pod_container_status_restarts_total{namespace=&quot;$namespace&quot;,pod=&quot;$pod&quot;}[5m]))&#39;</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'max(increase(kube_pod_container_status_restarts_total{namespace="$namespace",pod="$pod"}[5m]))'</span>
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error_logs_1m</span>
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">loki</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;sum(rate({k8s_namespace_name=&quot;$namespace&quot;,k8s_pod_name=&quot;$pod&quot;}</span><span class="nv"> </span><span class="s">|~</span><span class="nv"> </span><span class="s">&quot;(?i)(error|panic|fatal)&quot;</span><span class="nv"> </span><span class="s">[1m]))&#39;</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'sum(rate({k8s_namespace_name="$namespace",k8s_pod_name="$pod"}</span><span class="nv"> </span><span class="s">|~</span><span class="nv"> </span><span class="s">"(?i)(error|panic|fatal)"</span><span class="nv"> </span><span class="s">[1m]))'</span>
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
 </span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span><span class="nt">service_bundle</span><span class="p">:</span>
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error_rate_1m</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;sum(rate(spanmetrics_apm_calls_total{service_name=&quot;$service_name&quot;,status_code=&quot;STATUS_CODE_ERROR&quot;}[1m]))&#39;</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'sum(rate(spanmetrics_apm_calls_total{service_name="$service_name",status_code="STATUS_CODE_ERROR"}[1m]))'</span>
 </span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">request_rate_1m</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;sum(rate(spanmetrics_apm_calls_total{service_name=&quot;$service_name&quot;}[1m]))&#39;</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'sum(rate(spanmetrics_apm_calls_total{service_name="$service_name"}[1m]))'</span>
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latency_p99_5m</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;histogram_quantile(0.99,</span><span class="nv"> </span><span class="s">sum(rate(spanmetrics_apm_duration_milliseconds_bucket{service_name=&quot;$service_name&quot;}[5m]))</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">(le))&#39;</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'histogram_quantile(0.99,</span><span class="nv"> </span><span class="s">sum(rate(spanmetrics_apm_duration_milliseconds_bucket{service_name="$service_name"}[5m]))</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">(le))'</span>
 </span></code></pre></div>
 <h2 id="template-variables">Template Variables<a class="headerlink" href="#template-variables" title="Permanent link">&para;</a></h2>
 <table>

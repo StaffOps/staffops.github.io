@@ -450,6 +450,8 @@
       
         
       
+        
+      
     
     
       
@@ -631,6 +633,27 @@
   
   <span class="md-ellipsis">
     Product Hypothesis (gated)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../program-causal-correlation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Program: Causal Correlation
   </span>
   
 
@@ -1913,9 +1936,9 @@
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high_cpu_ratio</span><span class="w">          </span><span class="c1"># Unique rule name</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w">                      </span><span class="c1"># PromQL query</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">        </span><span class="no">max(rate(container_cpu_usage_seconds_total{...}[1m])) by (cluster, namespace, pod)</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="no">/ max(kube_pod_container_resource_limits{resource=&quot;cpu&quot;,...}) by (cluster, namespace, pod)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="no">/ max(kube_pod_container_resource_limits{resource="cpu",...}) by (cluster, namespace, pod)</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span><span class="w">                </span><span class="c1"># Comparison value</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;&quot;</span><span class="w">                 </span><span class="c1"># Operator: &gt;, &lt;, &gt;=, &lt;=</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">"&gt;"</span><span class="w">                 </span><span class="c1"># Operator: &gt;, &lt;, &gt;=, &lt;=</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span><span class="w">             </span><span class="c1"># warning or critical</span>
 </span></code></pre></div>
 <h3 id="default-static-rules">Default Static Rules<a class="headerlink" href="#default-static-rules" title="Permanent link">&para;</a></h3>
@@ -2090,12 +2113,12 @@ chart values and the program map for the full list.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">detection</span><span class="p">:</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">log_patterns</span><span class="p">:</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error_rate_by_namespace</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(rate({service_namespace=~&quot;.+&quot;} |= &quot;error&quot; [1m])) by (cluster, service_namespace)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(rate({service_namespace=~".+"} |= "error" [1m])) by (cluster, service_namespace)</span>
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">service_namespace</span><span class="p p-Indicator">]</span>
 </span></code></pre></div>
 <h3 id="pattern-matching-immediate">Pattern matching (immediate)<a class="headerlink" href="#pattern-matching-immediate" title="Permanent link">&para;</a></h3>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">panic_oom</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{service_namespace=~&quot;.+&quot;}</span><span class="nv"> </span><span class="s">|~</span><span class="nv"> </span><span class="s">&quot;(?i)(panic|oom|out</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">memory|fatal)&quot;&#39;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'{service_namespace=~".+"}</span><span class="nv"> </span><span class="s">|~</span><span class="nv"> </span><span class="s">"(?i)(panic|oom|out</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">memory|fatal)"'</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pattern_match</span>
 </span></code></pre></div>
 <h3 id="default-log-patterns">Default Log Patterns<a class="headerlink" href="#default-log-patterns" title="Permanent link">&para;</a></h3>
@@ -2157,9 +2180,9 @@ chart values and the program map for the full list.</p>
 </span></code></pre></div>
 <h3 id="example-custom-static-rule">Example: Custom Static Rule<a class="headerlink" href="#example-custom-static-rule" title="Permanent link">&para;</a></h3>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pending_pods</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count(kube_pod_status_phase{phase=&quot;Pending&quot;}) by (cluster, namespace)</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">count(kube_pod_status_phase{phase="Pending"}) by (cluster, namespace)</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;&quot;</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">"&gt;"</span>
 </span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
 </span></code></pre></div>
 

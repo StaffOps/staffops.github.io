@@ -450,6 +450,8 @@
       
         
       
+        
+      
     
     
       
@@ -631,6 +633,27 @@
   
   <span class="md-ellipsis">
     Product Hypothesis (gated)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../program-causal-correlation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Program: Causal Correlation
   </span>
   
 
@@ -1837,16 +1860,16 @@
 <ol>
 <li>Edit <code>.proto</code> files in <code>controller/proto/</code> or <code>ml/proto/</code></li>
 <li>Regenerate Go stubs:
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/controller&quot;</span>:/src<span class="w"> </span>-w<span class="w"> </span>/src<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>golang:1.25-alpine<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="s2">&quot;go install google.golang.org/protobuf/cmd/protoc-gen-go@latest &amp;&amp; \</span>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/controller"</span>:/src<span class="w"> </span>-w<span class="w"> </span>/src<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">GOPRIVATE</span><span class="o">=</span><span class="s1">'github.com/staffops/*'</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">GONOSUMDB</span><span class="o">=</span><span class="s1">'github.com/staffops/*'</span><span class="w"> </span>golang:1.26<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="s2">"go install google.golang.org/protobuf/cmd/protoc-gen-go@latest &amp;&amp; \</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s2">   go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest &amp;&amp; \</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s2">   protoc --go_out=. --go-grpc_out=. proto/*.proto&quot;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s2">   protoc --go_out=. --go-grpc_out=. proto/*.proto"</span>
 </span></code></pre></div></li>
 <li>Regenerate Python stubs:
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/ml&quot;</span>:/app<span class="w"> </span>-w<span class="w"> </span>/app<span class="w"> </span>python:3.11-slim<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="s2">&quot;pip install grpcio-tools -q &amp;&amp; \</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s2">   python -m grpc_tools.protoc -I proto --python_out=server --grpc_python_out=server proto/*.proto&quot;</span>
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/ml"</span>:/app<span class="w"> </span>-w<span class="w"> </span>/app<span class="w"> </span>python:3.11-slim<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="s2">"pip install grpcio-tools -q &amp;&amp; \</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="s2">   python -m grpc_tools.protoc -I proto --python_out=server --grpc_python_out=server proto/*.proto"</span>
 </span></code></pre></div></li>
 </ol>
 <h2 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">&para;</a></h2>

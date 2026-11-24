@@ -450,6 +450,8 @@
       
         
       
+        
+      
     
     
       
@@ -631,6 +633,27 @@
   
   <span class="md-ellipsis">
     Product Hypothesis (gated)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../program-causal-correlation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Program: Causal Correlation
   </span>
   
 
@@ -1810,7 +1833,7 @@ sinal + disciplina de custo. A integração com agentes (aigent-squad, P5.5) fic
 em <code>docs/detection/catalog/</code>):</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">signal</span><span class="p">:</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http_error_rate</span><span class="w">            </span><span class="c1"># nome estável, snake_case</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;sum(rate(...))</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">(service_name)&#39;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'sum(rate(...))</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">(service_name)'</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors</span><span class="w">                    </span><span class="c1"># latency | errors | traffic | saturation (RED/USE)</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ratio</span><span class="w">                      </span><span class="c1"># counter_rate | gauge | ratio | quantile</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">direction</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">up_bad</span><span class="w">                </span><span class="c1"># up_bad | down_bad | both_bad</span>
@@ -1824,7 +1847,7 @@ em <code>docs/detection/catalog/</code>):</p>
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="no">Checar deploy recente; se não houve, abrir runbook X seção Y.</span>
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="nt">runbook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${RUNBOOK_BASE_URL}/http-error-rate</span>
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="nt">fp_budget_per_week</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">            </span><span class="c1"># quantos falsos positivos/semana são toleráveis</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="nt">consumer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">on-call-sre</span><span class="w">            </span><span class="c1"># quem recebe (se &quot;ninguém&quot;, não crie a regra)</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="nt">consumer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">on-call-sre</span><span class="w">            </span><span class="c1"># quem recebe (se "ninguém", não crie a regra)</span>
 </span></code></pre></div>
 <p><strong>Regra de admissão</strong>: sinal sem <code>action</code> + <code>consumer</code> + <code>fp_budget</code> preenchidos
 não entra em produção. Sinal novo passa por replay (<code>--replay</code>) e, quando P0.1

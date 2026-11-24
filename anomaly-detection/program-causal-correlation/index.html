@@ -13,6 +13,10 @@
         <link rel="canonical" href="https://staffops.github.io/anomaly-detection/program-causal-correlation/">
       
       
+        <link rel="prev" href="../hypothesis-causal-origination/">
+      
+      
+        <link rel="next" href="../review-2026-07-04/">
       
       
       <link rel="icon" href="../assets/logo.png">
@@ -20,7 +24,7 @@
     
     
       
-        <title>Program: topological causal correlation — full phase map - StaffOps — Anomaly Detection</title>
+        <title>Program: Causal Correlation - StaffOps — Anomaly Detection</title>
       
     
     
@@ -109,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Program: topological causal correlation — full phase map
+              Program: Causal Correlation
             
           </span>
         </div>
@@ -231,7 +235,7 @@
         <li class="md-tabs__item">
           
             <a href="../architecture/"
-               class="md-tabs__link">
+               class="md-tabs__link md-tabs__link--active">
               Architecture
             </a>
           
@@ -421,6 +425,8 @@
       
   
   
+    
+  
   
   
     
@@ -446,6 +452,8 @@
       
         
       
+        
+      
     
     
       
@@ -454,11 +462,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
           
@@ -480,7 +488,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Architecture
@@ -631,6 +639,355 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Program: Causal Correlation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Program: Causal Correlation
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-verified-facts-2026-07-16-live-prometheus-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Verified facts (2026-07-16, live Prometheus + code)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Verified facts (2026-07-16, live Prometheus + code)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-the-service-graph-already-exists-as-metrics-and-is-richer-than-the-spec-assumed" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1 The service graph already exists as metrics, and is richer than the spec assumed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-spanmetrics-have-no-workload-label" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2 Spanmetrics have NO workload label
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-the-real-fdr-defect-is-a-truncated-family-not-pipeline-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.3 The real FDR defect is a truncated family, not pipeline position
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-edge-anomalies-would-correlate-as-unknown-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.4 Edge anomalies would correlate as "unknown" today
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-falco-is-not-deployed" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.5 Falco is not deployed
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-target-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Target pipeline
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Phases
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Phases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#f0-fdr-with-the-full-family-shipped-2026-07-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      F0 — FDR with the full family 🟢 ✅ SHIPPED (2026-07-17)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f1-detection-on-graph-edges-config-correlator-touch" class="md-nav__link">
+    <span class="md-ellipsis">
+      F1 — Detection on graph edges (config + correlator touch) 🟡
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f2-identity-resolver-nodeindex" class="md-nav__link">
+    <span class="md-ellipsis">
+      F2 — Identity resolver (NodeIndex) 🟡
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f3-in-memory-graph-internalgraph" class="md-nav__link">
+    <span class="md-ellipsis">
+      F3 — In-memory graph (internal/graph/) 🔒
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f4-metric-ontology-intra-workload-causal-ranking" class="md-nav__link">
+    <span class="md-ellipsis">
+      F4 — Metric ontology + intra-workload causal ranking 🔒
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f5-inter-service-correlation-incident-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      F5 — Inter-service correlation (incident merge) 🔒
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f6-graph-aware-ml-adr-0010-freeze" class="md-nav__link">
+    <span class="md-ellipsis">
+      F6 — Graph-aware ML 🔒 (+ ADR-0010 freeze)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f7-new-signal-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      F7 — New signal sources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#f8-learning-layer-last-deliberately" class="md-nav__link">
+    <span class="md-ellipsis">
+      F8 — Learning layer 🔒 (last, deliberately)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-dependency-and-gating-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Dependency and gating matrix
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cross-cutting-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Cross-cutting risks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-program-success-criteria-measurable" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Program success criteria (measurable)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-candidate-rule-catalog-research-pass-2026-07-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Candidate rule catalog (research pass, 2026-07-17)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Candidate rule catalog (research pass, 2026-07-17)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-ground-rules-from-the-research-apply-to-every-rule-below" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.1 Ground rules from the research (apply to every rule below)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-tier-a-service-graph-edge-rules-f1-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.2 Tier A — service graph / edge rules (F1 scope)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-tier-a-unbiased-sli-rules-new-finding-sdk-http-metrics-exist" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.3 Tier A — unbiased SLI rules (new finding: SDK HTTP metrics exist)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-tier-b-runtime-saturation-use-leading-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.4 Tier B — runtime saturation (USE / leading indicators)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-tier-b-container-k8s-rules-f7c-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.5 Tier B — container / K8s rules (F7c scope)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-tier-b-istio-mesh-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.6 Tier B — Istio mesh rules
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#77-tier-a-signal-pipeline-self-health-guards-every-edge-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.7 Tier A — signal-pipeline self-health (guards every edge rule)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#78-hygiene-findings-from-the-verification-act-before-adding-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.8 Hygiene findings from the verification (act before adding anything)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#79-rollout-order-for-the-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.9 Rollout order for the catalog
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2041,7 +2398,7 @@ yet — just adaptive rules over the edge metrics.</p>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">edge_total_failure</span>
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(sum(rate(traces_service_graph_request_failed_total[5m])) by (client, server) / sum(rate(traces_service_graph_request_total[5m])) by (client, server)) and (sum(rate(traces_service_graph_request_total[5m])) by (client, server) &gt; 0.1)</span>
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;&quot;</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">"&gt;"</span>
 </span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
 </span></code></pre></div>
 <blockquote>
@@ -2694,7 +3051,7 @@ through replay first.</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># A4 — mesh/network overhead per edge: client-perceived minus server-side p99.</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># Sampling bias cancels in the delta (both sides sampled identically).</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># A large positive delta = network / Istio ztunnel / connection-pool problem</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># BETWEEN the services, invisible to either service&#39;s own metrics.</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># BETWEEN the services, invisible to either service's own metrics.</span>
 </span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># direction: up_bad</span>
 </span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">edge_mesh_overhead_p99</span>
 </span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
@@ -2702,11 +3059,11 @@ through replay first.</p>
 </span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="no">- histogram_quantile(0.99, sum(rate(traces_service_graph_request_server_seconds_bucket[5m])) by (le, client, server))</span>
 </span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">client</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">server</span><span class="p p-Indicator">]</span>
 </span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="c1"># A5 — database edge latency: connection_type=&quot;database&quot; isolates DB calls.</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="c1"># A5 — database edge latency: connection_type="database" isolates DB calls.</span>
 </span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="c1"># Catches slow-query regressions per (service, db) pair without DB-side access.</span>
 </span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="c1"># direction: up_bad</span>
 </span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">edge_db_latency_p99</span>
-</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">histogram_quantile(0.99, sum(rate(traces_service_graph_request_server_seconds_bucket{connection_type=&quot;database&quot;}[5m])) by (le, client, server))</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">histogram_quantile(0.99, sum(rate(traces_service_graph_request_server_seconds_bucket{connection_type="database"}[5m])) by (le, client, server))</span>
 </span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">client</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">server</span><span class="p p-Indicator">]</span>
 </span></code></pre></div>
 <p><strong>Not</strong> a detection rule but F3 input: a new edge appearing in
@@ -2722,7 +3079,7 @@ detection on the same symptom → double FDR load and correlated FP pairs):</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># A6 — unbiased error ratio per service. direction: up_bad</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http_error_ratio_by_service</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="no">sum(rate(http_server_request_duration_seconds_count{http_response_status_code=~&quot;5..&quot;}[2m])) by (cluster, service_name)</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="no">sum(rate(http_server_request_duration_seconds_count{http_response_status_code=~"5.."}[2m])) by (cluster, service_name)</span>
 </span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="no">/ sum(rate(http_server_request_duration_seconds_count[2m])) by (cluster, service_name)</span>
 </span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">service_name</span><span class="p p-Indicator">]</span>
 </span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
@@ -2740,7 +3097,7 @@ detection on the same symptom → double FDR load and correlated FP pairs):</p>
 </span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">service_name</span><span class="p p-Indicator">]</span>
 </span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>
 </span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="c1"># A9 — DB operation latency per service (OTel stable semconv, unbiased).</span>
-</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="c1"># The direct &quot;is it the database?&quot; signal for the F4 ontology (layer 2).</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="c1"># The direct "is it the database?" signal for the F4 ontology (layer 2).</span>
 </span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="c1"># direction: up_bad</span>
 </span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db_operation_latency_p99_by_service</span>
 </span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">histogram_quantile(0.99, sum(rate(db_client_operation_duration_seconds_bucket[5m])) by (le, cluster, service_name))</span>
@@ -2790,15 +3147,15 @@ adaptive + <code>severity: info</code>-shaped annotations, not pagers.</p>
 </span></code></pre></div>
 <h3 id="75-tier-b-container-k8s-rules-f7c-scope">7.5 Tier B — container / K8s rules (F7c scope)<a class="headerlink" href="#75-tier-b-container-k8s-rules-f7c-scope" title="Permanent link">&para;</a></h3>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># B7 — CPU throttling ratio: the leading indicator cpu_ratio misses (a pod can</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># throttle hard at 60% &quot;usage&quot;). Gate on sustained ratio. direction: up_bad</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># throttle hard at 60% "usage"). Gate on sustained ratio. direction: up_bad</span>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpu_throttling_ratio</span>
 </span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="no">sum(rate(container_cpu_cfs_throttled_periods_total{container!=&quot;&quot;}[5m])) by (cluster, namespace, pod)</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="no">/ sum(rate(container_cpu_cfs_periods_total{container!=&quot;&quot;}[5m])) by (cluster, namespace, pod)</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="no">sum(rate(container_cpu_cfs_throttled_periods_total{container!=""}[5m])) by (cluster, namespace, pod)</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="no">/ sum(rate(container_cpu_cfs_periods_total{container!=""}[5m])) by (cluster, namespace, pod)</span>
 </span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">namespace</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pod</span><span class="p p-Indicator">]</span>
 </span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="c1"># static complement: &gt; 0.25 sustained = requests/limits mis-sized (warning)</span>
 </span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># B8 — HPA pinned at max: saturation masked by autoscaling &quot;working&quot;.</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># B8 — HPA pinned at max: saturation masked by autoscaling "working".</span>
 </span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1"># static, threshold 0 on the gap. severity: warning</span>
 </span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hpa_at_ceiling</span>
 </span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max(kube_horizontalpodautoscaler_spec_max_replicas - kube_horizontalpodautoscaler_status_current_replicas) by (cluster, namespace, horizontalpodautoscaler) == 0</span>
@@ -2807,12 +3164,12 @@ adaptive + <code>severity: info</code>-shaped annotations, not pagers.</p>
 </span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="c1"># B9 — deployment availability gap (generalizes the existing rollout_stuck,</span>
 </span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="c1"># which only covers Argo Rollouts). static, threshold 0. severity: warning</span>
 </span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deployment_replicas_unavailable</span>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max(kube_deployment_status_replicas_unavailable{namespace!~&quot;${EXCLUDE_NAMESPACES_REGEX:kube-system}&quot;}) by (cluster, namespace, deployment)</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max(kube_deployment_status_replicas_unavailable{namespace!~"${EXCLUDE_NAMESPACES_REGEX:kube-system}"}) by (cluster, namespace, deployment)</span>
 </span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>
 </span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="c1"># B10 — readiness flapping: pod oscillating Ready/NotReady without restarting</span>
 </span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="c1"># (restarts rule misses it). adaptive on the transition rate. direction: up_bad</span>
 </span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pod_ready_flapping</span>
-</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(changes(kube_pod_status_ready{condition=&quot;true&quot;}[15m])) by (cluster, namespace, pod)</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(changes(kube_pod_status_ready{condition="true"}[15m])) by (cluster, namespace, pod)</span>
 </span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">namespace</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pod</span><span class="p p-Indicator">]</span>
 </span></code></pre></div>
 <h3 id="76-tier-b-istio-mesh-rules">7.6 Tier B — Istio mesh rules<a class="headerlink" href="#76-tier-b-istio-mesh-rules" title="Permanent link">&para;</a></h3>
@@ -2820,7 +3177,7 @@ adaptive + <code>severity: info</code>-shaped annotations, not pagers.</p>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># trace-derived edge view (A2); divergence between them is itself a signal</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># (mesh sees what traces miss when sampling drops spans). direction: up_bad</span>
 </span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">istio_latency_p99_by_workload</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">histogram_quantile(0.99, sum(rate(istio_request_duration_milliseconds_bucket{destination_workload!=&quot;&quot;}[5m])) by (le, cluster, destination_workload, destination_workload_namespace))</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">histogram_quantile(0.99, sum(rate(istio_request_duration_milliseconds_bucket{destination_workload!=""}[5m])) by (le, cluster, destination_workload, destination_workload_namespace))</span>
 </span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">destination_workload</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">destination_workload_namespace</span><span class="p p-Indicator">]</span>
 </span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
 </span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1"># B12 — TCP connection churn: leak or retry storm signature. direction: up_bad</span>
@@ -2836,7 +3193,7 @@ edge signal itself (both metrics verified present):</p>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">servicegraph_series_limited</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(rate(tempo_metrics_generator_registry_series_limited_total[5m]))</span>
 </span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&gt;&quot;</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">"&gt;"</span>
 </span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
 </span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
 </span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1"># A11 — edges expiring unpaired = broken context propagation somewhere</span>

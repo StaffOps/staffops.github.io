@@ -450,6 +450,8 @@
       
         
       
+        
+      
     
     
       
@@ -631,6 +633,27 @@
   
   <span class="md-ellipsis">
     Product Hypothesis (gated)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../program-causal-correlation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Program: Causal Correlation
   </span>
   
 
@@ -1908,7 +1931,7 @@
 </span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">namespace</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pod</span><span class="p p-Indicator">]</span>
 </span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
 </span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error_rate_by_service</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(rate(spanmetrics_apm_calls_total{status_code=&quot;STATUS_CODE_ERROR&quot;}[1m])) by (service_name)</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(rate(spanmetrics_apm_calls_total{status_code="STATUS_CODE_ERROR"}[1m])) by (service_name)</span>
 </span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">      </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">service_name</span><span class="p p-Indicator">]</span>
 </span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>
 </span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latency_p99_by_service</span>
@@ -2060,7 +2083,7 @@ idling above it. The heap/limit ratio measured across every .NET pod was <code>q
 23% of all alerts. The right move was to change the measurement, not to floor it:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">max(process_runtime_dotnet_gc_heap_size_bytes) by (pod)</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">/ on(pod) group_left(cluster, namespace)</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">max(container_spec_memory_limit_bytes{container!=&quot;&quot;}) by (cluster, namespace, pod)</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">max(container_spec_memory_limit_bytes{container!=""}) by (cluster, namespace, pod)</span>
 </span></code></pre></div>
 <p>Ask "is this reading comparable across the series the rule covers?" before reaching for
 a floor. If the answer is no, normalize first — then the floor becomes meaningful.</p>
@@ -2084,10 +2107,10 @@ no cluster, so it cannot be routed, correlated, or drilled into.</p>
 <p>This bit both offending rules above: OTel SDK metrics carry <code>service_namespace</code> and
 <code>eks_cluster</code>, <strong>not</strong> <code>namespace</code> and <code>cluster</code>, so 100% of their alerts came out with an
 empty namespace. Map them explicitly:</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;label_replace(label_replace(</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="s">'label_replace(label_replace(</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">          </span><span class="s">max(http_client_active_requests)</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">(eks_cluster,</span><span class="nv"> </span><span class="s">service_namespace,</span><span class="nv"> </span><span class="s">pod),</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">          </span><span class="s">&quot;namespace&quot;,</span><span class="nv"> </span><span class="s">&quot;$1&quot;,</span><span class="nv"> </span><span class="s">&quot;service_namespace&quot;,</span><span class="nv"> </span><span class="s">&quot;(.*)&quot;),</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">          </span><span class="s">&quot;cluster&quot;,</span><span class="nv"> </span><span class="s">&quot;$1&quot;,</span><span class="nv"> </span><span class="s">&quot;eks_cluster&quot;,</span><span class="nv"> </span><span class="s">&quot;(.*)&quot;)&#39;</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">          </span><span class="s">"namespace",</span><span class="nv"> </span><span class="s">"$1",</span><span class="nv"> </span><span class="s">"service_namespace",</span><span class="nv"> </span><span class="s">"(.*)"),</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">          </span><span class="s">"cluster",</span><span class="nv"> </span><span class="s">"$1",</span><span class="nv"> </span><span class="s">"eks_cluster",</span><span class="nv"> </span><span class="s">"(.*)")'</span>
 </span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">cluster</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">namespace</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pod</span><span class="p p-Indicator">]</span>
 </span></code></pre></div>
 <p>Verify before shipping a rule: run the query and confirm every label in <code>group_by</code> comes back

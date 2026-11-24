@@ -452,6 +452,8 @@
       
         
       
+        
+      
     
     
       
@@ -856,6 +858,27 @@
   
   <span class="md-ellipsis">
     Product Hypothesis (gated)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../program-causal-correlation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Program: Causal Correlation
   </span>
   
 
@@ -2304,7 +2327,7 @@ blinding the pipeline) but <strong>does not address attacks on the detector's ow
 and dependencies</strong>. Concrete gaps observed in <code>controller/Dockerfile</code>,
 <code>ml/Dockerfile</code>, and <code>go.mod</code>:</p>
 <ul>
-<li>Base images are <code>golang:1.25-alpine</code>, <code>alpine:3.20</code>, <code>python:3.11-slim</code> — <strong>not
+<li>Base images are <code>golang:1.26.11-alpine</code>, <code>alpine:3.20</code>, <code>python:3.11-slim</code> — <strong>not
   golden apko-built and not cosign-signed</strong>. A compromised upstream image (or its
   registry) ships malicious code into every replica.</li>
 <li>~~<code>go.mod</code> imports <code>github.com/karlipegomes/staffops-otel-libs/go</code> at a
